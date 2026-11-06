@@ -77,10 +77,11 @@
                 </div>
                 <div>
                     <span class="font-serif text-xl sm:text-2xl font-bold text-creme-900 block leading-tight tracking-wide">La pause Fondante</span>
-                    <span class="text-[11px] text-sauge-600 font-medium tracking-widest uppercase block">Livraison offerte dès 60 € en point relais</span>
+                    <span class="text-[11px] text-sauge-600 font-medium tracking-widest uppercase block">Livraison offerte dès 70 € en point relais</span>
                 </div>
             </button>
 
+            <!-- Navigation Principale -->
             <nav class="hidden md:flex items-center space-x-4 text-sm font-medium">
                 <button id="nav-home" onclick="naviguerVers('home')" class="py-2 text-sauge-600 border-b-2 border-sauge-600 font-bold flex items-center gap-1.5">
                     <i data-lucide="home" class="w-4 h-4 text-sauge-600"></i> Accueil
@@ -117,7 +118,7 @@
             <div class="relative bg-gradient-to-br from-sauge-100 via-creme-100 to-ocre-50 rounded-3xl p-8 sm:p-12 md:p-16 border border-sauge-200 shadow-xs overflow-hidden">
                 <div class="max-w-2xl relative z-10 space-y-6">
                     <span class="inline-flex items-center gap-2 px-3.5 py-1 bg-white/90 backdrop-blur-sm border border-sauge-200 rounded-full text-xs font-bold text-sauge-700 uppercase tracking-widest shadow-2xs">
-                        <i data-lucide="truck" class="w-3.5 h-3.5 text-sauge-600"></i> Point relais au choix & Port offert dès 60 €
+                        <i data-lucide="truck" class="w-3.5 h-3.5 text-sauge-600"></i> Point relais au choix & Port offert dès 70 €
                     </span>
                     <h1 class="font-serif text-3xl sm:text-5xl font-bold text-creme-900 leading-tight">
                         La pause Fondante : Confection artisanale.
@@ -136,6 +137,7 @@
                 </div>
             </div>
 
+            <!-- Bannières & Cartes de navigation de l'accueil -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div onclick="naviguerVers('fondants')" class="group cursor-pointer bg-white p-6 rounded-3xl border border-creme-200 hover:border-sauge-500 hover:shadow-xl transition-all flex flex-col justify-between">
                     <div class="space-y-3">
@@ -182,6 +184,7 @@
                 <h2 class="font-serif text-3xl font-bold text-creme-900">Composez Votre Lot ou Tentez le Mystère</h2>
             </div>
 
+            <!-- Offre Mystère -->
             <div class="bg-gradient-to-r from-sauge-600 to-sauge-800 text-white rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
                 <div class="space-y-2 text-center md:text-left">
                     <span class="bg-ocre-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Édition Surprise</span>
@@ -198,6 +201,7 @@
                 </div>
             </div>
 
+            <!-- Étape 1 : Formats de lot -->
             <div class="space-y-4 bg-white p-6 rounded-3xl border border-creme-200 shadow-2xs">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-full bg-sauge-600 text-white flex items-center justify-center font-bold text-sm">1</div>
@@ -206,6 +210,7 @@
                 <div id="formats-container" class="grid grid-cols-2 sm:grid-cols-4 gap-4"></div>
             </div>
 
+            <!-- Étape 2 : Fragrances + Barre latérale -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 <div class="lg:col-span-8 space-y-6">
                     <div class="flex items-center justify-between flex-wrap gap-4">
@@ -319,7 +324,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
             <div>
                 <p class="font-serif font-bold text-creme-900 text-sm">La pause Fondante</p>
-                <p class="text-[11px] mt-0.5">Confection artisanale de fondants parfumés en cire végétale — Livraison offerte dès 60 € en point relais.</p>
+                <p class="text-[11px] mt-0.5">Confection artisanale de fondants parfumés en cire végétale — Livraison offerte dès 70 € en point relais.</p>
             </div>
             <div class="flex items-center gap-6 font-semibold">
                 <button onclick="ouvrirModalCGV()" class="hover:text-sauge-700 transition-colors">Conditions Générales de Vente (CGV)</button>
@@ -328,10 +333,11 @@
         </div>
     </footer>
 
-    <!-- DRAWER PANIER -->
+    <!-- DRAWER PANIER (TIROIR PANIER AVEC SYSTEME DE CODE PROMO) -->
     <div id="cart-drawer" class="fixed inset-0 z-50 hidden transition-opacity duration-300">
         <div onclick="fermerPanier()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-xs"></div>
         <div class="absolute right-0 top-0 bottom-0 max-w-md w-full bg-white shadow-2xl flex flex-col justify-between z-10">
+            <!-- Header du Panier -->
             <div class="p-6 border-b border-creme-200 flex items-center justify-between bg-creme-50">
                 <div class="flex items-center gap-2">
                     <i data-lucide="shopping-bag" class="w-5 h-5 text-sauge-600"></i>
@@ -340,23 +346,75 @@
                 <button onclick="fermerPanier()" class="p-1.5 rounded-full hover:bg-creme-200 text-creme-800 transition-colors"><i data-lucide="x"></i></button>
             </div>
 
-            <!-- CONTENU PANIER & PROGRESSION LIVRAISON OFFERTE -->
+            <!-- CONTENU PANIER, LIVRAISON GRATUITE & BLOC CODE PROMO -->
             <div class="flex-grow overflow-y-auto p-6 space-y-4 custom-scrollbar">
+                <!-- Jauge Port Offert (dès 70 €) -->
                 <div id="free-shipping-progress-container"></div>
+
+                <!-- Liste des articles -->
                 <div id="cart-drawer-content" class="space-y-3"></div>
+
+                <!-- SECTION CODE PROMO / CODE DE RÉDUCTION -->
+                <div class="bg-creme-50 p-4 rounded-2xl border border-creme-200 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-bold text-creme-900 flex items-center gap-1.5 uppercase tracking-wider">
+                            <i data-lucide="ticket" class="w-4 h-4 text-ocre-600"></i> Code Promo / Réduction
+                        </label>
+                        <span class="text-[10px] text-sauge-700 font-semibold bg-sauge-100 px-2 py-0.5 rounded-md">Offres actives</span>
+                    </div>
+
+                    <!-- Champ de saisie code promo -->
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="promo-code-input" placeholder="Ex: PAUSE10, OFFERT" class="flex-grow px-3.5 py-2.5 bg-white border border-creme-200 rounded-xl text-xs uppercase font-bold text-creme-900 tracking-wider focus:outline-none focus:border-sauge-500 shadow-2xs">
+                        <button onclick="appliquerCodePromo()" class="px-4 py-2.5 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-xl text-xs transition-all shadow-xs shrink-0">
+                            Appliquer
+                        </button>
+                    </div>
+
+                    <!-- Badges de codes rapides pour démonstration facile -->
+                    <div class="space-y-1.5">
+                        <span class="text-[10px] text-creme-800 font-semibold block">Codes d'exemples à tester :</span>
+                        <div class="flex flex-wrap gap-1.5">
+                            <button onclick="testerCodePromo('PAUSE10')" class="text-[11px] bg-white hover:bg-ocre-50 border border-ocre-200 text-ocre-700 px-2 py-1 rounded-lg font-bold transition-all shadow-2xs flex items-center gap-1">
+                                <i data-lucide="percent" class="w-3 h-3"></i> PAUSE10 (-10%)
+                            </button>
+                            <button onclick="testerCodePromo('OFFERT')" class="text-[11px] bg-white hover:bg-sauge-50 border border-sauge-200 text-sauge-700 px-2 py-1 rounded-lg font-bold transition-all shadow-2xs flex items-center gap-1">
+                                <i data-lucide="gift" class="w-3 h-3"></i> OFFERT (Gratuit)
+                            </button>
+                            <button onclick="testerCodePromo('LIVRAISON')" class="text-[11px] bg-white hover:bg-sauge-50 border border-sauge-200 text-sauge-800 px-2 py-1 rounded-lg font-bold transition-all shadow-2xs flex items-center gap-1">
+                                <i data-lucide="truck" class="w-3 h-3"></i> LIVRAISON (Port 0€)
+                            </button>
+                            <button onclick="testerCodePromo('BIENVENUE')" class="text-[11px] bg-white hover:bg-creme-200 border border-creme-300 text-creme-900 px-2 py-1 rounded-lg font-bold transition-all shadow-2xs flex items-center gap-1">
+                                <i data-lucide="sparkles" class="w-3 h-3"></i> BIENVENUE (-15%)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Affichage du Code Promo Actif -->
+                    <div id="promo-code-active-badge" class="hidden"></div>
+                </div>
             </div>
 
+            <!-- Footer du Panier avec Récapitulatif Financier -->
             <div class="p-6 border-t border-creme-200 bg-creme-50 space-y-3">
                 <div class="space-y-1.5 text-xs text-creme-800 border-b border-creme-200 pb-3">
                     <div class="flex justify-between">
                         <span>Sous-total articles</span>
                         <span id="cart-subtotal-articles" class="font-semibold">0,00 €</span>
                     </div>
+
+                    <!-- Ligne de remise promo dynamique -->
+                    <div id="cart-discount-row" class="hidden flex justify-between text-sauge-700 font-bold bg-sauge-100/60 p-1.5 rounded-lg border border-sauge-200">
+                        <span class="flex items-center gap-1"><i data-lucide="tag" class="w-3.5 h-3.5"></i> Remise appliquée</span>
+                        <span id="cart-discount-amount">-0,00 €</span>
+                    </div>
+
                     <div class="flex justify-between items-center">
                         <span class="flex items-center gap-1"><i data-lucide="truck" class="w-3.5 h-3.5 text-sauge-600"></i> Frais de port (point relais)</span>
                         <span id="cart-shipping-fee" class="font-semibold">4,79 €</span>
                     </div>
                 </div>
+
                 <div class="flex justify-between items-end">
                     <div>
                         <span class="text-[11px] text-creme-800 uppercase tracking-wider block font-semibold">Total Général (Port inclus)</span>
@@ -364,6 +422,7 @@
                     </div>
                     <button onclick="viderToutLePanier()" class="text-xs text-creme-800 hover:text-red-500 underline">Vider le panier</button>
                 </div>
+
                 <button onclick="ouvrirModalPaiement()" class="w-full py-4 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wider">
                     Valider la commande <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
@@ -382,10 +441,10 @@
             <div class="flex-grow overflow-y-auto space-y-3 text-xs text-creme-800 leading-relaxed custom-scrollbar pr-2">
                 <p class="font-bold text-creme-900">Article 1 - Objet</p>
                 <p>Les présentes Conditions Générales de Vente régissent les ventes de fondants artisanaux, tablettes, coffrets et créations par La pause Fondante.</p>
-                <p class="font-bold text-creme-900">Article 2 - Prix et Paiement</p>
-                <p>Les prix affichés sont en Euros (€). Le règlement s'effectue par carte bancaire de manière sécurisée via notre terminal SumUp.</p>
+                <p class="font-bold text-creme-900">Article 2 - Prix, Codes Promo et Paiement</p>
+                <p>Les prix affichés sont en Euros (€). Les codes de réduction éventuels s'appliquent sur le sous-total de la commande. Le règlement s'effectue par carte bancaire via notre terminal SumUp.</p>
                 <p class="font-bold text-creme-900">Article 3 - Livraison en point relais</p>
-                <p>Les commandes sont préparées et expédiées en point relais sous 3 à 5 jours ouvrés. Les frais de port sont calculés selon le poids et sont **OFFERTS à partir de 60,00 € d'achats**.</p>
+                <p>Les commandes sont préparées et expédiées en point relais sous 3 à 5 jours ouvrés. Les frais de port sont calculés selon le poids et sont **OFFERTS à partir de 70,00 € d'achats** ou lors de l'application d'un code de livraison gratuite.</p>
                 <p class="font-bold text-creme-900">Article 4 - Droit de rétractation</p>
                 <p>Conformément à la législation en vigueur, vous disposez d'un délai de 14 jours suivant la réception de votre commande pour exercer votre droit de rétractation sur les produits non personnalisés.</p>
             </div>
@@ -448,7 +507,7 @@
         </div>
     </div>
 
-    <!-- MODALE PAIEMENT SUMUP (AVEC CHOIX DU POINT RELAIS) -->
+    <!-- MODALE PAIEMENT SUMUP (AVEC CHOIX DU POINT RELAIS ET RECAP CODE PROMO) -->
     <div id="modal-checkout" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
         <div onclick="fermerModalPaiement()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
         <div class="relative bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl z-10 space-y-5 text-center animate-fade-in">
@@ -470,7 +529,8 @@
                 <p class="text-[11px] text-creme-800 italic">Si laissé vide, nous choisirons le point relais le plus proche de votre adresse.</p>
             </div>
 
-            <div id="checkout-summary-box" class="bg-creme-50 p-4 rounded-2xl border border-creme-200 text-left text-xs space-y-2 max-h-48 overflow-y-auto custom-scrollbar font-sans"></div>
+            <!-- RÉCAPITULATIF FINANCIER AVEC CODE PROMO -->
+            <div id="checkout-summary-box" class="bg-creme-50 p-4 rounded-2xl border border-creme-200 text-left text-xs space-y-2 max-h-52 overflow-y-auto custom-scrollbar font-sans"></div>
             
             <div class="pt-1 space-y-2">
                 <button id="sumup-pay-button" onclick="payerCommandeSumUp()" class="w-full py-4 bg-ocre-600 hover:bg-ocre-700 text-white font-bold rounded-2xl shadow-lg transition-all text-sm uppercase tracking-wider text-center flex items-center justify-center gap-2">
@@ -483,7 +543,7 @@
         </div>
     </div>
 
-    <!-- TOASTS -->
+    <!-- TOASTS DE NOTIFICATION -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
     <!-- SCRIPT FIREBASE -->
@@ -609,11 +669,22 @@
         }
     </script>
 
-    <!-- SCRIPT BOUTIQUE -->
+    <!-- SCRIPT BOUTIQUE & GESTION DES CODES PROMO -->
     <script>
         const CONFIG = {
             nomBoutique: "La pause Fondante",
-            seuilFraisDePortGratuit: 60.00,
+            seuilFraisDePortGratuit: 70.00, // MISE À JOUR : Seuil réhaussé à 70.00 €
+            
+            // CONFIGURATION DES CODES PROMO / CODES DE RÉDUCTION
+            codesPromo: {
+                'PAUSE10': { code: 'PAUSE10', type: 'pourcentage', valeur: 10, description: "10% de réduction immédiate" },
+                'REDUC10': { code: 'REDUC10', type: 'pourcentage', valeur: 10, description: "10% de réduction immédiate" },
+                'BIENVENUE': { code: 'BIENVENUE', type: 'pourcentage', valeur: 15, description: "15% de réduction de bienvenue" },
+                'OFFERT': { code: 'OFFERT', type: 'gratuit', valeur: 100, description: "Commande 100% Gratuite (0,00 €)" },
+                'GRATUIT': { code: 'GRATUIT', type: 'gratuit', valeur: 100, description: "Commande 100% Gratuite (0,00 €)" },
+                'LIVRAISON': { code: 'LIVRAISON', type: 'port_offert', valeur: 100, description: "Frais de port totalement offerts" }
+            },
+
             lots: [
                 { id: 'unite', nom: "À l'unité", description: "0,50 € / pièce", capacity: null, prix: null },
                 { id: 'lot12', nom: "Lot de 12", description: "Format Découverte", capacity: 12, prix: 5.00 },
@@ -666,6 +737,7 @@
         let selectedCategoryFilter = "Toutes";
         let selectedTablettesCategoryFilter = "Toutes";
         let cart = [];
+        let codePromoActif = null; // Code promo actuellement appliqué
 
         window.onload = function() {
             choisirFormat('unite');
@@ -693,6 +765,7 @@
             lucide.createIcons();
         }
 
+        // --- BAR À FONDANTS ---
         function renderFormats() {
             const container = document.getElementById('formats-container');
             if(!container) return;
@@ -1000,6 +1073,7 @@
             ouvrirPanier();
         }
 
+        // --- PLATEAUX & CRÉATIONS ---
         function renderPlateauxGrid() {
             const container = document.getElementById('plateaux-grid');
             if(!container) return;
@@ -1081,12 +1155,19 @@
             ouvrirPanier();
         }
 
-        // --- CALCUL DES FRAIS DE PORT COLISSIMO POINT DE RETRAIT ---
-        function calculerFraisDePort(poidsTotalGrams, sousTotalArticles) {
+        // --- CALCULS FRAIS DE PORT & RÉDUCTION DE CODE PROMO (SEUIL 70 €) ---
+        function calculerFraisDePort(poidsTotalGrams, sousTotalApresRemise, promoActuel) {
             if (poidsTotalGrams <= 0) return 0;
-            // Offre livraison gratuite dès 60,00 € d'achats
-            if (sousTotalArticles >= CONFIG.seuilFraisDePortGratuit) return 0;
 
+            // Si le code promo offre les frais de port ou rend la commande gratuite
+            if (promoActuel && (promoActuel.type === 'port_offert' || promoActuel.type === 'gratuit')) {
+                return 0;
+            }
+
+            // Port offert si le montant après remise atteint au moins 70,00 €
+            if (sousTotalApresRemise >= CONFIG.seuilFraisDePortGratuit) return 0;
+
+            // Barème Colissimo Point de Retrait
             if (poidsTotalGrams <= 250) return 4.79;
             if (poidsTotalGrams <= 500) return 6.89;
             if (poidsTotalGrams <= 750) return 8.59;
@@ -1096,7 +1177,6 @@
             return 16.69;
         }
 
-        // --- CALCULS PANIER ---
         function calculerTotalPanier() {
             let sousTotalArticles = 0;
             let nombreTablettes = 0;
@@ -1118,11 +1198,67 @@
             });
             sousTotalArticles += prixTotalTablettes;
 
-            const estLivraisonOfferte = sousTotalArticles >= CONFIG.seuilFraisDePortGratuit;
-            const fraisDePort = cart.length > 0 ? calculerFraisDePort(poidsTotal, sousTotalArticles) : 0;
-            const total = sousTotalArticles + fraisDePort;
+            // Calcul de la remise du Code Promo
+            let montantRemise = 0;
+            if (codePromoActif && cart.length > 0) {
+                if (codePromoActif.type === 'pourcentage') {
+                    montantRemise = (sousTotalArticles * codePromoActif.valeur) / 100;
+                } else if (codePromoActif.type === 'gratuit') {
+                    montantRemise = sousTotalArticles; // 100% de réduction sur les articles
+                }
+            }
 
-            return { total, sousTotalArticles, fraisDePort, estLivraisonOfferte, lotsDeTrois, nombreTablettes };
+            const sousTotalApresRemise = Math.max(0, sousTotalArticles - montantRemise);
+            const fraisDePort = cart.length > 0 ? calculerFraisDePort(poidsTotal, sousTotalApresRemise, codePromoActif) : 0;
+            const estLivraisonOfferte = (fraisDePort === 0 && cart.length > 0);
+            const total = sousTotalApresRemise + fraisDePort;
+
+            return { 
+                total, 
+                sousTotalArticles, 
+                montantRemise, 
+                sousTotalApresRemise, 
+                fraisDePort, 
+                estLivraisonOfferte, 
+                lotsDeTrois, 
+                nombreTablettes,
+                codePromoActif 
+            };
+        }
+
+        // --- GESTION DES CODES PROMO ---
+        window.appliquerCodePromo = function() {
+            const input = document.getElementById('promo-code-input');
+            if (!input) return;
+            const val = input.value.trim().toUpperCase();
+
+            if (!val) {
+                afficherToast("Veuillez entrer un code promo.", "warning");
+                return;
+            }
+
+            if (CONFIG.codesPromo[val]) {
+                codePromoActif = CONFIG.codesPromo[val];
+                input.value = '';
+                updateCartUI();
+                afficherToast(`Code ${val} appliqué : ${codePromoActif.description} !`);
+            } else {
+                afficherToast(`Le code "${val}" est invalide ou expiré.`, "warning");
+            }
+        }
+
+        window.testerCodePromo = function(codeKey) {
+            if (CONFIG.codesPromo[codeKey]) {
+                codePromoActif = CONFIG.codesPromo[codeKey];
+                updateCartUI();
+                afficherToast(`Code ${codeKey} appliqué : ${codePromoActif.description} !`);
+            }
+        }
+
+        window.retirerCodePromo = function() {
+            codePromoActif = null;
+            updateCartUI();
+            afficherToast("Code promo retiré.");
         }
 
         function updateCartUI() {
@@ -1130,8 +1266,11 @@
             const drawerContent = document.getElementById('cart-drawer-content');
             const freeShippingContainer = document.getElementById('free-shipping-progress-container');
             const drawerSubtotal = document.getElementById('cart-subtotal-articles');
+            const discountRow = document.getElementById('cart-discount-row');
+            const discountAmount = document.getElementById('cart-discount-amount');
             const drawerShipping = document.getElementById('cart-shipping-fee');
             const drawerTotal = document.getElementById('cart-drawer-total');
+            const promoBadgeContainer = document.getElementById('promo-code-active-badge');
             if(!countHeader) return;
 
             const totalItemsCount = cart.reduce((acc, item) => acc + item.quantity, 0);
@@ -1140,6 +1279,34 @@
             const resPanier = calculerTotalPanier();
             drawerSubtotal.textContent = resPanier.sousTotalArticles.toFixed(2).replace('.', ',') + " €";
             
+            // Affichage de la ligne de remise
+            if (resPanier.montantRemise > 0) {
+                discountRow.classList.remove('hidden');
+                discountAmount.textContent = `- ${resPanier.montantRemise.toFixed(2).replace('.', ',')} €`;
+            } else {
+                discountRow.classList.add('hidden');
+            }
+
+            // Gestion du badge du code actif
+            if (resPanier.codePromoActif) {
+                promoBadgeContainer.classList.remove('hidden');
+                promoBadgeContainer.innerHTML = `
+                    <div class="flex items-center justify-between bg-ocre-50 border border-ocre-200 p-2.5 rounded-xl text-xs">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="tag" class="w-4 h-4 text-ocre-600"></i>
+                            <div>
+                                <span class="font-bold text-ocre-800 uppercase block">${resPanier.codePromoActif.code}</span>
+                                <span class="text-[10px] text-creme-800">${resPanier.codePromoActif.description}</span>
+                            </div>
+                        </div>
+                        <button onclick="retirerCodePromo()" class="text-creme-800 hover:text-red-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                `;
+            } else {
+                promoBadgeContainer.classList.add('hidden');
+            }
+
+            // Gestion des frais de port dans le panier
             if (resPanier.estLivraisonOfferte && cart.length > 0) {
                 drawerShipping.innerHTML = `<span class="text-sauge-700 font-bold bg-sauge-100 px-2 py-0.5 rounded-md">OFFERTE</span>`;
             } else {
@@ -1148,11 +1315,18 @@
             
             drawerTotal.textContent = resPanier.total.toFixed(2).replace('.', ',') + " €";
 
-            // GESTION BARRE DE PROGRESSION LIVRAISON GRATUITE (60 €)
+            // BARRE DE PROGRESSION LIVRAISON GRATUITE (MISE À JOUR SEUIL 70 €)
             if (cart.length > 0) {
-                const restePourGratuit = CONFIG.seuilFraisDePortGratuit - resPanier.sousTotalArticles;
-                if (restePourGratuit > 0) {
-                    const pourcentage = Math.min(100, (resPanier.sousTotalArticles / CONFIG.seuilFraisDePortGratuit) * 100);
+                const restePourGratuit = CONFIG.seuilFraisDePortGratuit - resPanier.sousTotalApresRemise;
+                if (resPanier.codePromoActif && (resPanier.codePromoActif.type === 'port_offert' || resPanier.codePromoActif.type === 'gratuit')) {
+                    freeShippingContainer.innerHTML = `
+                        <div class="bg-ocre-50 border border-ocre-200 p-3 rounded-2xl text-xs font-bold text-ocre-700 flex items-center justify-center gap-2">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-ocre-600"></i>
+                            <span>Livraison Offerte via le code promo "${resPanier.codePromoActif.code}" ! 🎉</span>
+                        </div>
+                    `;
+                } else if (restePourGratuit > 0) {
+                    const pourcentage = Math.min(100, (resPanier.sousTotalApresRemise / CONFIG.seuilFraisDePortGratuit) * 100);
                     freeShippingContainer.innerHTML = `
                         <div class="bg-sauge-50 border border-sauge-200 p-3.5 rounded-2xl space-y-2">
                             <div class="flex justify-between text-xs font-bold text-sauge-800">
@@ -1237,6 +1411,7 @@
 
         window.viderToutLePanier = function() {
             cart = [];
+            codePromoActif = null;
             updateCartUI();
         }
 
@@ -1270,7 +1445,7 @@
             document.getElementById('modal-mentions').classList.remove('flex');
         }
 
-        // --- MODALE PAIEMENT AVEC API CHECKOUT ET CHOIX DU POINT RELAIS ---
+        // --- MODALE PAIEMENT AVEC CODE PROMO ET POINT RELAIS ---
         window.ouvrirModalPaiement = function() {
             if (cart.length === 0) {
                 afficherToast("Votre panier est vide.", "warning");
@@ -1289,6 +1464,10 @@
             htmlRecap += `</ul><div class="mt-3 pt-2 border-t border-creme-200 font-semibold space-y-1">`;
             htmlRecap += `<div class="flex justify-between"><span>Sous-total articles :</span> <span>${res.sousTotalArticles.toFixed(2).replace('.', ',')} €</span></div>`;
             
+            if (res.montantRemise > 0) {
+                htmlRecap += `<div class="flex justify-between text-sauge-700 font-bold"><span>Code promo (${res.codePromoActif.code}) :</span> <span>- ${res.montantRemise.toFixed(2).replace('.', ',')} €</span></div>`;
+            }
+
             const portText = res.estLivraisonOfferte ? `<span class="text-sauge-700 font-bold">OFFERTE</span>` : `${res.fraisDePort.toFixed(2).replace('.', ',')} €`;
             htmlRecap += `<div class="flex justify-between"><span>Frais de port point relais :</span> <span>${portText}</span></div>`;
             htmlRecap += `<div class="flex justify-between text-ocre-600 font-bold text-sm pt-1 border-t border-creme-200"><span>Total à régler :</span> <span>${res.total.toFixed(2).replace('.', ',')} €</span></div>`;
@@ -1316,7 +1495,11 @@
                 const response = await fetch('/api/checkout', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ amount: res.total })
+                    body: JSON.stringify({ 
+                        amount: res.total,
+                        promoCode: res.codePromoActif ? res.codePromoActif.code : null,
+                        discountAmount: res.montantRemise
+                    })
                 });
                 
                 const data = await response.json();
@@ -1346,11 +1529,14 @@
             });
             texte += `\nPoint Relais souhaité : ${pointRelaisSaisi}`;
             texte += `\nSous-total articles : ${res.sousTotalArticles.toFixed(2).replace('.', ',')} €`;
+            if (res.codePromoActif) {
+                texte += `\nCode Promo appliqué : ${res.codePromoActif.code} (-${res.montantRemise.toFixed(2).replace('.', ',')} €)`;
+            }
             texte += `\nFrais de port : ${res.estLivraisonOfferte ? 'OFFERTS (0,00 €)' : res.fraisDePort.toFixed(2).replace('.', ',') + ' €'}`;
             texte += `\nTotal Général : ${res.total.toFixed(2).replace('.', ',')} €`;
 
             navigator.clipboard.writeText(texte).then(() => {
-                afficherToast("Résumé de commande copié avec le Point Relais !");
+                afficherToast("Résumé de commande copié avec le Point Relais et Code Promo !");
             });
         }
 
