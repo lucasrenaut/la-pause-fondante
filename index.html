@@ -423,7 +423,7 @@
                     </div>
                 </div>
 
-                <!-- FORMULAIRE DE CONTACT DIRECT (OUVERTURE MAILTO SANS JSMAIL) -->
+                <!-- FORMULAIRE DE CONTACT DIRECT (MAILTO) -->
                 <div class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-2xl border border-creme-200 shadow-2xs space-y-4">
                     <h3 class="font-serif text-xl font-bold text-creme-900 border-b border-creme-100 pb-3">Envoyez-nous un Message</h3>
                     
@@ -750,6 +750,14 @@
             return nouveaux;
         }
 
+        function retirerPointsFidelite(pts) {
+            const actuels = getPointsUtilisateur();
+            const nouveaux = Math.max(0, actuels - pts);
+            localStorage.setItem(getPointsKey(), nouveaux.toString());
+            updateFidelityUI();
+            return nouveaux;
+        }
+
         function updateFidelityUI() {
             const pts = getPointsUtilisateur();
             const badgeHeader = document.getElementById('header-fidelity-badge');
@@ -795,14 +803,14 @@
         window.echangerRecompense = function(type) {
             const pts = getPointsUtilisateur();
             if (type === 'bon10' && pts >= 120) {
-                localStorage.setItem(getPointsKey(), (pts - 120).toString());
-                codePromoApplique = { code: "FIDELITE10", type: "percent", value: 10, label: "Bon fidélité 10%" };
+                retirerPointsFidelite(120);
+                codePromoApplique = { code: "FIDELITE10", type: "percent", value: 10, label: "Bon fidélité 10%", isReward: true, pointsCost: 120 };
                 updateFidelityUI();
                 updateCartUI();
                 afficherToast("🎉 Bon de 10% appliqué à votre panier ! (-120 pts)");
             } else if (type === 'lot12' && pts >= 300) {
-                localStorage.setItem(getPointsKey(), (pts - 300).toString());
-                cart.push({ id: 'recompense-' + Date.now(), type: 'lot', title: "Lot de 12 Fondants Gratuits (Récompense)", subtitle: "Offert par fidélité", price: 0.00, weight: 120, quantity: 1 });
+                retirerPointsFidelite(300);
+                cart.push({ id: 'recompense-' + Date.now(), type: 'reward_lot', title: "Lot de 12 Fondants Gratuits (Récompense)", subtitle: "Offert par fidélité", price: 0.00, weight: 120, quantity: 1, pointsCost: 300 });
                 updateFidelityUI();
                 sauvegarderPanierDansStorage();
                 updateCartUI();
@@ -1581,8 +1589,13 @@
         }
 
         window.retirerCodePromo = function() {
+            if (codePromoApplique && codePromoApplique.isReward) {
+                ajouterPointsFidelite(codePromoApplique.pointsCost);
+                afficherToast(`Bon fidélité retiré : +${codePromoApplique.pointsCost} pts recrédités !`);
+            } else {
+                afficherToast("Code promo retiré.");
+            }
             codePromoApplique = null;
-            afficherToast("Code promo retiré.");
             updateCartUI();
         }
 
@@ -1756,22 +1769,39 @@
 
         window.modifierQuantitePanier = function(index, delta) {
             cart[index].quantity += delta;
-            if (cart[index].quantity <= 0) cart.splice(index, 1);
+            if (cart[index].quantity <= 0) {
+                supprimerDuPanier(index);
+                return;
+            }
             sauvegarderPanierDansStorage();
             updateCartUI();
         }
 
         window.supprimerDuPanier = function(index) {
+            const item = cart[index];
+            if (item && item.type === 'reward_lot' && item.pointsCost) {
+                ajouterPointsFidelite(item.pointsCost);
+                afficherToast(`Récompense supprimée : +${item.pointsCost} pts recrédités !`);
+            }
             cart.splice(index, 1);
             sauvegarderPanierDansStorage();
             updateCartUI();
         }
 
         window.viderToutLePanier = function() {
+            cart.forEach(item => {
+                if (item.type === 'reward_lot' && item.pointsCost) {
+                    ajouterPointsFidelite(item.pointsCost);
+                }
+            });
+            if (codePromoApplique && codePromoApplique.isReward && codePromoApplique.pointsCost) {
+                ajouterPointsFidelite(codePromoApplique.pointsCost);
+            }
             cart = [];
             codePromoApplique = null;
             sauvegarderPanierDansStorage();
             updateCartUI();
+            afficherToast("Panier vidé. Points fidélité recrédités le cas échéant.");
         }
 
         window.ouvrirPanier = function() {
@@ -1835,7 +1865,7 @@
             htmlRecap += `<div class="flex justify-between"><span>Frais de port :</span> <span>${portText}</span></div>`;
             
             const pointsGagnes = Math.floor(res.sousTotalApresReduction) * 10;
-            htmlRecap += `<div class="flex justify-between text-sauge-700 font-bold text-xs pt-1"><span>Points fidélité gagnés (1€ = 10 pts) :</span> <span>+ ${pointsGagnes} pts</span></div>`;
+            htmlRecap += `<div class="flex justify-between text-sauge-700 font-bold text-xs pt-1"><span>Points fidélité gagnés (après paiement) :</span> <span>+ ${pointsGagnes} pts</span></div>`;
             
             htmlRecap += `<div class="flex justify-between text-ocre-600 font-bold text-sm pt-1 border-t border-creme-200"><span>Total à régler :</span> <span>${res.total.toFixed(2).replace('.', ',')} €</span></div>`;
             htmlRecap += `</div>`;
@@ -1850,7 +1880,7 @@
             document.getElementById('modal-checkout').classList.remove('flex');
         }
 
-        // --- GESTION SÉPARÉE : FORMULAIRE DE CONTACT DIRECT (MAILTO) ---
+        // --- CONTACT DIRECT (MAILTO) ---
         window.envoyerMailContactDirect = function(event) {
             event.preventDefault();
             const nom = document.getElementById('contact-nom').value.trim();
@@ -1862,13 +1892,12 @@
             const objetMail = encodeURIComponent("[QUESTION SITE] " + sujet);
             const corpsMail = encodeURIComponent(`Nom : ${nom}\nE-mail : ${email}\n\nMessage :\n${msg}`);
 
-            // Ouvre directement le client mail de l'appareil
             window.location.href = `mailto:${destinataire}?subject=${objetMail}&body=${corpsMail}`;
             afficherToast("Ouverture de votre messagerie pour envoyer le message à debstyle-coiffure@hotmail.com !");
             event.target.reset();
         }
 
-        // --- GESTION SÉPARÉE : NOTIFICATION E-MAIL DE COMMANDE (EMAILJS) ---
+        // --- NOTIFICATION E-MAIL DE COMMANDE (ENVOYÉE AVANT LE PAIEMENT) ---
         async function envoyerNotificationEmailCommande(resTotal) {
             const clientEmail = window.utilisateurActuel ? window.utilisateurActuel.email : "Client invité";
             let articlesText = cart.map(item => `- ${item.quantity}x ${item.title} (${item.subtitle})`).join('\n');
@@ -1898,12 +1927,13 @@
             const btn = document.getElementById('sumup-pay-button');
             if (!btn) return;
 
-            btn.textContent = "Génération du paiement en cours...";
+            btn.textContent = "Envoi de l'e-mail & Paiement...";
             btn.disabled = true;
 
+            // 1. Envoi de l'e-mail à debstyle-coiffure@hotmail.com avant d'aller vers SumUp
             await envoyerNotificationEmailCommande(res);
 
-            // CUMUL DES POINTS DE FIDÉLITÉ : 1€ = 10 points
+            // 2. Calcul et attribution des points de fidélité SEULEMENT au moment du paiement
             const ptsGagnes = Math.floor(res.sousTotalApresReduction) * 10;
             ajouterPointsFidelite(ptsGagnes);
 
@@ -1924,14 +1954,14 @@
                     viderToutLePanier();
                     window.location.href = data.url;
                 } else {
-                    afficherToast(`Commande validée ! (+${ptsGagnes} pts fidélité gagnés)`, "success");
+                    afficherToast(`Commande validée et e-mail envoyé ! (+${ptsGagnes} pts fidélité)`, "success");
                     viderToutLePanier();
                     fermerModalPaiement();
                     btn.textContent = "Payer avec SumUp";
                     btn.disabled = false;
                 }
             } catch (error) {
-                afficherToast(`Commande validée ! (+${ptsGagnes} pts fidélité gagnés)`, "success");
+                afficherToast(`Commande validée et e-mail envoyé ! (+${ptsGagnes} pts fidélité)`, "success");
                 viderToutLePanier();
                 fermerModalPaiement();
                 btn.textContent = "Payer avec SumUp";
