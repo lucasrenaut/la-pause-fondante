@@ -14,6 +14,9 @@
     <!-- EmailJS SDK pour la réception des commandes par e-mail -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
+    <!-- Supabase JS Client SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <!-- Palette de couleurs & Typographie -->
     <script>
         tailwind.config = {
@@ -489,37 +492,19 @@
         </div>
     </div>
 
-    <!-- MODALE COMPTE FIREBASE (EMAIL/MDP & GOOGLE 1-CLICK) -->
+    <!-- MODALE COMPTE SUPABASE -->
     <div id="modal-auth" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
         <div onclick="fermerModalAuth()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
-        <div class="relative bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl z-10 space-y-5 animate-fade-in">
+        <div class="relative bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl z-10 space-y-6 animate-fade-in">
             <button onclick="fermerModalAuth()" class="absolute top-4 right-4 text-creme-800 hover:text-creme-900"><i data-lucide="x"></i></button>
             <div class="text-center space-y-2">
                 <div class="w-12 h-12 bg-sauge-100 text-sauge-600 rounded-2xl flex items-center justify-center mx-auto">
                     <i data-lucide="user" class="w-6 h-6"></i>
                 </div>
                 <h3 id="auth-modal-title" class="font-serif text-2xl font-bold text-creme-900">Connexion</h3>
-                <p id="auth-modal-subtitle" class="text-xs text-creme-800">Accédez à votre espace client sécurisé.</p>
+                <p id="auth-modal-subtitle" class="text-xs text-creme-800">Accédez à votre compte sécurisé.</p>
             </div>
-
-            <!-- BOUTON SE CONNECTER AVEC GOOGLE -->
-            <button type="button" onclick="connexionGoogleFirebase()" class="w-full py-3 px-4 bg-white hover:bg-creme-50 text-creme-900 font-bold border border-creme-200 rounded-2xl shadow-2xs transition-all flex items-center justify-center gap-3 text-xs">
-                <svg class="w-4 h-4" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                </svg>
-                Continuer avec Google
-            </button>
-
-            <div class="flex items-center gap-3 my-2">
-                <div class="flex-grow border-t border-creme-200"></div>
-                <span class="text-[11px] font-semibold text-creme-800 uppercase tracking-wider">ou par email</span>
-                <div class="flex-grow border-t border-creme-200"></div>
-            </div>
-
-            <form id="auth-form" onsubmit="soumettreAuthFirebase(event)" class="space-y-4">
+            <form id="auth-form" onsubmit="soumettreAuthSupabase(event)" class="space-y-4">
                 <div class="space-y-1">
                     <label class="text-xs font-bold text-creme-800 uppercase tracking-wider">Adresse Email</label>
                     <input type="email" id="auth-email" required placeholder="votre.email@exemple.com" class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl text-xs focus:outline-none focus:border-sauge-500">
@@ -578,38 +563,18 @@
     <!-- TOASTS DE NOTIFICATION -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-    <!-- SCRIPT FIREBASE COMPLET ET CORRIGÉ -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { 
-            getAuth, 
-            createUserWithEmailAndPassword, 
-            signInWithEmailAndPassword, 
-            signInWithPopup, 
-            GoogleAuthProvider, 
-            signOut, 
-            onAuthStateChanged 
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    <!-- SCRIPT SUPABASE AUTHENTIFICATION -->
+    <script>
+        const SUPABASE_URL = "https://ewmdyjcjxwibhfjejhwe.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_esIheB1MfmllTZQWBivCWA_QFFuWkX8";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBSA3oAvmhJubZqQsqmkaMhjZ7o4BCUX00",
-            authDomain: "la-pause-fondante.firebaseapp.com",
-            projectId: "la-pause-fondante",
-            storageBucket: "la-pause-fondante.firebasestorage.app",
-            messagingSenderId: "536615269392",
-            appId: "1:536615269392:web:4d984de997c2b2ab704695",
-            measurementId: "G-T54LRCSS09"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const googleProvider = new GoogleAuthProvider();
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         window.utilisateurActuel = null;
         let modeInscription = false;
 
-        onAuthStateChanged(auth, (user) => {
-            window.utilisateurActuel = user;
+        supabase.auth.onAuthStateChange((event, session) => {
+            window.utilisateurActuel = session ? session.user : null;
             renderAuthHeader();
         });
 
@@ -617,12 +582,11 @@
             const container = document.getElementById('auth-header-container');
             if (!container) return;
             if (window.utilisateurActuel) {
-                const identifier = window.utilisateurActuel.displayName || window.utilisateurActuel.email;
                 container.innerHTML = `
                     <div class="flex items-center gap-2 bg-sauge-50 border border-sauge-200 px-3 py-1.5 rounded-2xl">
                         <i data-lucide="user-check" class="w-4 h-4 text-sauge-600"></i>
-                        <span class="text-xs font-bold text-sauge-800 max-w-[120px] truncate">${identifier}</span>
-                        <button onclick="deconnecterFirebase()" title="Se déconnecter" class="text-creme-800 hover:text-red-600 ml-1"><i data-lucide="log-out" class="w-3.5 h-3.5"></i></button>
+                        <span class="text-xs font-bold text-sauge-800 max-w-[120px] truncate">${window.utilisateurActuel.email}</span>
+                        <button onclick="deconnecterSupabase()" title="Se déconnecter" class="text-creme-800 hover:text-red-600 ml-1"><i data-lucide="log-out" class="w-3.5 h-3.5"></i></button>
                     </div>
                 `;
             } else {
@@ -633,24 +597,24 @@
                 `;
             }
             if (window.lucide) window.lucide.createIcons();
-        }
+        };
 
         window.ouvrirModalAuth = function() {
             modeInscription = false;
             majModalAuthUI();
             document.getElementById('modal-auth').classList.remove('hidden');
             document.getElementById('modal-auth').classList.add('flex');
-        }
+        };
 
         window.fermerModalAuth = function() {
             document.getElementById('modal-auth').classList.add('hidden');
             document.getElementById('modal-auth').classList.remove('flex');
-        }
+        };
 
         window.basculerModeAuth = function() {
             modeInscription = !modeInscription;
             majModalAuthUI();
-        }
+        };
 
         function majModalAuthUI() {
             const title = document.getElementById('auth-modal-title');
@@ -660,62 +624,63 @@
 
             if (modeInscription) {
                 title.textContent = "Créer un compte";
-                subtitle.textContent = "Inscrivez-vous en ligne en quelques secondes.";
+                subtitle.textContent = "Inscrivez-vous en quelques secondes pour suivre vos commandes.";
                 submitBtn.textContent = "S'inscrire";
                 switchBtn.textContent = "Déjà un compte ? Se connecter";
             } else {
                 title.textContent = "Connexion";
-                subtitle.textContent = "Connectez-vous à votre espace client.";
+                subtitle.textContent = "Connectez-vous à votre espace client La Pause Fondante.";
                 submitBtn.textContent = "Se connecter";
                 switchBtn.textContent = "Pas encore de compte ? Créer un compte";
             }
         }
 
-        window.soumettreAuthFirebase = async function(event) {
+        window.soumettreAuthSupabase = async function(event) {
             event.preventDefault();
             const email = document.getElementById('auth-email').value.trim();
             const password = document.getElementById('auth-password').value;
 
             try {
                 if (modeInscription) {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    afficherToast("Compte créé et connecté avec succès !");
+                    const { data, error } = await supabase.auth.signUp({
+                        email: email,
+                        password: password,
+                    });
+                    if (error) throw error;
+                    afficherToast("Compte créé avec succès !");
                 } else {
-                    await signInWithEmailAndPassword(auth, email, password);
+                    const { data, error } = await supabase.auth.signInWithPassword({
+                        email: email,
+                        password: password,
+                    });
+                    if (error) throw error;
                     afficherToast("Connexion réussie !");
                 }
                 fermerModalAuth();
                 document.getElementById('auth-form').reset();
             } catch (error) {
-                let msg = "Erreur d'authentification.";
-                if (error.code === 'auth/email-already-in-use') msg = "Cet email est déjà utilisé.";
-                if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') msg = "Email ou mot de passe incorrect.";
-                if (error.code === 'auth/weak-password') msg = "Le mot de passe doit contenir au moins 6 caractères.";
-                if (error.code === 'auth/requests-to-this-api-identitytoolkit-method-are-blocked') msg = "L'accès à l'API est temporairement restreint. Vérifiez la console Firebase.";
+                console.error("Erreur d'authentification :", error);
+                let msg = error.message || "Erreur lors de l'authentification.";
+                if (error.message.includes("Password should be at least")) {
+                    msg = "Le mot de passe doit contenir au moins 6 caractères.";
+                } else if (error.message.includes("Invalid login credentials")) {
+                    msg = "Email ou mot de passe incorrect.";
+                } else if (error.message.includes("User already registered")) {
+                    msg = "Cet email possède déjà un compte.";
+                }
                 afficherToast(msg, "warning");
             }
-        }
+        };
 
-        window.connexionGoogleFirebase = async function() {
+        window.deconnecterSupabase = async function() {
             try {
-                await signInWithPopup(auth, googleProvider);
-                afficherToast("Connexion avec Google réussie !");
-                fermerModalAuth();
-            } catch (error) {
-                if (error.code !== 'auth/popup-closed-by-user') {
-                    afficherToast("Erreur lors de la connexion Google.", "warning");
-                }
-            }
-        }
-
-        window.deconnecterFirebase = async function() {
-            try {
-                await signOut(auth);
+                const { error } = await supabase.auth.signOut();
+                if (error) throw error;
                 afficherToast("Déconnecté avec succès.");
             } catch (error) {
                 afficherToast("Erreur lors de la déconnexion.", "warning");
             }
-        }
+        };
     </script>
 
     <!-- SCRIPT PRINCIPAL BOUTIQUE -->
@@ -778,7 +743,7 @@
                     prix: 7.00, 
                     weight: 350, 
                     badge: "Édition Ultra Limitée (4 dispo !)", 
-                    image: "boite_musique_noël.png",
+                    image: "boite_musique_noel.png",
                     fallbackImage: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=500",
                     description: "Une petite boîte pleine de magie qui renferme 5 fondants parfumés d'environ 10g (soit 50g de douceur) + une jolie boîte musicale pour prolonger la magie des fêtes !",
                     elements: ["5 fondants parfumés (env. 50g au total)", "Boîte musicale mécanique de Noël", "Seulement 4 boîtes disponibles"] 
@@ -1556,7 +1521,8 @@
         async function envoyerNotificationEmail(pointRelaisSaisi, resTotal) {
             const clientEmail = window.utilisateurActuel ? window.utilisateurActuel.email : "Client non connecté";
             
-            let articlesText = cart.map(item => `- ${item.quantity}x ${item.title} (${item.subtitle})`).join('\n');
+            let articlesText = cart.map(item => `- ${item.quantity}x ${item.title} (${item.subtitle})`).join('
+');
             
             const templateParams = {
                 client_email: clientEmail,
@@ -1623,17 +1589,25 @@
             const res = calculerTotalPanier();
             const pointRelaisSaisi = document.getElementById('checkout-point-relais')?.value.trim() || "Non spécifié (point le plus proche)";
             
-            let texte = `Bonjour, je souhaite valider ma commande sur ${CONFIG.nomBoutique} (envoi en point relais) :\n\n`;
+            let texte = `Bonjour, je souhaite valider ma commande sur ${CONFIG.nomBoutique} (envoi en point relais) :
+
+`;
             cart.forEach(item => {
-                texte += `- ${item.quantity}x ${item.title} (${item.subtitle})\n`;
+                texte += `- ${item.quantity}x ${item.title} (${item.subtitle})
+`;
             });
-            texte += `\nPoint Relais souhaité : ${pointRelaisSaisi}`;
-            texte += `\nSous-total articles : ${res.sousTotalArticles.toFixed(2).replace('.', ',')} €`;
+            texte += `
+Point Relais souhaité : ${pointRelaisSaisi}`;
+            texte += `
+Sous-total articles : ${res.sousTotalArticles.toFixed(2).replace('.', ',')} €`;
             if (res.montantReduction > 0) {
-                texte += `\nCode promo appliqué (${codePromoApplique.code}) : - ${res.montantReduction.toFixed(2).replace('.', ',')} €`;
+                texte += `
+Code promo appliqué (${codePromoApplique.code}) : - ${res.montantReduction.toFixed(2).replace('.', ',')} €`;
             }
-            texte += `\nFrais de port : ${res.estLivraisonOfferte ? 'OFFERTS (0,00 €)' : res.fraisDePort.toFixed(2).replace('.', ',') + ' €'}`;
-            texte += `\nTotal Général : ${res.total.toFixed(2).replace('.', ',')} €`;
+            texte += `
+Frais de port : ${res.estLivraisonOfferte ? 'OFFERTS (0,00 €)' : res.fraisDePort.toFixed(2).replace('.', ',') + ' €'}`;
+            texte += `
+Total Général : ${res.total.toFixed(2).replace('.', ',')} €`;
 
             navigator.clipboard.writeText(texte).then(() => {
                 afficherToast("Résumé de commande copié avec le Point Relais !");
