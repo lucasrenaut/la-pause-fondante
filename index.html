@@ -941,7 +941,7 @@
             ]
         };
 
-        // Configuration EmailJS vérifiée
+        // Configuration EmailJS validée
         const EMAILJS_CONFIG = {
             publicKey: "rnYePJTMswP2wkX6O",
             serviceID: "service_cbfk3mr",
@@ -1753,7 +1753,7 @@
             event.target.reset();
         }
 
-        // --- NOTIFICATION E-MAIL DE COMMANDE VIA EMAILJS ---
+        // --- NOTIFICATION E-MAIL DE COMMANDE VIA EMAILJS (AVANT PAIEMENT) ---
         async function envoyerNotificationEmailCommande(resTotal) {
             const clientEmail = window.utilisateurActuel ? window.utilisateurActuel.email : "Client invité";
             let articlesText = cart.map(item => `- ${item.quantity}x ${item.title} (${item.subtitle})`).join('\n');
@@ -1767,10 +1767,18 @@
 
             if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.serviceID) {
                 try {
-                    await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateOrderID, orderParams);
+                    const res = await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateOrderID, orderParams);
+                    console.log("E-mail EmailJS envoyé avec succès :", res.status, res.text);
+                    return true;
                 } catch (err) {
-                    console.error("Erreur d'envoi EmailJS :", err);
+                    console.error("Erreur détaillée EmailJS :", err);
+                    const errorMsg = err.text || err.message || JSON.stringify(err);
+                    afficherToast("Erreur d'envoi d'e-mail : " + errorMsg, "warning");
+                    return false;
                 }
+            } else {
+                console.warn("EmailJS n'est pas initialisé.");
+                return false;
             }
         }
 
