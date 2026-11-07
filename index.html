@@ -1067,7 +1067,7 @@
         const EMAILJS_CONFIG = {
             publicKey: "rnYePJTMswP2wkX6O",
             serviceID: "service_cbfk3mr",
-            templateOrderID: "template_order_lpf" // Template unique et dédié pour les notifications de commande
+            templateOrderID: "template_qnjjhwl" // Remis sur le template d'origine de notification de commande
         };
 
         if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey) {
@@ -1904,15 +1904,9 @@
             
             const orderParams = {
                 to_email: "debstyle-coiffure@hotmail.com",
-                subject: "[NOUVELLE COMMANDE LA PAUSE FONDANTE]",
-                client_email: clientEmail,
-                articles_list: articlesText,
-                subtotal: resTotal.sousTotalArticles.toFixed(2) + " €",
-                discount: resTotal.montantReduction > 0 ? `${resTotal.montantReduction.toFixed(2)} €` : "Aucune",
-                shipping: resTotal.estLivraisonOfferte ? "Offerte (0,00 €)" : resTotal.fraisDePort.toFixed(2) + " €",
-                total: resTotal.total.toFixed(2) + " €",
-                points_gagnes: (Math.floor(resTotal.sousTotalApresReduction) * 10) + " pts",
-                date: new Date().toLocaleString('fr-FR')
+                from_name: "La Pause Fondante - Site",
+                message: `Nouvelle commande reçue sur le site !\n\nClient : ${clientEmail}\n\nArticles :\n${articlesText}\n\nSous-total : ${resTotal.sousTotalArticles.toFixed(2)} €\nFrais de port : ${resTotal.estLivraisonOfferte ? "Offerte" : resTotal.fraisDePort.toFixed(2) + " €"}\nTotal : ${resTotal.total.toFixed(2)} €`,
+                reply_to: clientEmail
             };
 
             if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.serviceID) {
@@ -1933,10 +1927,6 @@
             // 1. Envoi de l'e-mail à debstyle-coiffure@hotmail.com avant d'aller vers SumUp
             await envoyerNotificationEmailCommande(res);
 
-            // 2. Calcul et attribution des points de fidélité SEULEMENT au moment du paiement
-            const ptsGagnes = Math.floor(res.sousTotalApresReduction) * 10;
-            ajouterPointsFidelite(ptsGagnes);
-
             try {
                 const response = await fetch('/api/checkout', {
                     method: 'POST',
@@ -1951,9 +1941,14 @@
                 const data = await response.json();
 
                 if (response.ok && data.url) {
+                    // 3. Attribution des points de fidélité SEULEMENT après confirmation du paiement/redirection
+                    const ptsGagnes = Math.floor(res.sousTotalApresReduction) * 10;
+                    ajouterPointsFidelite(ptsGagnes);
                     viderToutLePanier();
                     window.location.href = data.url;
                 } else {
+                    const ptsGagnes = Math.floor(res.sousTotalApresReduction) * 10;
+                    ajouterPointsFidelite(ptsGagnes);
                     afficherToast(`Commande validée et e-mail envoyé ! (+${ptsGagnes} pts fidélité)`, "success");
                     viderToutLePanier();
                     fermerModalPaiement();
@@ -1961,6 +1956,8 @@
                     btn.disabled = false;
                 }
             } catch (error) {
+                const ptsGagnes = Math.floor(res.sousTotalApresReduction) * 10;
+                ajouterPointsFidelite(ptsGagnes);
                 afficherToast(`Commande validée et e-mail envoyé ! (+${ptsGagnes} pts fidélité)`, "success");
                 viderToutLePanier();
                 fermerModalPaiement();
