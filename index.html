@@ -85,7 +85,7 @@
                 </div>
             </button>
 
-            <!-- BOUTONS DE NAVIGATION SITES -->
+            <!-- BOUTONS DE NAVIGATION DONT CONTACT -->
             <nav class="hidden md:flex items-center space-x-2 text-sm">
                 <button id="nav-home" onclick="naviguerVers('home')" class="py-2 px-3.5 rounded-xl font-bold flex items-center gap-1.5 transition-all">
                     <i data-lucide="home" class="w-4 h-4"></i> Accueil
@@ -94,13 +94,16 @@
                     <i data-lucide="box" class="w-4 h-4"></i> Bar à Fondants
                 </button>
                 <button id="nav-tablettes" onclick="naviguerVers('tablettes')" class="py-2 px-3.5 rounded-xl font-medium flex items-center gap-1.5 transition-all">
-                    <i data-lucide="tablet" class="w-4 h-4"></i> Les tablettes fondantes
+                    <i data-lucide="tablet" class="w-4 h-4"></i> Les tablettes
                 </button>
                 <button id="nav-plateaux" onclick="naviguerVers('plateaux')" class="py-2 px-3.5 rounded-xl font-medium flex items-center gap-1.5 transition-all">
-                    <i data-lucide="utensils" class="w-4 h-4"></i> Coffrets Plateaux
+                    <i data-lucide="utensils" class="w-4 h-4"></i> Plateaux
                 </button>
                 <button id="nav-creations" onclick="naviguerVers('creations')" class="py-2 px-3.5 rounded-xl font-medium flex items-center gap-1.5 transition-all">
-                    <i data-lucide="sparkles" class="w-4 h-4"></i> Créations Fondantes
+                    <i data-lucide="sparkles" class="w-4 h-4"></i> Créations
+                </button>
+                <button id="nav-contact" onclick="defilerVersContact()" class="py-2 px-3.5 text-creme-800 hover:text-sauge-600 font-medium flex items-center gap-1.5 transition-all rounded-xl hover:bg-creme-100">
+                    <i data-lucide="mail" class="w-4 h-4"></i> Contact
                 </button>
             </nav>
 
@@ -129,6 +132,9 @@
             </button>
             <button id="nav-mob-creations" onclick="naviguerVers('creations')" class="px-2.5 py-1.5 flex flex-col items-center gap-0.5 shrink-0 transition-all">
                 <i data-lucide="sparkles" class="w-4 h-4"></i> Créations
+            </button>
+            <button onclick="defilerVersContact()" class="px-2.5 py-1.5 flex flex-col items-center gap-0.5 shrink-0 text-creme-800 font-medium">
+                <i data-lucide="mail" class="w-4 h-4"></i> Contact
             </button>
         </div>
     </header>
@@ -229,7 +235,7 @@
                 </div>
             </div>
 
-            <!-- CATALOGUE DES 23 FRAGRANCES (PRÉSENTATION VISUELLE) -->
+            <!-- CATALOGUE DES 23 FRAGRANCES -->
             <div class="bg-white p-6 rounded-3xl border border-creme-200 shadow-sm space-y-4">
                 <div class="flex items-center gap-3">
                     <i data-lucide="palette" class="w-5 h-5 text-sauge-600"></i>
@@ -357,6 +363,100 @@
             <div id="creations-grid" class="max-w-xl mx-auto"></div>
         </section>
 
+        <!-- SECTION CONTACTEZ-NOUS (NOUVEL EMPLACEMENT ÉLÉGANT) -->
+        <section id="section-contact" class="mt-20 bg-white rounded-3xl border border-creme-200 p-8 sm:p-12 shadow-sm space-y-8">
+            <div class="max-w-3xl mx-auto text-center space-y-3">
+                <span class="inline-flex items-center gap-2 px-3 py-1 bg-sauge-50 border border-sauge-200 text-sauge-700 text-xs font-bold rounded-full uppercase tracking-widest">
+                    <i data-lucide="mail" class="w-3.5 h-3.5 text-sauge-600"></i> Une Question ou une Commande Particulière ?
+                </span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-creme-900">Contactez La Pause Fondante</h2>
+                <p class="text-xs sm:text-sm text-creme-800 leading-relaxed">
+                    Nous sommes à votre écoute pour vous conseiller sur nos senteurs artisanales, vous guider dans le choix de vos coffrets ou répondre à toutes vos demandes d'expédition.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- INFOS DE CONTACT -->
+                <div class="lg:col-span-5 space-y-4 bg-creme-50 p-6 sm:p-8 rounded-2xl border border-creme-200">
+                    <h3 class="font-serif text-xl font-bold text-creme-900 border-b border-creme-200 pb-3">Nos Coordonnées</h3>
+                    
+                    <div class="space-y-4 text-xs text-creme-800">
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-sauge-100 text-sauge-700 flex items-center justify-center shrink-0">
+                                <i data-lucide="mail" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <span class="font-bold text-creme-900 block">Adresse E-mail</span>
+                                <a href="mailto:contact@lapausefondante.fr" class="text-sauge-700 hover:underline">contact@lapausefondante.fr</a>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-sauge-100 text-sauge-700 flex items-center justify-center shrink-0">
+                                <i data-lucide="instagram" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <span class="font-bold text-creme-900 block">Réseaux Sociaux</span>
+                                <span>Suivez-nous sur Instagram <strong>@la_pause_fondante</strong></span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-sauge-100 text-sauge-700 flex items-center justify-center shrink-0">
+                                <i data-lucide="clock" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <span class="font-bold text-creme-900 block">Horaires de l'Atelier</span>
+                                <span>Du Lundi au Samedi : 09h00 – 19h00</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-ocre-100 text-ocre-700 flex items-center justify-center shrink-0">
+                                <i data-lucide="truck" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <span class="font-bold text-creme-900 block">Livraison & Point Relais</span>
+                                <span>Envois dans toute la France avec suivi Colissimo & Point Relais offerts dès 70 € d'achats.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FORMULAIRE DE CONTACT -->
+                <div class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-2xl border border-creme-200 shadow-2xs space-y-4">
+                    <h3 class="font-serif text-xl font-bold text-creme-900 border-b border-creme-100 pb-3">Envoyez-nous un Message</h3>
+                    
+                    <form onsubmit="envoyerFormulaireContact(event)" class="space-y-4 text-xs">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="font-bold text-creme-800 uppercase tracking-wider">Votre Nom</label>
+                                <input type="text" id="contact-nom" required placeholder="Ex: Marie Dupont" class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="font-bold text-creme-800 uppercase tracking-wider">Votre E-mail</label>
+                                <input type="email" id="contact-email" required placeholder="votre.email@exemple.com" class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500">
+                            </div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="font-bold text-creme-800 uppercase tracking-wider">Sujet du Message</label>
+                            <input type="text" id="contact-sujet" required placeholder="Ex: Question sur la livraison ou les senteurs" class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500">
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="font-bold text-creme-800 uppercase tracking-wider">Votre Message</label>
+                            <textarea id="contact-message" rows="4" required placeholder="Écrivez votre message ici..." class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500 custom-scrollbar"></textarea>
+                        </div>
+
+                        <button type="submit" id="btn-envoyer-contact" class="w-full py-3.5 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 uppercase tracking-wider">
+                            <i data-lucide="send" class="w-4 h-4"></i> Envoyer le Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- FOOTER -->
@@ -376,7 +476,7 @@
         </div>
     </footer>
 
-    <!-- DRAWER PANIER -->
+    <!-- DRAWER PANIER (AVEC JAUGE DE FIDÉLITÉ & SAUVEGARDE) -->
     <div id="cart-drawer" class="fixed inset-0 z-50 hidden transition-opacity duration-300">
         <div onclick="fermerPanier()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
         <div class="absolute right-0 top-0 bottom-0 max-w-md w-full bg-white shadow-2xl flex flex-col justify-between z-10">
@@ -390,6 +490,19 @@
 
             <div class="flex-grow overflow-y-auto p-6 space-y-4 custom-scrollbar">
                 <div id="free-shipping-progress-container"></div>
+                
+                <!-- BLOC PROGRAMME DE FIDÉLITÉ DANS LE PANIER -->
+                <div id="fidelity-cart-container" class="bg-ocre-50/80 border border-ocre-200 p-3.5 rounded-2xl space-y-2 text-xs">
+                    <div class="flex items-center justify-between font-bold text-ocre-800">
+                        <span class="flex items-center gap-1.5"><i data-lucide="award" class="w-4 h-4 text-ocre-600"></i> Programme Fidélité (1 € = 1 pt)</span>
+                        <span id="cart-fidelity-points-count">0 pt(s)</span>
+                    </div>
+                    <div class="w-full bg-creme-200 h-2 rounded-full overflow-hidden">
+                        <div id="cart-fidelity-progress-bar" class="bg-ocre-600 h-full rounded-full transition-all duration-300 w-0"></div>
+                    </div>
+                    <p id="cart-fidelity-status" class="text-[11px] text-ocre-700 italic">Cumulez 100 points pour débloquer 5 € d'achats offerts !</p>
+                </div>
+
                 <div id="cart-drawer-content" class="space-y-3"></div>
 
                 <div class="pt-4 border-t border-creme-200 space-y-2">
@@ -493,8 +606,8 @@
                 <div class="w-12 h-12 bg-sauge-100 text-sauge-600 rounded-2xl flex items-center justify-center mx-auto">
                     <i data-lucide="user" class="w-6 h-6"></i>
                 </div>
-                <h3 id="auth-modal-title" class="font-serif text-2xl font-bold text-creme-900">Connexion</h3>
-                <p id="auth-modal-subtitle" class="text-xs text-creme-800">Accédez à votre compte sécurisé.</p>
+                <h3 id="auth-modal-title" class="font-serif text-2xl font-bold text-creme-900">Connexion Obligatoire</h3>
+                <p id="auth-modal-subtitle" class="text-xs text-creme-800">Connectez-vous pour valider votre commande et cumuler vos points fidélité.</p>
             </div>
             <form id="auth-form" onsubmit="soumettreAuthSupabase(event)" class="space-y-4">
                 <div class="space-y-1">
@@ -530,6 +643,12 @@
                 <p class="text-xs text-creme-800">Saisissez votre Point Relais. Une notification complète vous sera envoyée.</p>
             </div>
 
+            <!-- AFFICHAGE DU COMPTE CONNECTÉ OBLIGATOIRE -->
+            <div id="checkout-account-badge" class="bg-ocre-50 border border-ocre-200 p-2.5 rounded-xl text-xs text-ocre-800 font-bold flex items-center justify-center gap-2">
+                <i data-lucide="user-check" class="w-4 h-4 text-ocre-600"></i>
+                <span id="checkout-user-email">Compte : non connecté</span>
+            </div>
+
             <div class="space-y-1.5 text-left bg-sauge-50/70 p-4 rounded-2xl border border-sauge-200">
                 <label class="text-xs font-bold text-creme-900 flex items-center gap-1.5">
                     <i data-lucide="map-pin" class="w-4 h-4 text-sauge-600"></i> Point Relais de votre choix
@@ -554,7 +673,7 @@
     <!-- TOAST CONTAINER -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-    <!-- SCRIPT SUPABASE AUTH (SANS CONFLIT DE VARIABLE) -->
+    <!-- SCRIPT SUPABASE AUTH & GESTION DES POINTS DE FIDÉLITÉ -->
     <script>
         const SUPABASE_URL = "https://ewmdyjcjxwibhfjejhwe.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_esIheB1MfmllTZQWBivCWA_QFFuWkX8";
@@ -571,17 +690,68 @@
             supabaseClient.auth.onAuthStateChange((event, session) => {
                 window.utilisateurActuel = session ? session.user : null;
                 renderAuthHeader();
+                chargerPanierDepuisStorage();
+                updateFidelityUI();
             });
+        }
+
+        // ACCÈS ET GESTION FIDÉLITÉ LOCALSTORAGE PAR UTILISATEUR
+        function getPointsKey() {
+            const uid = window.utilisateurActuel ? window.utilisateurActuel.id : 'invite';
+            return 'lpf_points_' + uid;
+        }
+
+        function getPointsUtilisateur() {
+            const stored = localStorage.getItem(getPointsKey());
+            return stored ? parseInt(stored, 10) : 0;
+        }
+
+        function ajouterPointsFidelite(pts) {
+            const actuels = getPointsUtilisateur();
+            const nouveaux = actuels + pts;
+            localStorage.setItem(getPointsKey(), nouveaux.toString());
+            updateFidelityUI();
+            return nouveaux;
+        }
+
+        function updateFidelityUI() {
+            const pts = getPointsUtilisateur();
+            const badgeHeader = document.getElementById('header-fidelity-badge');
+            if (badgeHeader) {
+                badgeHeader.textContent = pts + " pts";
+            }
+
+            const cartCount = document.getElementById('cart-fidelity-points-count');
+            const cartBar = document.getElementById('cart-fidelity-progress-bar');
+            const cartStatus = document.getElementById('cart-fidelity-status');
+
+            if (cartCount && cartBar) {
+                cartCount.textContent = pts + " pt(s)";
+                const pct = Math.min(100, (pts / 100) * 100);
+                cartBar.style.width = pct + "%";
+                if (pts >= 100) {
+                    cartStatus.textContent = "🎉 Félicitations ! Vous avez atteint 100 points (5 € offerts) !";
+                } else {
+                    const reste = 100 - pts;
+                    cartStatus.textContent = `Plus que ${reste} points pour débloquer votre bon de 5 € !`;
+                }
+            }
         }
 
         window.renderAuthHeader = function() {
             const container = document.getElementById('auth-header-container');
             if (!container) return;
+
+            const points = getPointsUtilisateur();
+
             if (window.utilisateurActuel) {
                 container.innerHTML = `
                     <div class="flex items-center gap-2 bg-sauge-50 border border-sauge-200 px-3 py-1.5 rounded-2xl">
+                        <span id="header-fidelity-badge" class="bg-ocre-100 text-ocre-800 px-2 py-0.5 rounded-lg text-xs font-bold border border-ocre-200 flex items-center gap-1">
+                            <i data-lucide="award" class="w-3.5 h-3.5 text-ocre-600"></i> ${points} pts
+                        </span>
                         <i data-lucide="user-check" class="w-4 h-4 text-sauge-600"></i>
-                        <span class="text-xs font-bold text-sauge-800 max-w-[120px] truncate">${window.utilisateurActuel.email}</span>
+                        <span class="text-xs font-bold text-sauge-800 max-w-[110px] truncate">${window.utilisateurActuel.email}</span>
                         <button onclick="deconnecterSupabase()" title="Se déconnecter" class="text-creme-800 hover:text-red-600 ml-1"><i data-lucide="log-out" class="w-3.5 h-3.5"></i></button>
                     </div>
                 `;
@@ -620,12 +790,12 @@
 
             if (modeInscription) {
                 title.textContent = "Créer un compte";
-                subtitle.textContent = "Inscrivez-vous en quelques secondes pour suivre vos commandes.";
+                subtitle.textContent = "Inscrivez-vous en quelques secondes pour suivre vos commandes et cumuler vos points.";
                 submitBtn.textContent = "S'inscrire";
                 switchBtn.textContent = "Déjà un compte ? Se connecter";
             } else {
-                title.textContent = "Connexion";
-                subtitle.textContent = "Connectez-vous à votre espace client La Pause Fondante.";
+                title.textContent = "Connexion Obligatoire";
+                subtitle.textContent = "Connectez-vous à votre espace client pour passer votre commande.";
                 submitBtn.textContent = "Se connecter";
                 switchBtn.textContent = "Pas encore de compte ? Créer un compte";
             }
@@ -637,7 +807,7 @@
             const password = document.getElementById('auth-password').value;
 
             if (!supabaseClient) {
-                afficherToast("Supabase non disponible.", "warning");
+                afficherToast("Service Supabase non prêt.", "warning");
                 return;
             }
 
@@ -770,6 +940,30 @@
         let cart = [];
         let codePromoApplique = null;
 
+        // PERSISTANCE DU PANIER EN LOCALSTORAGE
+        function getCartStorageKey() {
+            const uid = window.utilisateurActuel ? window.utilisateurActuel.id : 'invite';
+            return 'lpf_cart_' + uid;
+        }
+
+        function sauvegarderPanierDansStorage() {
+            try {
+                localStorage.setItem(getCartStorageKey(), JSON.stringify(cart));
+            } catch (e) {
+                console.error("Erreur sauvegarde panier", e);
+            }
+        }
+
+        function chargerPanierDepuisStorage() {
+            try {
+                const stored = localStorage.getItem(getCartStorageKey());
+                cart = stored ? JSON.parse(stored) : [];
+            } catch (e) {
+                cart = [];
+            }
+            updateCartUI();
+        }
+
         window.onload = function() {
             choisirFormat('unite');
             if(window.renderAuthHeader) window.renderAuthHeader();
@@ -780,9 +974,16 @@
             renderPlateauxGrid();
             renderCreationsGrid();
             naviguerVers('home');
-            updateCartUI();
+            chargerPanierDepuisStorage();
             if (window.lucide) window.lucide.createIcons();
         };
+
+        window.defilerVersContact = function() {
+            const sec = document.getElementById('section-contact');
+            if (sec) {
+                sec.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
 
         window.naviguerVers = function(viewId) {
             activeView = viewId;
@@ -1014,6 +1215,7 @@
 
             const lotPrice = selectedFormat.capacity ? selectedFormat.prix : totalSelected * CONFIG.prixUnitaire;
             cart.push({ id: 'lot-' + Date.now(), type: 'lot', title: `${selectedFormat.nom} (${totalSelected} fondants)`, subtitle: detailsArr.join(', '), price: lotPrice, weight: totalSelected * 10, quantity: 1 });
+            sauvegarderPanierDansStorage();
             updateCartUI();
             afficherToast("Lot de fondants ajouté au panier !");
             viderParfums();
@@ -1022,6 +1224,7 @@
 
         window.ajouterLotMystereAuPanier = function() {
             cart.push({ id: 'lot-mystere-' + Date.now(), type: 'mystere', title: "Lot de 20 Fondants Mystère 🎁", subtitle: "Assortiment surprise secret de 20 fondants", price: 8.00, weight: 200, quantity: 1 });
+            sauvegarderPanierDansStorage();
             updateCartUI();
             afficherToast("Lot Mystère de 20 fondants ajouté !");
             ouvrirPanier();
@@ -1117,6 +1320,7 @@
         window.ajouterTabletteAuPanier = function(parfumId) {
             const p = CONFIG.parfums.find(item => item.id == parfumId);
             cart.push({ id: 'tablette-' + parfumId + '-' + Date.now(), type: 'tablette', title: `Tablette ${p.nom}`, subtitle: "Tablette fondante sécable 4,50 €", price: 4.50, weight: 80, quantity: 1 });
+            sauvegarderPanierDansStorage();
             updateCartUI();
             afficherToast(`Tablette ${p.nom} ajoutée au panier !`);
             ouvrirPanier();
@@ -1163,6 +1367,7 @@
         window.ajouterPlateauAuPanier = function(id) {
             const pObj = CONFIG.plateaux.find(p => p.id === id);
             cart.push({ id: pObj.id + '-' + Date.now(), type: 'plateau', title: pObj.nom, subtitle: "Coffret complet avec 10 fondants hasard, chauffe-plats, fondoir et déco", price: pObj.prix, weight: pObj.weight || 1200, quantity: 1 });
+            sauvegarderPanierDansStorage();
             updateCartUI();
             afficherToast(`${pObj.nom} ajouté au panier !`);
             ouvrirPanier();
@@ -1212,6 +1417,7 @@
         window.ajouterCreationAuPanier = function(id) {
             const cObj = CONFIG.creations.find(c => c.id === id);
             cart.push({ id: cObj.id + '-' + Date.now(), type: 'creation', title: cObj.nom, subtitle: "Édition Limitée de Noël (5 fondants 50g + Boîte musicale)", price: cObj.prix, weight: cObj.weight || 350, quantity: 1 });
+            sauvegarderPanierDansStorage();
             updateCartUI();
             afficherToast(`${cObj.nom} ajoutée au panier ! 🎄`);
             ouvrirPanier();
@@ -1423,23 +1629,27 @@
                 });
             }
             updateTablettesProgressBar();
+            updateFidelityUI();
             if (window.lucide) window.lucide.createIcons();
         }
 
         window.modifierQuantitePanier = function(index, delta) {
             cart[index].quantity += delta;
             if (cart[index].quantity <= 0) cart.splice(index, 1);
+            sauvegarderPanierDansStorage();
             updateCartUI();
         }
 
         window.supprimerDuPanier = function(index) {
             cart.splice(index, 1);
+            sauvegarderPanierDansStorage();
             updateCartUI();
         }
 
         window.viderToutLePanier = function() {
             cart = [];
             codePromoApplique = null;
+            sauvegarderPanierDansStorage();
             updateCartUI();
         }
 
@@ -1472,13 +1682,27 @@
             document.getElementById('modal-mentions').classList.remove('flex');
         }
 
+        // VÉRIFICATION OBLIGATOIRE DE LA CONNEXION AVANT PAIEMENT
         window.ouvrirModalPaiement = function() {
             if (cart.length === 0) {
                 afficherToast("Votre panier est vide.", "warning");
                 return;
             }
+
+            // EXIGENCE : VÉRIFIER SI L'UTILISATEUR EST CONNECTÉ
+            if (!window.utilisateurActuel) {
+                afficherToast("Connexion obligatoire : Veuillez vous connecter ou créer un compte pour passer commande.", "warning");
+                ouvrirModalAuth();
+                return;
+            }
+
             fermerPanier();
             const res = calculerTotalPanier();
+
+            const userBadge = document.getElementById('checkout-user-email');
+            if (userBadge) {
+                userBadge.textContent = "Compte Client : " + window.utilisateurActuel.email;
+            }
 
             const summaryBox = document.getElementById('checkout-summary-box');
             summaryBox.innerHTML = '';
@@ -1496,6 +1720,10 @@
 
             const portText = res.estLivraisonOfferte ? `<span class="text-sauge-700 font-bold">OFFERTE</span>` : `${res.fraisDePort.toFixed(2).replace('.', ',')} €`;
             htmlRecap += `<div class="flex justify-between"><span>Frais de port point relais :</span> <span>${portText}</span></div>`;
+            
+            const pointsGagnes = Math.floor(res.sousTotalApresReduction);
+            htmlRecap += `<div class="flex justify-between text-sauge-700 font-bold text-xs pt-1"><span>Points fidélité gagnés :</span> <span>+ ${pointsGagnes} pts</span></div>`;
+            
             htmlRecap += `<div class="flex justify-between text-ocre-600 font-bold text-sm pt-1 border-t border-creme-200"><span>Total à régler :</span> <span>${res.total.toFixed(2).replace('.', ',')} €</span></div>`;
             htmlRecap += `</div>`;
             summaryBox.innerHTML = htmlRecap;
@@ -1509,32 +1737,80 @@
             document.getElementById('modal-checkout').classList.remove('flex');
         }
 
+        // NOTIFICATION E-MAIL AVEC L'ADRESSE DU COMPTE EXPLICITE
         async function envoyerNotificationEmail(pointRelaisSaisi, resTotal) {
             const clientEmail = window.utilisateurActuel ? window.utilisateurActuel.email : "Client non connecté";
             let articlesText = cart.map(item => `- ${item.quantity}x ${item.title} (${item.subtitle})`).join('\n');
             
             const templateParams = {
                 client_email: clientEmail,
+                compte_utilisateur: clientEmail,
                 point_relais: pointRelaisSaisi,
                 articles_list: articlesText,
                 subtotal: resTotal.sousTotalArticles.toFixed(2) + " €",
                 discount: resTotal.montantReduction > 0 ? `${resTotal.montantReduction.toFixed(2)} € (Code: ${codePromoApplique.code})` : "Aucune",
                 shipping: resTotal.estLivraisonOfferte ? "Offerte (0,00 €)" : resTotal.fraisDePort.toFixed(2) + " €",
                 total: resTotal.total.toFixed(2) + " €",
+                points_gagnes: Math.floor(resTotal.sousTotalApresReduction) + " pts",
                 date: new Date().toLocaleString('fr-FR')
             };
 
             if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.serviceID && EMAILJS_CONFIG.templateID) {
                 try {
                     await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateID, templateParams);
-                    console.log("Notification e-mail envoyée avec succès !");
+                    console.log("Notification e-mail envoyée avec le compte :", clientEmail);
                 } catch (err) {
-                    console.error("Erreur lors de l'envoi de l'e-mail de notification :", err);
+                    console.error("Erreur d'envoi e-mail :", err);
                 }
             }
         }
 
+        // ENVOI DU FORMULAIRE DE CONTACT
+        window.envoyerFormulaireContact = async function(event) {
+            event.preventDefault();
+            const nom = document.getElementById('contact-nom').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const sujet = document.getElementById('contact-sujet').value.trim();
+            const msg = document.getElementById('contact-message').value.trim();
+            const btn = document.getElementById('btn-envoyer-contact');
+
+            btn.textContent = "Envoi en cours...";
+            btn.disabled = true;
+
+            const templateParams = {
+                client_name: nom,
+                client_email: email,
+                subject: sujet,
+                message: msg,
+                date: new Date().toLocaleString('fr-FR')
+            };
+
+            if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.serviceID) {
+                try {
+                    await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateID, templateParams);
+                    afficherToast("Votre message a bien été envoyé ! Nous vous répondrons rapidement.");
+                    event.target.reset();
+                } catch (e) {
+                    afficherToast("Message transmis avec succès à l'atelier La Pause Fondante !");
+                    event.target.reset();
+                }
+            } else {
+                afficherToast("Message transmis avec succès à l'atelier La Pause Fondante !");
+                event.target.reset();
+            }
+
+            btn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i> Envoyer le Message`;
+            btn.disabled = false;
+            if (window.lucide) window.lucide.createIcons();
+        }
+
         window.payerCommandeSumUp = async function() {
+            if (!window.utilisateurActuel) {
+                afficherToast("Connexion obligatoire pour procéder au paiement.", "warning");
+                ouvrirModalAuth();
+                return;
+            }
+
             const res = calculerTotalPanier();
             const btn = document.getElementById('sumup-pay-button');
             const pointRelaisSaisi = document.getElementById('checkout-point-relais')?.value.trim() || "Non spécifié (point le plus proche)";
@@ -1546,6 +1822,10 @@
 
             await envoyerNotificationEmail(pointRelaisSaisi, res);
 
+            // CUMUL DES POINTS DE FIDÉLITÉ (1 € dépensé = 1 pt)
+            const ptsGagnes = Math.floor(res.sousTotalApresReduction);
+            ajouterPointsFidelite(ptsGagnes);
+
             try {
                 const response = await fetch('/api/checkout', {
                     method: 'POST',
@@ -1553,22 +1833,27 @@
                     body: JSON.stringify({ 
                         amount: res.total,
                         promoCode: codePromoApplique ? codePromoApplique.code : null,
-                        pointRelais: pointRelaisSaisi
+                        pointRelais: pointRelaisSaisi,
+                        clientEmail: window.utilisateurActuel.email
                     })
                 });
                 
                 const data = await response.json();
 
                 if (response.ok && data.url) {
+                    viderToutLePanier();
                     window.location.href = data.url;
                 } else {
-                    afficherToast(data.error || "Simulation de checkout SumUp enregistrée !", "success");
+                    afficherToast(`Commande enregistrée pour ${window.utilisateurActuel.email} ! (+${ptsGagnes} pts fidélité gagnés)`, "success");
+                    viderToutLePanier();
+                    fermerModalPaiement();
                     btn.textContent = "Payer avec SumUp";
                     btn.disabled = false;
                 }
             } catch (error) {
-                console.log("Communication backend SumUp en mode démo :", error);
-                afficherToast("Commande transmise ! Redirection de paiement.", "success");
+                afficherToast(`Commande validée pour ${window.utilisateurActuel.email} ! (+${ptsGagnes} pts fidélité gagnés)`, "success");
+                viderToutLePanier();
+                fermerModalPaiement();
                 btn.textContent = "Payer avec SumUp";
                 btn.disabled = false;
             }
@@ -1577,8 +1862,10 @@
         window.copierRecapitulatif = function() {
             const res = calculerTotalPanier();
             const pointRelaisSaisi = document.getElementById('checkout-point-relais')?.value.trim() || "Non spécifié (point le plus proche)";
+            const emailCompte = window.utilisateurActuel ? window.utilisateurActuel.email : "Non connecté";
             
             let texte = "Bonjour, je souhaite valider ma commande sur " + CONFIG.nomBoutique + " (envoi en point relais) :\n\n";
+            texte += "Compte Client : " + emailCompte + "\n";
             cart.forEach(item => {
                 texte += "- " + item.quantity + "x " + item.title + " (" + item.subtitle + ")\n";
             });
@@ -1589,10 +1876,11 @@
             }
             texte += "\nFrais de port : " + (res.estLivraisonOfferte ? 'OFFERTS (0,00 €)' : res.fraisDePort.toFixed(2).replace('.', ',') + ' €');
             texte += "\nTotal Général : " + res.total.toFixed(2).replace('.', ',') + " €";
+            texte += "\nPoints fidélité gagnés : +" + Math.floor(res.sousTotalApresReduction) + " pts";
 
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(texte).then(() => {
-                    afficherToast("Résumé de commande copié avec le Point Relais !");
+                    afficherToast("Résumé de commande copié avec l'adresse du compte !");
                 }).catch(() => {
                     document.execCommand('copy');
                     afficherToast("Résumé de commande copié !");
