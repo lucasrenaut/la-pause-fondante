@@ -423,11 +423,11 @@
                     </div>
                 </div>
 
-                <!-- FORMULAIRE DE CONTACT -->
+                <!-- FORMULAIRE DE CONTACT DIRECT (OUVERTURE MAILTO SANS JSMAIL) -->
                 <div class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-2xl border border-creme-200 shadow-2xs space-y-4">
                     <h3 class="font-serif text-xl font-bold text-creme-900 border-b border-creme-100 pb-3">Envoyez-nous un Message</h3>
                     
-                    <form onsubmit="envoyerFormulaireContact(event)" class="space-y-4 text-xs">
+                    <form onsubmit="envoyerMailContactDirect(event)" class="space-y-4 text-xs">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="space-y-1">
                                 <label class="font-bold text-creme-800 uppercase tracking-wider">Votre Nom</label>
@@ -450,7 +450,7 @@
                         </div>
 
                         <button type="submit" id="btn-envoyer-contact" class="w-full py-3.5 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 uppercase tracking-wider">
-                            <i data-lucide="send" class="w-4 h-4"></i> Envoyer le Message
+                            <i data-lucide="send" class="w-4 h-4"></i> Envoyer le Message (Ouvrir l'e-mail)
                         </button>
                     </form>
                 </div>
@@ -476,7 +476,7 @@
         </div>
     </footer>
 
-    <!-- DRAWER PANIER (AVEC SECTION COMPTE, GESTION MOT DE PASSE & FIDÉLITÉ 1€ = 10PTS) -->
+    <!-- DRAWER PANIER -->
     <div id="cart-drawer" class="fixed inset-0 z-50 hidden transition-opacity duration-300">
         <div onclick="fermerPanier()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
         <div class="absolute right-0 top-0 bottom-0 max-w-md w-full bg-white shadow-2xl flex flex-col justify-between z-10">
@@ -498,7 +498,7 @@
                     <div id="cart-account-content" class="space-y-2"></div>
                 </div>
 
-                <!-- BLOC PROGRAMME DE FIDÉLITÉ (1€ = 10 PTS + RÉCOMPENSES) -->
+                <!-- BLOC PROGRAMME DE FIDÉLITÉ (1€ = 10 PTS) -->
                 <div id="fidelity-cart-container" class="bg-ocre-50/80 border border-ocre-200 p-4 rounded-2xl space-y-3 text-xs">
                     <div class="flex items-center justify-between font-bold text-ocre-800">
                         <span class="flex items-center gap-1.5"><i data-lucide="award" class="w-4 h-4 text-ocre-600"></i> Fidélité (1 € = 10 pts)</span>
@@ -1059,8 +1059,7 @@
         const EMAILJS_CONFIG = {
             publicKey: "rnYePJTMswP2wkX6O",
             serviceID: "service_cbfk3mr",
-            templateContactID: "template_jeryfp3", // Template dédié pour le contact vers debstyle-coiffure@hotmail.com
-            templateOrderID: "template_order_lpf"     // Template dédié pour les notifications de commande
+            templateOrderID: "template_order_lpf" // Template unique et dédié pour les notifications de commande
         };
 
         if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey) {
@@ -1851,49 +1850,25 @@
             document.getElementById('modal-checkout').classList.remove('flex');
         }
 
-        // --- GESTION DES EMAILS SÉPARÉS (CONTACT VS COMMANDE) ---
-
-        // 1. Envoi e-mail de contact vers debstyle-coiffure@hotmail.com
-        window.envoyerFormulaireContact = async function(event) {
+        // --- GESTION SÉPARÉE : FORMULAIRE DE CONTACT DIRECT (MAILTO) ---
+        window.envoyerMailContactDirect = function(event) {
             event.preventDefault();
             const nom = document.getElementById('contact-nom').value.trim();
             const email = document.getElementById('contact-email').value.trim();
             const sujet = document.getElementById('contact-sujet').value.trim();
             const msg = document.getElementById('contact-message').value.trim();
-            const btn = document.getElementById('btn-envoyer-contact');
 
-            btn.textContent = "Envoi en cours...";
-            btn.disabled = true;
+            const destinataire = "debstyle-coiffure@hotmail.com";
+            const objetMail = encodeURIComponent("[QUESTION SITE] " + sujet);
+            const corpsMail = encodeURIComponent(`Nom : ${nom}\nE-mail : ${email}\n\nMessage :\n${msg}`);
 
-            const templateParams = {
-                to_email: "debstyle-coiffure@hotmail.com",
-                client_name: nom,
-                client_email: email,
-                subject: "[CONTACT SITE] " + sujet,
-                message: msg,
-                date: new Date().toLocaleString('fr-FR')
-            };
-
-            if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.serviceID) {
-                try {
-                    await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateContactID, templateParams);
-                    afficherToast("Votre message a bien été envoyé à debstyle-coiffure@hotmail.com !");
-                    event.target.reset();
-                } catch (e) {
-                    afficherToast("Message transmis avec succès !");
-                    event.target.reset();
-                }
-            } else {
-                afficherToast("Message transmis avec succès !");
-                event.target.reset();
-            }
-
-            btn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i> Envoyer le Message`;
-            btn.disabled = false;
-            if (window.lucide) window.lucide.createIcons();
+            // Ouvre directement le client mail de l'appareil
+            window.location.href = `mailto:${destinataire}?subject=${objetMail}&body=${corpsMail}`;
+            afficherToast("Ouverture de votre messagerie pour envoyer le message à debstyle-coiffure@hotmail.com !");
+            event.target.reset();
         }
 
-        // 2. Notification de commande séparée
+        // --- GESTION SÉPARÉE : NOTIFICATION E-MAIL DE COMMANDE (EMAILJS) ---
         async function envoyerNotificationEmailCommande(resTotal) {
             const clientEmail = window.utilisateurActuel ? window.utilisateurActuel.email : "Client invité";
             let articlesText = cart.map(item => `- ${item.quantity}x ${item.title} (${item.subtitle})`).join('\n');
