@@ -498,36 +498,6 @@
                     <div id="cart-account-content" class="space-y-2"></div>
                 </div>
 
-                <!-- BLOC PROGRAMME DE FIDÉLITÉ (1€ = 10 PTS) -->
-                <div id="fidelity-cart-container" class="bg-ocre-50/80 border border-ocre-200 p-4 rounded-2xl space-y-3 text-xs">
-                    <div class="flex items-center justify-between font-bold text-ocre-800">
-                        <span class="flex items-center gap-1.5"><i data-lucide="award" class="w-4 h-4 text-ocre-600"></i> Fidélité (1 € = 10 pts)</span>
-                        <span id="cart-fidelity-points-count" class="bg-ocre-100 px-2 py-0.5 rounded-lg border border-ocre-200">0 pt(s)</span>
-                    </div>
-                    <div class="space-y-1">
-                        <div class="flex justify-between text-[11px] text-ocre-700 font-semibold">
-                            <span id="fidelity-reward-hint">Récompenses disponibles</span>
-                            <span id="fidelity-progress-text">0 / 300 pts</span>
-                        </div>
-                        <div class="w-full bg-creme-200 h-2.5 rounded-full overflow-hidden">
-                            <div id="cart-fidelity-progress-bar" class="bg-ocre-600 h-full rounded-full transition-all duration-300 w-0"></div>
-                        </div>
-                    </div>
-                    <div class="pt-1 border-t border-ocre-200/60 text-[11px] text-ocre-800 space-y-1">
-                        <p class="font-bold">🎁 Récompenses de fidélité :</p>
-                        <div class="grid grid-cols-2 gap-2 pt-1">
-                            <button onclick="echangerRecompense('bon10')" id="btn-reward-1" class="p-2 bg-white hover:bg-ocre-100 border border-ocre-200 rounded-xl text-left transition-all opacity-60 cursor-not-allowed">
-                                <span class="font-bold block text-ocre-900">Bon de 10%</span>
-                                <span class="text-[10px] text-creme-800">120 pts requis</span>
-                            </button>
-                            <button onclick="echangerRecompense('lot12')" id="btn-reward-2" class="p-2 bg-white hover:bg-ocre-100 border border-ocre-200 rounded-xl text-left transition-all opacity-60 cursor-not-allowed">
-                                <span class="font-bold block text-ocre-900">Lot 12 fondants gratuits</span>
-                                <span class="text-[10px] text-creme-800">300 pts requis</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
                 <div id="free-shipping-progress-container"></div>
                 <div id="cart-drawer-content" class="space-y-3"></div>
 
@@ -652,7 +622,7 @@
                     <i data-lucide="user" class="w-6 h-6"></i>
                 </div>
                 <h3 id="auth-modal-title" class="font-serif text-2xl font-bold text-creme-900">Connexion Compte</h3>
-                <p id="auth-modal-subtitle" class="text-xs text-creme-800">Connectez-vous pour retrouver votre email et cumuler vos points fidélité.</p>
+                <p id="auth-modal-subtitle" class="text-xs text-creme-800">Connectez-vous pour retrouver votre email et gérer vos commandes.</p>
             </div>
             <form id="auth-form" onsubmit="soumettreAuthSupabase(event)" class="space-y-4">
                 <div class="space-y-1">
@@ -685,7 +655,7 @@
             </div>
             <div class="space-y-1">
                 <h3 class="font-serif text-2xl font-bold text-creme-900">Validation de la Commande</h3>
-                <p class="text-xs text-creme-800">Paiement sécurisé et enregistrement de vos points fidélité (1€ = 10 pts).</p>
+                <p class="text-xs text-creme-800">Paiement sécurisé et envoi direct de la confirmation.</p>
             </div>
 
             <div id="checkout-account-badge" class="bg-ocre-50 border border-ocre-200 p-2.5 rounded-xl text-xs text-ocre-800 font-bold flex items-center justify-center gap-2">
@@ -728,109 +698,16 @@
                 renderAuthHeader();
                 renderCartAccountSection();
                 chargerPanierDepuisStorage();
-                updateFidelityUI();
             });
-        }
-
-        function getPointsKey() {
-            const uid = window.utilisateurActuel ? window.utilisateurActuel.id : 'invite';
-            return 'lpf_points_' + uid;
-        }
-
-        function getPointsUtilisateur() {
-            const stored = localStorage.getItem(getPointsKey());
-            return stored ? parseInt(stored, 10) : 0;
-        }
-
-        function ajouterPointsFidelite(pts) {
-            const actuels = getPointsUtilisateur();
-            const nouveaux = actuels + pts;
-            localStorage.setItem(getPointsKey(), nouveaux.toString());
-            updateFidelityUI();
-            return nouveaux;
-        }
-
-        function retirerPointsFidelite(pts) {
-            const actuels = getPointsUtilisateur();
-            const nouveaux = Math.max(0, actuels - pts);
-            localStorage.setItem(getPointsKey(), nouveaux.toString());
-            updateFidelityUI();
-            return nouveaux;
-        }
-
-        function updateFidelityUI() {
-            const pts = getPointsUtilisateur();
-            const badgeHeader = document.getElementById('header-fidelity-badge');
-            if (badgeHeader) {
-                badgeHeader.textContent = pts + " pts";
-            }
-
-            const cartCount = document.getElementById('cart-fidelity-points-count');
-            const cartBar = document.getElementById('cart-fidelity-progress-bar');
-            const fidelityProgressText = document.getElementById('fidelity-progress-text');
-            const btnReward1 = document.getElementById('btn-reward-1');
-            const btnReward2 = document.getElementById('btn-reward-2');
-
-            if (cartCount && cartBar) {
-                cartCount.textContent = pts + " pt(s)";
-                const maxGoal = 300;
-                const pct = Math.min(100, (pts / maxGoal) * 100);
-                cartBar.style.width = pct + "%";
-                fidelityProgressText.textContent = pts + " / " + maxGoal + " pts";
-
-                if (btnReward1) {
-                    if (pts >= 120) {
-                        btnReward1.classList.remove('opacity-60', 'cursor-not-allowed');
-                        btnReward1.classList.add('bg-ocre-100', 'hover:bg-ocre-200', 'cursor-pointer', 'border-ocre-400');
-                    } else {
-                        btnReward1.classList.add('opacity-60', 'cursor-not-allowed');
-                        btnReward1.classList.remove('bg-ocre-100', 'hover:bg-ocre-200', 'cursor-pointer', 'border-ocre-400');
-                    }
-                }
-
-                if (btnReward2) {
-                    if (pts >= 300) {
-                        btnReward2.classList.remove('opacity-60', 'cursor-not-allowed');
-                        btnReward2.classList.add('bg-ocre-100', 'hover:bg-ocre-200', 'cursor-pointer', 'border-ocre-400');
-                    } else {
-                        btnReward2.classList.add('opacity-60', 'cursor-not-allowed');
-                        btnReward2.classList.remove('bg-ocre-100', 'hover:bg-ocre-200', 'cursor-pointer', 'border-ocre-400');
-                    }
-                }
-            }
-        }
-
-        window.echangerRecompense = function(type) {
-            const pts = getPointsUtilisateur();
-            if (type === 'bon10' && pts >= 120) {
-                retirerPointsFidelite(120);
-                codePromoApplique = { code: "FIDELITE10", type: "percent", value: 10, label: "Bon fidélité 10%", isReward: true, pointsCost: 120 };
-                updateFidelityUI();
-                updateCartUI();
-                afficherToast("🎉 Bon de 10% appliqué à votre panier ! (-120 pts)");
-            } else if (type === 'lot12' && pts >= 300) {
-                retirerPointsFidelite(300);
-                cart.push({ id: 'recompense-' + Date.now(), type: 'reward_lot', title: "Lot de 12 Fondants Gratuits (Récompense)", subtitle: "Offert par fidélité", price: 0.00, weight: 120, quantity: 1, pointsCost: 300 });
-                updateFidelityUI();
-                sauvegarderPanierDansStorage();
-                updateCartUI();
-                afficherToast("🎉 Lot de 12 fondants gratuits ajouté à votre panier ! (-300 pts)");
-            } else {
-                afficherToast("Points insuffisants pour cette récompense.", "warning");
-            }
         }
 
         window.renderAuthHeader = function() {
             const container = document.getElementById('auth-header-container');
             if (!container) return;
-            const points = getPointsUtilisateur();
 
             if (window.utilisateurActuel) {
                 container.innerHTML = `
                     <div class="flex items-center gap-2 bg-sauge-50 border border-sauge-200 px-3 py-1.5 rounded-2xl">
-                        <span id="header-fidelity-badge" class="bg-ocre-100 text-ocre-800 px-2 py-0.5 rounded-lg text-xs font-bold border border-ocre-200 flex items-center gap-1">
-                            <i data-lucide="award" class="w-3.5 h-3.5 text-ocre-600"></i> ${points} pts
-                        </span>
                         <i data-lucide="user-check" class="w-4 h-4 text-sauge-600"></i>
                         <span class="text-xs font-bold text-sauge-800 max-w-[110px] truncate">${window.utilisateurActuel.email}</span>
                         <button onclick="deconnecterSupabase()" title="Se déconnecter" class="text-creme-800 hover:text-red-600 ml-1"><i data-lucide="log-out" class="w-3.5 h-3.5"></i></button>
@@ -878,7 +755,7 @@
                 }
                 container.innerHTML = `
                     <div class="text-center space-y-2 py-1">
-                        <p class="text-creme-800">Connectez-vous pour retrouver votre adresse email, cumuler vos points et gérer vos récompenses.</p>
+                        <p class="text-creme-800">Connectez-vous pour retrouver votre adresse email et gérer vos commandes.</p>
                         <button onclick="ouvrirModalAuth()" class="w-full py-2.5 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-xl shadow-sm transition-all">
                             Se connecter ou créer un compte
                         </button>
@@ -943,12 +820,12 @@
 
             if (modeInscription) {
                 title.textContent = "Créer un compte";
-                subtitle.textContent = "Inscrivez-vous pour enregistrer votre email et cumuler 10 points par euro.";
+                subtitle.textContent = "Inscrivez-vous pour enregistrer votre email et passer vos commandes facilement.";
                 submitBtn.textContent = "S'inscrire";
                 switchBtn.textContent = "Déjà un compte ? Se connecter";
             } else {
                 title.textContent = "Connexion Compte";
-                subtitle.textContent = "Connectez-vous pour retrouver votre email et vos points fidélité.";
+                subtitle.textContent = "Connectez-vous pour retrouver votre email.";
                 submitBtn.textContent = "Se connecter";
                 switchBtn.textContent = "Pas encore de compte ? Créer un compte";
             }
@@ -1064,6 +941,7 @@
             ]
         };
 
+        // Configuration EmailJS vérifiée
         const EMAILJS_CONFIG = {
             publicKey: "rnYePJTMswP2wkX6O",
             serviceID: "service_cbfk3mr",
@@ -1589,12 +1467,7 @@
         }
 
         window.retirerCodePromo = function() {
-            if (codePromoApplique && codePromoApplique.isReward) {
-                ajouterPointsFidelite(codePromoApplique.pointsCost);
-                afficherToast(`Bon fidélité retiré : +${codePromoApplique.pointsCost} pts recrédités !`);
-            } else {
-                afficherToast("Code promo retiré.");
-            }
+            afficherToast("Code promo retiré.");
             codePromoApplique = null;
             updateCartUI();
         }
@@ -1763,7 +1636,6 @@
                 });
             }
             updateTablettesProgressBar();
-            updateFidelityUI();
             if (window.lucide) window.lucide.createIcons();
         }
 
@@ -1778,30 +1650,17 @@
         }
 
         window.supprimerDuPanier = function(index) {
-            const item = cart[index];
-            if (item && item.type === 'reward_lot' && item.pointsCost) {
-                ajouterPointsFidelite(item.pointsCost);
-                afficherToast(`Récompense supprimée : +${item.pointsCost} pts recrédités !`);
-            }
             cart.splice(index, 1);
             sauvegarderPanierDansStorage();
             updateCartUI();
         }
 
         window.viderToutLePanier = function() {
-            cart.forEach(item => {
-                if (item.type === 'reward_lot' && item.pointsCost) {
-                    ajouterPointsFidelite(item.pointsCost);
-                }
-            });
-            if (codePromoApplique && codePromoApplique.isReward && codePromoApplique.pointsCost) {
-                ajouterPointsFidelite(codePromoApplique.pointsCost);
-            }
             cart = [];
             codePromoApplique = null;
             sauvegarderPanierDansStorage();
             updateCartUI();
-            afficherToast("Panier vidé. Points fidélité recrédités le cas échéant.");
+            afficherToast("Panier vidé.");
         }
 
         window.ouvrirPanier = function() {
@@ -1864,9 +1723,6 @@
             const portText = res.estLivraisonOfferte ? `<span class="text-sauge-700 font-bold">OFFERTE</span>` : `${res.fraisDePort.toFixed(2).replace('.', ',')} €`;
             htmlRecap += `<div class="flex justify-between"><span>Frais de port :</span> <span>${portText}</span></div>`;
             
-            const pointsGagnes = Math.floor(res.sousTotalApresReduction) * 10;
-            htmlRecap += `<div class="flex justify-between text-sauge-700 font-bold text-xs pt-1"><span>Points fidélité gagnés (après paiement) :</span> <span>+ ${pointsGagnes} pts</span></div>`;
-            
             htmlRecap += `<div class="flex justify-between text-ocre-600 font-bold text-sm pt-1 border-t border-creme-200"><span>Total à régler :</span> <span>${res.total.toFixed(2).replace('.', ',')} €</span></div>`;
             htmlRecap += `</div>`;
             summaryBox.innerHTML = htmlRecap;
@@ -1897,7 +1753,7 @@
             event.target.reset();
         }
 
-        // --- NOTIFICATION E-MAIL DE COMMANDE (ENVOYÉE AVANT LE PAIEMENT) ---
+        // --- NOTIFICATION E-MAIL DE COMMANDE VIA EMAILJS ---
         async function envoyerNotificationEmailCommande(resTotal) {
             const clientEmail = window.utilisateurActuel ? window.utilisateurActuel.email : "Client invité";
             let articlesText = cart.map(item => `- ${item.quantity}x ${item.title} (${item.subtitle})`).join('\n');
@@ -1912,7 +1768,9 @@
             if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.serviceID) {
                 try {
                     await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateOrderID, orderParams);
-                } catch (err) {}
+                } catch (err) {
+                    console.error("Erreur d'envoi EmailJS :", err);
+                }
             }
         }
 
@@ -1924,7 +1782,7 @@
             btn.textContent = "Envoi de l'e-mail & Paiement...";
             btn.disabled = true;
 
-            // 1. Envoi de l'e-mail à debstyle-coiffure@hotmail.com AVANT de payer sur SumUp
+            // 1. Envoi de l'e-mail de commande avant le paiement
             await envoyerNotificationEmailCommande(res);
 
             try {
@@ -1940,24 +1798,18 @@
                 
                 const data = await response.json();
 
-                // 2. Attribution des points de fidélité SEULEMENT au moment où le paiement est effectué / validé
-                const ptsGagnes = Math.floor(res.sousTotalApresReduction) * 10;
-                ajouterPointsFidelite(ptsGagnes);
-
                 if (response.ok && data.url) {
                     viderToutLePanier();
                     window.location.href = data.url;
                 } else {
-                    afficherToast(`Commande validée et e-mail envoyé ! (+${ptsGagnes} pts fidélité)`, "success");
+                    afficherToast("Commande validée et e-mail envoyé !", "success");
                     viderToutLePanier();
                     fermerModalPaiement();
                     btn.textContent = "Payer avec SumUp";
                     btn.disabled = false;
                 }
             } catch (error) {
-                const ptsGagnes = Math.floor(res.sousTotalApresReduction) * 10;
-                ajouterPointsFidelite(ptsGagnes);
-                afficherToast(`Commande validée et e-mail envoyé ! (+${ptsGagnes} pts fidélité)`, "success");
+                afficherToast("Commande validée et e-mail envoyé !", "success");
                 viderToutLePanier();
                 fermerModalPaiement();
                 btn.textContent = "Payer avec SumUp";
@@ -1980,7 +1832,6 @@
             }
             texte += "\nFrais de port : " + (res.estLivraisonOfferte ? 'OFFERTS (0,00 €)' : res.fraisDePort.toFixed(2).replace('.', ',') + ' €');
             texte += "\nTotal Général : " + res.total.toFixed(2).replace('.', ',') + " €";
-            texte += "\nPoints fidélité gagnés : +" + (Math.floor(res.sousTotalApresReduction) * 10) + " pts";
 
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(texte).then(() => {
