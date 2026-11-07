@@ -363,7 +363,7 @@
             <div id="creations-grid" class="max-w-xl mx-auto"></div>
         </section>
 
-        <!-- SECTION CONTACTEZ-NOUS (AVEC EMAIL DE CONTACT ET RÉSEAUX SOCIAUX) -->
+        <!-- SECTION CONTACTEZ-NOUS -->
         <section id="section-contact" class="mt-20 bg-white rounded-3xl border border-creme-200 p-8 sm:p-12 shadow-sm space-y-8">
             <div class="max-w-3xl mx-auto text-center space-y-3">
                 <span class="inline-flex items-center gap-2 px-3 py-1 bg-sauge-50 border border-sauge-200 text-sauge-700 text-xs font-bold rounded-full uppercase tracking-widest">
@@ -466,7 +466,7 @@
                 <img src="logo_pause_fondante.jpeg" alt="Logo" class="w-10 h-10 rounded-full object-cover border border-sauge-300" onerror="this.onerror=null; this.src='https://placehold.co/100x100/6b7f71/ffffff?text=LPF';">
                 <div>
                     <p class="font-serif font-bold text-creme-900 text-sm">La pause Fondante</p>
-                    <p class="text-[11px] mt-0.5">Confection artisanale de fondants parfumés en cire végétale — Contact : debstyle-coiffure@hotmail.com</p>
+                    <p class="text-[11px] mt-0.5">Confection artisanale — Contact : debstyle-coiffure@hotmail.com</p>
                 </div>
             </div>
             <div class="flex items-center gap-6 font-semibold">
@@ -495,9 +495,7 @@
                         <span class="flex items-center gap-1.5"><i data-lucide="user" class="w-4 h-4 text-sauge-600"></i> Espace Compte & Sécurité</span>
                         <span id="cart-account-status-badge" class="text-[10px] bg-ocre-100 text-ocre-800 px-2 py-0.5 rounded-md">Non connecté</span>
                     </div>
-                    <div id="cart-account-content" class="space-y-2">
-                        <!-- Rempli dynamiquement -->
-                    </div>
+                    <div id="cart-account-content" class="space-y-2"></div>
                 </div>
 
                 <!-- BLOC PROGRAMME DE FIDÉLITÉ (1€ = 10 PTS + RÉCOMPENSES) -->
@@ -509,7 +507,7 @@
                     <div class="space-y-1">
                         <div class="flex justify-between text-[11px] text-ocre-700 font-semibold">
                             <span id="fidelity-reward-hint">Récompenses disponibles</span>
-                            <span id="fidelity-progress-text">0 / 120 pts</span>
+                            <span id="fidelity-progress-text">0 / 300 pts</span>
                         </div>
                         <div class="w-full bg-creme-200 h-2.5 rounded-full overflow-hidden">
                             <div id="cart-fidelity-progress-bar" class="bg-ocre-600 h-full rounded-full transition-all duration-300 w-0"></div>
@@ -597,7 +595,7 @@
         </div>
     </div>
 
-    <!-- MODALE CGV (AVEC CONTACT DEBSTYLE) -->
+    <!-- MODALE CGV -->
     <div id="modal-cgv" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
         <div onclick="fermerModalCGV()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
         <div class="relative bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl z-10 space-y-4 max-h-[85vh] flex flex-col animate-fade-in">
@@ -606,19 +604,16 @@
                 <button onclick="fermerModalCGV()" class="p-1 rounded-full hover:bg-creme-100 text-creme-800"><i data-lucide="x"></i></button>
             </div>
             <div class="flex-grow overflow-y-auto space-y-4 text-xs text-creme-800 leading-relaxed custom-scrollbar pr-2">
-                <p class="font-bold text-creme-900">Contact de référence : debstyle-coiffure@hotmail.com</p>
+                <p class="font-bold text-creme-900">Contact : debstyle-coiffure@hotmail.com</p>
                 <p class="font-bold text-creme-900">Article 1 - Objet</p>
                 <p>Les présentes Conditions Générales de Vente régissent les ventes de fondants artisanaux, tablettes, coffrets et créations par La pause Fondante.</p>
                 <p class="font-bold text-creme-900">Article 2 - Prix et Paiement</p>
                 <p>Les prix affichés sont en Euros (€). Le règlement s'effectue par carte bancaire de manière sécurisée.</p>
                 <p class="font-bold text-creme-900">Article 3 - Livraison</p>
-                <p>Les commandes sont préparées et expédiées sous 3 à 5 jours ouvrés. Frais de port **OFFERTS à partir de 70,00 € d'achats**.</p>
-                <p class="font-bold text-creme-900">Article 4 - Droit de rétractation</p>
-                <p>Vous disposez d'un délai de 14 jours suivant la réception de votre commande pour exercer votre droit de rétractation.</p>
-
+                <p>Frais de port **OFFERTS à partir de 70,00 € d'achats**.</p>
                 <div class="pt-4 border-t border-creme-200 space-y-2">
-                    <p class="font-bold text-creme-900 text-sm">Informations de Sécurité & Conseils de Prudence :</p>
-                    <img src="Attention_pause_fondante.jpeg" alt="Consignes de prudence et allergènes La Pause Fondante" class="w-full h-auto rounded-xl border border-creme-200" onerror="this.onerror=null; this.style.display='none';">
+                    <p class="font-bold text-creme-900 text-sm">Conseils de Prudence :</p>
+                    <img src="Attention_pause_fondante.jpeg" alt="Consignes" class="w-full h-auto rounded-xl border border-creme-200" onerror="this.onerror=null; this.style.display='none';">
                 </div>
             </div>
             <div class="pt-2 border-t border-creme-200 text-right">
@@ -627,7 +622,7 @@
         </div>
     </div>
 
-    <!-- MODALE MENTIONS LÉGALES (AVEC CONTACT DEBSTYLE) -->
+    <!-- MODALE MENTIONS LÉGALES -->
     <div id="modal-mentions" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
         <div onclick="fermerModalMentions()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
         <div class="relative bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl z-10 space-y-4 animate-fade-in">
@@ -639,8 +634,7 @@
                 <p><strong>Raison sociale :</strong> La pause Fondante</p>
                 <p><strong>Contact :</strong> debstyle-coiffure@hotmail.com</p>
                 <p><strong>Réseaux :</strong> Facebook & TikTok : La Pause Fondante</p>
-                <p><strong>Activité :</strong> Confection artisanale de cire végétale et parfums d'intérieur.</p>
-                <p><strong>Hébergement :</strong> Vercel Inc. — 340 S Lemon Ave #4133 Walnut, CA 91789, USA.</p>
+                <p><strong>Hébergement :</strong> Vercel Inc.</p>
             </div>
             <div class="pt-2 border-t border-creme-200 text-right">
                 <button onclick="fermerModalMentions()" class="px-5 py-2.5 bg-sauge-600 text-white font-bold rounded-xl text-xs">Fermer</button>
@@ -648,7 +642,7 @@
         </div>
     </div>
 
-    <!-- MODALE AUTHENTIFICATION SUPABASE -->
+    <!-- MODALE AUTHENTIFICATION -->
     <div id="modal-auth" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
         <div onclick="fermerModalAuth()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
         <div class="relative bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl z-10 space-y-6 animate-fade-in">
@@ -658,7 +652,7 @@
                     <i data-lucide="user" class="w-6 h-6"></i>
                 </div>
                 <h3 id="auth-modal-title" class="font-serif text-2xl font-bold text-creme-900">Connexion Compte</h3>
-                <p id="auth-modal-subtitle" class="text-xs text-creme-800">Connectez-vous pour retrouver votre email, gérer votre mot de passe et cumuler vos points fidélité.</p>
+                <p id="auth-modal-subtitle" class="text-xs text-creme-800">Connectez-vous pour retrouver votre email et cumuler vos points fidélité.</p>
             </div>
             <form id="auth-form" onsubmit="soumettreAuthSupabase(event)" class="space-y-4">
                 <div class="space-y-1">
@@ -681,7 +675,7 @@
         </div>
     </div>
 
-    <!-- MODALE CHECKOUT SUMUP -->
+    <!-- MODALE CHECKOUT -->
     <div id="modal-checkout" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
         <div onclick="fermerModalPaiement()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
         <div class="relative bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl z-10 space-y-5 text-center animate-fade-in">
@@ -715,7 +709,7 @@
     <!-- TOAST CONTAINER -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-    <!-- SCRIPT SUPABASE AUTH & GESTION FIDÉLITÉ (1€ = 10PTS) -->
+    <!-- SCRIPTS CONFIGURATION & LOGIQUE -->
     <script>
         const SUPABASE_URL = "https://ewmdyjcjxwibhfjejhwe.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_esIheB1MfmllTZQWBivCWA_QFFuWkX8";
@@ -771,14 +765,11 @@
 
             if (cartCount && cartBar) {
                 cartCount.textContent = pts + " pt(s)";
-                
-                // Objectif max affiché : 300 points (lot de 12 fondants)
                 const maxGoal = 300;
                 const pct = Math.min(100, (pts / maxGoal) * 100);
                 cartBar.style.width = pct + "%";
                 fidelityProgressText.textContent = pts + " / " + maxGoal + " pts";
 
-                // Gestion des boutons de récompense (120 pts pour bon 10%, 300 pts pour lot 12 fondants)
                 if (btnReward1) {
                     if (pts >= 120) {
                         btnReward1.classList.remove('opacity-60', 'cursor-not-allowed');
@@ -824,7 +815,6 @@
         window.renderAuthHeader = function() {
             const container = document.getElementById('auth-header-container');
             if (!container) return;
-
             const points = getPointsUtilisateur();
 
             if (window.utilisateurActuel) {
@@ -945,7 +935,7 @@
 
             if (modeInscription) {
                 title.textContent = "Créer un compte";
-                subtitle.textContent = "Inscrivez-vous pour enregistrer votre email et cumuler 10 points par euro dépensé.";
+                subtitle.textContent = "Inscrivez-vous pour enregistrer votre email et cumuler 10 points par euro.";
                 submitBtn.textContent = "S'inscrire";
                 switchBtn.textContent = "Déjà un compte ? Se connecter";
             } else {
@@ -1000,7 +990,7 @@
         };
     </script>
 
-    <!-- SCRIPT PRINCIPAL E-COMMERCE -->
+    <!-- CATALOGUE ET E-COMMERCE -->
     <script>
         const CONFIG = {
             nomBoutique: "La pause Fondante",
@@ -1010,7 +1000,6 @@
                 { code: "REDUC10", type: "percent", value: 10, label: "10% de réduction" },
                 { code: "BIENVENUE", type: "percent", value: 15, label: "15% de bienvenue" },
                 { code: "OFFERT", type: "free_order", value: 100, label: "Commande offerte (100%)" },
-                { code: "GRATUIT", type: "free_order", value: 100, label: "Commande 100% offerte" },
                 { code: "LIVRAISON", type: "free_shipping", value: 0, label: "Livraison offerte" }
             ],
             lots: [
@@ -1061,8 +1050,8 @@
                     badge: "Édition Ultra Limitée (4 dispo !)", 
                     image: "boite_musique_noel.png",
                     fallbackImage: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=500",
-                    description: "Une petite boîte pleine de magie qui renferme 5 fondants parfumés d'environ 10g (soit 50g de douceur) + une jolie boîte musicale pour prolonger la magie des fêtes !",
-                    elements: ["5 fondants parfumés (env. 50g au total)", "Boîte musicale mécanique de Noël", "Seulement 4 boîtes disponibles"] 
+                    description: "Une petite boîte pleine de magie qui renferme 5 fondants parfumés d'environ 10g + une jolie boîte musicale !",
+                    elements: ["5 fondants parfumés (env. 50g)", "Boîte musicale mécanique de Noël", "Seulement 4 boîtes disponibles"] 
                 }
             ]
         };
@@ -1070,7 +1059,8 @@
         const EMAILJS_CONFIG = {
             publicKey: "rnYePJTMswP2wkX6O",
             serviceID: "service_cbfk3mr",
-            templateID: "template_jeryfp3"
+            templateContactID: "template_jeryfp3", // Template dédié pour le contact vers debstyle-coiffure@hotmail.com
+            templateOrderID: "template_order_lpf"     // Template dédié pour les notifications de commande
         };
 
         if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey) {
@@ -1441,7 +1431,7 @@
             } else if (etapeActuelle === 0) {
                 badge.textContent = `${totalTablettesPanier} sélectionnée(s) — Offre Débloquée ! 🎉`;
                 bar.style.width = "100%";
-                status.textContent = `Super ! ${nombreLotsComplets} lot(s) de 3 tablettes passe(nt) automatiquement à 12,00 €.`;
+                status.textContent = `Super ! ${nombreLotsComplets} lot(s) de 3 tablettes passe(nt) à 12,00 €.`;
             } else {
                 badge.textContent = `${totalTablettesPanier} sélectionnée(s) (${etapeActuelle}/3)`;
                 bar.style.width = `${(etapeActuelle / 3) * 100}%`;
@@ -1566,7 +1556,6 @@
             if (poidsTotalGrams <= 750) return 8.59;
             if (poidsTotalGrams <= 1000) return 8.89;
             if (poidsTotalGrams <= 2000) return 10.49;
-            if (poidsTotalGrams <= 5000) return 16.69;
             return 16.69;
         }
 
@@ -1862,29 +1851,9 @@
             document.getElementById('modal-checkout').classList.remove('flex');
         }
 
-        async function envoyerNotificationEmail(resTotal) {
-            const clientEmail = window.utilisateurActuel ? window.utilisateurActuel.email : "Client non connecté";
-            let articlesText = cart.map(item => `- ${item.quantity}x ${item.title} (${item.subtitle})`).join('\n');
-            
-            const templateParams = {
-                client_email: clientEmail,
-                compte_utilisateur: clientEmail,
-                articles_list: articlesText,
-                subtotal: resTotal.sousTotalArticles.toFixed(2) + " €",
-                discount: resTotal.montantReduction > 0 ? `${resTotal.montantReduction.toFixed(2)} €` : "Aucune",
-                shipping: resTotal.estLivraisonOfferte ? "Offerte (0,00 €)" : resTotal.fraisDePort.toFixed(2) + " €",
-                total: resTotal.total.toFixed(2) + " €",
-                points_gagnes: (Math.floor(resTotal.sousTotalApresReduction) * 10) + " pts",
-                date: new Date().toLocaleString('fr-FR')
-            };
+        // --- GESTION DES EMAILS SÉPARÉS (CONTACT VS COMMANDE) ---
 
-            if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.serviceID && EMAILJS_CONFIG.templateID) {
-                try {
-                    await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateID, templateParams);
-                } catch (err) {}
-            }
-        }
-
+        // 1. Envoi e-mail de contact vers debstyle-coiffure@hotmail.com
         window.envoyerFormulaireContact = async function(event) {
             event.preventDefault();
             const nom = document.getElementById('contact-nom').value.trim();
@@ -1897,17 +1866,18 @@
             btn.disabled = true;
 
             const templateParams = {
+                to_email: "debstyle-coiffure@hotmail.com",
                 client_name: nom,
                 client_email: email,
-                subject: sujet,
+                subject: "[CONTACT SITE] " + sujet,
                 message: msg,
                 date: new Date().toLocaleString('fr-FR')
             };
 
             if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.serviceID) {
                 try {
-                    await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateID, templateParams);
-                    afficherToast("Message bien envoyé à debstyle-coiffure@hotmail.com !");
+                    await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateContactID, templateParams);
+                    afficherToast("Votre message a bien été envoyé à debstyle-coiffure@hotmail.com !");
                     event.target.reset();
                 } catch (e) {
                     afficherToast("Message transmis avec succès !");
@@ -1923,6 +1893,31 @@
             if (window.lucide) window.lucide.createIcons();
         }
 
+        // 2. Notification de commande séparée
+        async function envoyerNotificationEmailCommande(resTotal) {
+            const clientEmail = window.utilisateurActuel ? window.utilisateurActuel.email : "Client invité";
+            let articlesText = cart.map(item => `- ${item.quantity}x ${item.title} (${item.subtitle})`).join('\n');
+            
+            const orderParams = {
+                to_email: "debstyle-coiffure@hotmail.com",
+                subject: "[NOUVELLE COMMANDE LA PAUSE FONDANTE]",
+                client_email: clientEmail,
+                articles_list: articlesText,
+                subtotal: resTotal.sousTotalArticles.toFixed(2) + " €",
+                discount: resTotal.montantReduction > 0 ? `${resTotal.montantReduction.toFixed(2)} €` : "Aucune",
+                shipping: resTotal.estLivraisonOfferte ? "Offerte (0,00 €)" : resTotal.fraisDePort.toFixed(2) + " €",
+                total: resTotal.total.toFixed(2) + " €",
+                points_gagnes: (Math.floor(resTotal.sousTotalApresReduction) * 10) + " pts",
+                date: new Date().toLocaleString('fr-FR')
+            };
+
+            if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.serviceID) {
+                try {
+                    await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateOrderID, orderParams);
+                } catch (err) {}
+            }
+        }
+
         window.payerCommandeSumUp = async function() {
             const res = calculerTotalPanier();
             const btn = document.getElementById('sumup-pay-button');
@@ -1931,7 +1926,7 @@
             btn.textContent = "Génération du paiement en cours...";
             btn.disabled = true;
 
-            await envoyerNotificationEmail(res);
+            await envoyerNotificationEmailCommande(res);
 
             // CUMUL DES POINTS DE FIDÉLITÉ : 1€ = 10 points
             const ptsGagnes = Math.floor(res.sousTotalApresReduction) * 10;
