@@ -1067,7 +1067,7 @@
         const EMAILJS_CONFIG = {
             publicKey: "rnYePJTMswP2wkX6O",
             serviceID: "service_cbfk3mr",
-            templateOrderID: "template_qnjjhwl" // Remis sur le template d'origine de notification de commande
+            templateOrderID: "template_qnjjhwl"
         };
 
         if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey) {
@@ -1924,7 +1924,7 @@
             btn.textContent = "Envoi de l'e-mail & Paiement...";
             btn.disabled = true;
 
-            // 1. Envoi de l'e-mail à debstyle-coiffure@hotmail.com avant d'aller vers SumUp
+            // 1. Envoi de l'e-mail à debstyle-coiffure@hotmail.com AVANT de payer sur SumUp
             await envoyerNotificationEmailCommande(res);
 
             try {
@@ -1940,15 +1940,14 @@
                 
                 const data = await response.json();
 
+                // 2. Attribution des points de fidélité SEULEMENT au moment où le paiement est effectué / validé
+                const ptsGagnes = Math.floor(res.sousTotalApresReduction) * 10;
+                ajouterPointsFidelite(ptsGagnes);
+
                 if (response.ok && data.url) {
-                    // 3. Attribution des points de fidélité SEULEMENT après confirmation du paiement/redirection
-                    const ptsGagnes = Math.floor(res.sousTotalApresReduction) * 10;
-                    ajouterPointsFidelite(ptsGagnes);
                     viderToutLePanier();
                     window.location.href = data.url;
                 } else {
-                    const ptsGagnes = Math.floor(res.sousTotalApresReduction) * 10;
-                    ajouterPointsFidelite(ptsGagnes);
                     afficherToast(`Commande validée et e-mail envoyé ! (+${ptsGagnes} pts fidélité)`, "success");
                     viderToutLePanier();
                     fermerModalPaiement();
