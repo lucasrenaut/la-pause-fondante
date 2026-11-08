@@ -3,7 +3,19 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Méthode non autorisée' });
   }
 
-  const { amount, sousTotal, fraisDePort, estLivraisonOfferte, pointRelais, clientEmail, cart, clientName, clientPhone, deliveryAddress, discount } = req.body || {};
+  const {
+    amount,
+    sousTotal,
+    fraisDePort,
+    estLivraisonOfferte,
+    pointRelais,
+    clientEmail,
+    cart,
+    clientName,
+    clientPhone,
+    deliveryAddress,
+    discount
+  } = req.body || {};
   
   if (!amount || amount <= 0) {
     return res.status(400).json({ error: 'Montant invalide' });
@@ -51,121 +63,59 @@ export default async function handler(req, res) {
 
     if (checkoutResponse.ok && checkoutData.hosted_checkout_url) {
       
-      // 3. ENVOI DE LA NOTIFICATION DE COMMANDE SUR TA BOÎTE MAIL VIA RESEND
-      const resendApiKey = process.env.RESEND_API_KEY;
+      // 3. ENVOI DE L'E-MAIL DE NOTIFICATION VIA EMAILJS (API REST)
+      const serviceId = process.env.EMAILJS_SERVICE_ID || "service_cbfk3mr";
+      const templateId = process.env.EMAILJS_TEMPLATE_ID || "template_jeryfp3";
+      const publicKey = process.env.EMAILJS_PUBLIC_KEY || "rnYePJTMswP2wkX6O";
+      const privateKey = process.env.EMAILJS_PRIVATE_KEY; // Nécessaire seulement si la clé privée est activée
 
-      if (resendApiKey) {
-        const detailsArticles = (cart || []).map(item => `
-          <tr style="border-bottom: 1px solid #eadfcf;">
-            <td style="padding: 10px 0; color: #2d312e;">
-              <strong style="color: #3e4b42;">${item.quantity}x ${item.title}</strong><br/>
-              <span style="font-size: 12px; color: #777;">${item.subtitle || ''}</span>
-            </td>
-            <td align="right" style="padding: 10px 0; font-weight: bold; color: #c88b4a; white-space: nowrap;">
-              ${(item.price * item.quantity).toFixed(2).replace('.', ',')} €
-            </td>
-          </tr>
-        `).join('');
+      const dateFormatee = new Date().toLocaleDateString('fr-FR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
 
-        const emailHtml = `
-          <!DOCTYPE html>
-          <html lang="fr">
-          <head><meta charset="UTF-8"/></head>
-          <body style="margin: 0; padding: 0; background-color: #fbf9f5; font-family: Arial, sans-serif; color: #2d312e;">
-            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #fbf9f5; padding: 20px 10px;">
-              <tr>
-                <td align="center">
-                  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 16px; border: 1px solid #eadfcf; overflow: hidden;">
-                    
-                    <!-- EN-TÊTE -->
-                    <tr>
-                      <td style="background-color: #6b7f71; padding: 20px 25px; color: #ffffff;">
-                        <h2 style="margin: 0; font-size: 20px; font-weight: bold;">🚨 Nouvelle commande à préparer !</h2>
-                        <p style="margin: 5px 0 0 0; font-size: 13px; color: #e4ebe4;">La Pause Fondante — ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</p>
-                      </td>
-                    </tr>
+      const articlesList = (cart || []).map(item => 
+        `• ${item.quantity}x ${item.title}${item.subtitle ? ` (${item.subtitle})` : ''} — ${(item.price * item.quantity).toFixed(2).replace('.', ',')} €`
+      ).join('\n');
 
-                    <!-- COORDONNÉES CLIENT & LIVRAISON -->
-                    <tr>
-                      <td style="padding: 25px;">
-                        
-                        <h3 style="margin: 0 0 12px 0; font-size: 14px; color: #3e4b42; text-transform: uppercase; letter-spacing: 0.5px;">
-                          👤 Coordonnées du Client
-                        </h3>
-                        <div style="background-color: #fbf9f5; border: 1px solid #e4ebe4; border-radius: 10px; padding: 15px; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">
-                          <p style="margin: 0 0 6px 0;"><strong>Nom :</strong> ${clientName || 'Non renseigné'}</p>
-                          <p style="margin: 0 0 6px 0;"><strong>E-mail client :</strong> <a href="mailto:${clientEmail}" style="color: #6b7f71; font-weight: bold;">${clientEmail || 'Non renseigné'}</a></p>
-                          <p style="margin: 0;"><strong>Téléphone :</strong> <a href="tel:${clientPhone}" style="color: #6b7f71; font-weight: bold;">${clientPhone || 'Non renseigné'}</a></p>
-                        </div>
+      const templateParams = {
+        to_email: "debstyle-coiffure@hotmail.com, renaut.lucas@outlook.fr, pooky49@hotmail.fr",
+        date: dateFormatee,
+        client_name: clientName || 'Client',
+        client_email: clientEmail || 'Non renseigné',
+        client_phone: clientPhone || 'Non renseigné',
+        delivery_address: deliveryAddress || 'Non renseignée',
+        point_relais: pointRelais || 'Livraison à domicile',
+        articles_list: articlesList,
+        details_articles: articlesList,
+        subtotal: `${parseFloat(sousTotal || 0).toFixed(2).replace('.', ',')} €`,
+        discount: discount || '0,00 €',
+        shipping: estLivraisonOfferte ? "OFFERTS" : `${parseFloat(fraisDePort || 0).toFixed(2).replace('.', ',')} €`,
+        total: `${parseFloat(amount).toFixed(2).replace('.', ',')} €`
+      };
 
-                        <h3 style="margin: 0 0 12px 0; font-size: 14px; color: #3e4b42; text-transform: uppercase; letter-spacing: 0.5px;">
-                          📦 Adresse & Point Relais
-                        </h3>
-                        <div style="background-color: #fdf9f3; border: 1px solid #efd9b7; border-radius: 10px; padding: 15px; font-size: 13px; line-height: 1.6; margin-bottom: 25px;">
-                          <p style="margin: 0 0 8px 0;"><strong>Adresse postale client :</strong><br/>${deliveryAddress || 'Non renseignée'}</p>
-                          <p style="margin: 0; color: #a66e35;"><strong>Mode / Point Relais choisi :</strong><br/><strong>${pointRelais || 'Livraison à domicile'}</strong></p>
-                        </div>
+      const emailjsBody = {
+        service_id: serviceId,
+        template_id: templateId,
+        user_id: publicKey,
+        template_params: templateParams
+      };
 
-                        <!-- ARTICLES -->
-                        <h3 style="margin: 0 0 12px 0; font-size: 14px; color: #3e4b42; text-transform: uppercase; letter-spacing: 0.5px;">
-                          🛒 Articles commandés
-                        </h3>
-                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 13px; margin-bottom: 20px;">
-                          ${detailsArticles}
-                        </table>
+      if (privateKey) {
+        emailjsBody.accessToken = privateKey;
+      }
 
-                        <!-- TOTAL -->
-                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top: 2px solid #6b7f71; padding-top: 15px; font-size: 13px;">
-                          <tr>
-                            <td style="padding: 4px 0; color: #666;">Sous-total articles :</td>
-                            <td align="right" style="font-weight: bold;">${parseFloat(sousTotal || 0).toFixed(2).replace('.', ',')} €</td>
-                          </tr>
-                          <tr>
-                            <td style="padding: 4px 0; color: #666;">Réduction :</td>
-                            <td align="right" style="font-weight: bold; color: #c88b4a;">${discount || '0,00 €'}</td>
-                          </tr>
-                          <tr>
-                            <td style="padding: 4px 0; color: #666;">Frais de port :</td>
-                            <td align="right" style="font-weight: bold;">
-                              ${estLivraisonOfferte ? '<span style="color: #6b7f71;">OFFERTS</span>' : parseFloat(fraisDePort || 0).toFixed(2).replace('.', ',') + ' €'}
-                            </td>
-                          </tr>
-                          <tr>
-                            <td style="padding: 12px 0 0 0; font-size: 16px; font-weight: bold; color: #3e4b42;">TOTAL À ENCAISSER :</td>
-                            <td align="right" style="padding: 12px 0 0 0; font-size: 20px; font-weight: bold; color: #c88b4a;">
-                              ${parseFloat(amount).toFixed(2).replace('.', ',')} €
-                            </td>
-                          </tr>
-                        </table>
-
-                      </td>
-                    </tr>
-
-                  </table>
-                </td>
-              </tr>
-            </table>
-          </body>
-          </html>
-        `;
-
-        try {
-          await fetch("https://api.resend.com/emails", {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${resendApiKey}`,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              from: "La pause Fondante <onboarding@resend.dev>",
-              to: ["debstyle-coiffure@hotmail.com"], // Envoi exclusif à ton adresse
-              subject: `🔔 NOUVELLE COMMANDE (${parseFloat(amount).toFixed(2).replace('.', ',')} €) - ${clientName || 'Client'}`,
-              html: emailHtml
-            })
-          });
-        } catch (err) {
-          console.error("Erreur d'envoi d'email Resend :", err);
-        }
+      try {
+        await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(emailjsBody)
+        });
+      } catch (err) {
+        console.error("Erreur d'envoi d'email EmailJS :", err);
       }
 
       return res.status(200).json({ url: checkoutData.hosted_checkout_url });
