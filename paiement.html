@@ -319,10 +319,8 @@
         }
 
         function obtenirPrixExpeditionSelonPoids(mode, poidsGrammes, sousTotal) {
-            // Livraison offerte dès 70 € d'achat
-            if (sousTotal >= 70.00) return 0;
+            if (sousTotal >= 70.00) return 0; // Offert dès 70 € d'achat
 
-            // CHRONOPOST (Shop2Shop standard)
             if (mode === 'chronopost') {
                 if (poidsGrammes <= 500) return 3.95;
                 if (poidsGrammes <= 1000) return 4.95;
@@ -330,7 +328,6 @@
                 return 7.90;
             }
 
-            // COLISSIMO POINT DE RETRAIT (Grille officielle 2026)
             if (mode === 'colissimo_relais') {
                 if (poidsGrammes <= 250) return 4.79;
                 if (poidsGrammes <= 500) return 6.89;
@@ -340,7 +337,6 @@
                 return 16.69;
             }
 
-            // COLISSIMO DOMICILE (Grille officielle 2026)
             if (mode === 'colissimo_domicile') {
                 if (poidsGrammes <= 250) return 5.49;
                 if (poidsGrammes <= 500) return 7.59;
@@ -484,7 +480,7 @@
             if (window.lucide) window.lucide.createIcons();
         }
 
-        // TRAITEMENT ET ENVOI DE L'EMAIL AVANT REDIRECTION PAIEMENT
+        // ENVOI DE L'EMAIL PUIS REDIRECTION VERS LE LIEN SUMUP OFFICIEL
         async function traiterPaiementSumUp() {
             if (!utilisateurActuel) {
                 afficherToast("Tu dois être connecté à ton compte pour commander.", "warning");
@@ -521,9 +517,20 @@
 
             const btnPayer = document.getElementById('btn-payer-sumup');
             btnPayer.disabled = true;
-            btnPayer.textContent = "Transmission de la commande...";
+            btnPayer.textContent = "Transmission & Redirection SumUp...";
 
             const adresseComplete = `${adresse}, ${cp} ${ville} (${pays})`;
+
+            let sousTotal = 0;
+            cart.forEach(i => sousTotal += i.price * i.quantity);
+            const poidsTotal = calculerPoidsTotalEnGrammes();
+            let fraisLivraison = obtenirPrixExpeditionSelonPoids(modeLivraisonSelectionne.type, poidsTotal, sousTotal);
+            let reduction = 0;
+            if (promoApplique) {
+                if (promoApplique.type === 'percent') reduction = (sousTotal * promoApplique.val) / 100;
+                else if (promoApplique.type === 'free') reduction = sousTotal;
+            }
+            const totalFinal = Math.max(0, (sousTotal - reduction) + fraisLivraison);
 
             const checkoutPayload = {
                 clientEmail: utilisateurActuel.email,
@@ -531,14 +538,14 @@
                 adresseLivraison: adresseComplete,
                 telephone: telephone,
                 pointRelais: pointRelaisVal,
-                poidsTotalGrammes: calculerPoidsTotalEnGrammes(),
+                poidsTotalGrammes: poidsTotal,
                 articles: cart,
                 promo: promoApplique,
                 modeLivraison: modeLivraisonSelectionne.type,
                 date: new Date().toLocaleDateString('fr-FR')
             };
 
-            // 1. ENVOI DE L'EMAIL VIA EMAILJS AVANT PAIEMENT
+            // Préparation des variables pour EmailJS correspondant à ton template
             let listeArticlesText = checkoutPayload.articles.map(i => `• ${i.quantity}x ${i.title} (${i.subtitle || i.weight + 'g' || ''})`).join('\n');
 
             const paramsMail = {
@@ -546,17 +553,22 @@
                 reply_to: checkoutPayload.clientEmail,
                 client_email: checkoutPayload.clientEmail,
                 client_name: checkoutPayload.nomClient,
-                client_phone: checkoutPayload.telephone,          // Téléphone inclus
-                delivery_address: checkoutPayload.adresseLivraison, // Adresse complète incluse
+                client_phone: checkoutPayload.telephone,
+                delivery_address: checkoutPayload.adresseLivraison,
                 point_relais: checkoutPayload.pointRelais,
                 articles_list: listeArticlesText,
+                subtotal: sousTotal.toFixed(2).replace('.', ',') + " €",
+                discount: promoApplique ? `- ${reduction.toFixed(2).replace('.', ',')} €` : "0,00 €",
+                shipping: fraisLivraison === 0 ? "OFFERTS" : fraisLivraison.toFixed(2).replace('.', ',') + " €",
+                total: totalFinal.toFixed(2).replace('.', ',') + " €",
                 date: checkoutPayload.date
             };
 
+            // 1. ENVOI DE L'EMAIL AVANT REDIRECTION
             try {
                 if (typeof emailjs !== 'undefined') {
                     await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateOrderID, paramsMail, EMAILJS_CONFIG.publicKey);
-                    console.log("E-mail de commande envoyé avec succès à debstyle-coiffure@hotmail.com");
+                    console.log("E-mail envoyé avec succès à debstyle-coiffure@hotmail.com");
                 }
             } catch (err) {
                 console.error("Erreur lors de l'envoi de l'e-mail EmailJS :", err);
@@ -564,27 +576,9 @@
 
             sessionStorage.setItem('lpf_pending_checkout', JSON.stringify(checkoutPayload));
 
-            // 2. REDIRECTION SUMUP OU FINALISATION
-            try {
-                const resSumup = await fetch('/api/checkout', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(checkoutPayload)
-                });
-                const data = await resSumup.json();
-
-                if (resSumup.ok && data.url) {
-                    window.location.href = data.url;
-                } else {
-                    localStorage.removeItem(getCartKey());
-                    afficherToast("Commande enregistrée et e-mail envoyé !", "success");
-                    setTimeout(() => { window.location.href = 'index.html'; }, 2500);
-                }
-            } catch (err) {
-                localStorage.removeItem(getCartKey());
-                afficherToast("Commande enregistrée avec succès !", "success");
-                setTimeout(() => { window.location.href = 'index.html'; }, 2500);
-            }
+            // 2. REDIRECTION VERS TON LIEN SUMUP OFFICIEL
+            const LIEN_SUMUP = "https://pay.sumup.com/b2c/QDCB1T3C";
+            window.location.href = LIEN_SUMUP;
         }
 
         function afficherToast(message, type = "success") {
