@@ -4,19 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La Pause Fondante | Commande & Livraison</title>
-
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
-
-    <!-- EmailJS SDK -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
-    <!-- Supabase JS Client SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <script>
         tailwind.config = {
             theme: {
@@ -34,7 +24,6 @@
             }
         }
     </script>
-
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="h-full font-sans text-creme-900 antialiased bg-[#fbf9f5]">
@@ -52,16 +41,14 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-12">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             
-            <!-- COLONNE GAUCHE : ADRESSE ET LIVRAISON -->
             <div class="lg:col-span-7 space-y-8">
-                
                 <div id="auth-alert" class="hidden bg-amber-50 border border-amber-200 p-4 rounded-2xl flex items-center justify-between gap-4">
                     <div class="flex items-center gap-3 text-xs text-amber-900">
                         <i data-lucide="lock" class="w-5 h-5 text-amber-600 shrink-0"></i>
                         <span>Tu dois être connecté à ton compte client pour valider la commande.</span>
                     </div>
                     <a href="index.html" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow-sm shrink-0">
-                        Se connecter sur la boutique
+                        Se connecter
                     </a>
                 </div>
 
@@ -126,7 +113,7 @@
                     <div class="bg-white rounded-2xl border border-creme-300 overflow-hidden shadow-sm divide-y divide-creme-200">
                         <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-sauge-50/50 transition-colors">
                             <div class="flex items-center gap-3">
-                                <input type="radio" name="shipping_mode" value="chronopost" data-relais="true" checked onchange="renderCheckoutSummary()" class="w-4 h-4 text-sauge-600 focus:ring-sauge-500">
+                                <input type="radio" name="shipping_mode" value="chronopost" data-relais="true" checked onchange="renderCheckoutSummary()" class="w-4 h-4 text-sauge-600">
                                 <div>
                                     <span class="text-xs font-bold text-creme-900 block">Chronopost Point Relais (Shop2Shop)</span>
                                     <span class="text-[11px] text-creme-800">Livraison sous 2 à 4 jours</span>
@@ -137,7 +124,7 @@
 
                         <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-sauge-50/50 transition-colors">
                             <div class="flex items-center gap-3">
-                                <input type="radio" name="shipping_mode" value="colissimo_relais" data-relais="true" onchange="renderCheckoutSummary()" class="w-4 h-4 text-sauge-600 focus:ring-sauge-500">
+                                <input type="radio" name="shipping_mode" value="colissimo_relais" data-relais="true" onchange="renderCheckoutSummary()" class="w-4 h-4 text-sauge-600">
                                 <div>
                                     <span class="text-xs font-bold text-creme-900 block">Colissimo Point de Retrait (La Poste / Pickup)</span>
                                     <span class="text-[11px] text-creme-800">Livraison sous 48h</span>
@@ -148,7 +135,7 @@
 
                         <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-sauge-50/50 transition-colors border-l-4 border-l-ocre-500 bg-ocre-50/30">
                             <div class="flex items-center gap-3">
-                                <input type="radio" name="shipping_mode" value="colissimo_domicile" data-relais="false" onchange="renderCheckoutSummary()" class="w-4 h-4 text-ocre-600 focus:ring-ocre-500">
+                                <input type="radio" name="shipping_mode" value="colissimo_domicile" data-relais="false" onchange="renderCheckoutSummary()" class="w-4 h-4 text-ocre-600">
                                 <div>
                                     <div class="flex items-center gap-2">
                                         <span class="text-xs font-bold text-creme-900">Colissimo Domicile</span>
@@ -161,7 +148,6 @@
                         </label>
                     </div>
 
-                    <!-- MODULE DE SAISIE DU POINT RELAIS -->
                     <div id="section-point-relais" class="bg-sauge-50 border border-sauge-200 p-5 rounded-3xl space-y-3">
                         <div>
                             <label class="font-bold text-sauge-900 uppercase tracking-wider flex items-center gap-2 text-xs">
@@ -173,12 +159,11 @@
                     </div>
                 </section>
 
-                <button id="btn-payer-sumup" onclick="traiterPaiementSumUp()" class="w-full py-4 bg-ocre-600 hover:bg-ocre-700 text-white font-bold rounded-2xl shadow-lg transition-all text-sm uppercase tracking-wider text-center flex items-center justify-center gap-2">
+                <button id="btn-payer-sumup" onclick="lancerPaiementAPI()" class="w-full py-4 bg-ocre-600 hover:bg-ocre-700 text-white font-bold rounded-2xl shadow-lg transition-all text-sm uppercase tracking-wider text-center flex items-center justify-center gap-2">
                     Payer avec SumUp
                 </button>
             </div>
 
-            <!-- COLONNE DROITE : RÉCAPITULATIF COMMANDE -->
             <div class="lg:col-span-5 bg-white p-6 sm:p-8 rounded-3xl border border-creme-200 shadow-sm space-y-6">
                 <h2 class="font-serif text-xl font-bold text-creme-900 pb-2 border-b border-creme-200">Récapitulatif de la commande</h2>
                 <div id="order-items-list" class="space-y-4 max-h-80 overflow-y-auto pr-1"></div>
@@ -220,19 +205,8 @@
     <script>
         const SUPABASE_URL = "https://ewmdyjcjxwibhfjejhwe.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_esIheB1MfmllTZQWBivCWA_QFFuWkX8";
-        
         let supabaseClient = null;
         if (window.supabase) supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        const EMAILJS_CONFIG = {
-            publicKey: "rnYePJTMswP2wkX6O",
-            serviceID: "service_cbfk3mr",
-            templateOrderID: "template_eadq46i"
-        };
-        
-        if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey) {
-            emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey });
-        }
 
         let utilisateurActuel = null;
         let cart = [];
@@ -285,7 +259,6 @@
 
         function obtenirFraisPort(mode, poidsGrammes, sousTotal) {
             if (sousTotal >= 70.00) return 0;
-
             if (mode === 'chronopost') {
                 if (poidsGrammes <= 500) return 3.95;
                 if (poidsGrammes <= 1000) return 4.95;
@@ -385,9 +358,9 @@
             if (window.lucide) window.lucide.createIcons();
         }
 
-        async function traiterPaiementSumUp() {
+        async function lancerPaiementAPI() {
             if (!utilisateurActuel) {
-                afficherToast("Tu dois être connecté à ton compte pour commander.", "warning");
+                afficherToast("Connecte-toi pour commander.", "warning");
                 return;
             }
             if (cart.length === 0) {
@@ -400,79 +373,71 @@
             const adresse = document.getElementById('input-adresse').value.trim();
             const cp = document.getElementById('input-cp').value.trim();
             const ville = document.getElementById('input-ville').value.trim();
-            const pays = document.getElementById('input-pays').value.trim();
-            const telephone = document.getElementById('input-telephone').value.trim();
+            const tel = document.getElementById('input-telephone').value.trim();
 
-            if (!prenom || !nom || !adresse || !cp || !ville || !telephone) {
-                afficherToast("Merci de remplir tous les champs d'adresse et le téléphone.", "warning");
+            if (!prenom || !nom || !adresse || !cp || !ville || !tel) {
+                afficherToast("Remplis tous les champs d'adresse et le téléphone.", "warning");
                 return;
             }
 
             const modeInput = document.querySelector('input[name="shipping_mode"]:checked');
+            const modeLivraison = modeInput ? modeInput.value : 'chronopost';
             const isRelais = modeInput ? modeInput.dataset.relais === "true" : true;
 
-            let pointRelaisVal = "Livraison à domicile (Colissimo Domicile)";
+            let pointRelaisVal = "Livraison à domicile";
             if (isRelais) {
                 pointRelaisVal = document.getElementById('input-point-relais').value.trim();
                 if (!pointRelaisVal) {
-                    afficherToast("Merci d'indiquer ton Point Relais choisi.", "warning");
-                    document.getElementById('input-point-relais').focus();
+                    afficherToast("Indique ton Point Relais choisi.", "warning");
                     return;
                 }
             }
 
             const btnPayer = document.getElementById('btn-payer-sumup');
             btnPayer.disabled = true;
-            btnPayer.textContent = "Traitement en cours...";
+            btnPayer.textContent = "Génération du paiement sécurisé...";
 
-            // Calculs financiers
             let sousTotal = 0;
             cart.forEach(i => sousTotal += i.price * i.quantity);
             const poidsTotal = calculerPoidsTotalEnGrammes();
-            const fraisPort = obtenirFraisPort(modeInput ? modeInput.value : 'chronopost', poidsTotal, sousTotal);
+            const fraisDePort = obtenirFraisPort(modeLivraison, poidsTotal, sousTotal);
             let reduction = 0;
             if (promoApplique) {
                 if (promoApplique.type === 'percent') reduction = (sousTotal * promoApplique.val) / 100;
                 else if (promoApplique.type === 'free') reduction = sousTotal;
             }
-            const totalFinal = Math.max(0, (sousTotal - reduction) + fraisPort);
+            const totalFinal = Math.max(1.00, (sousTotal - reduction) + fraisDePort);
 
-            const adresseComplete = `${adresse}, ${cp} ${ville} (${pays})`;
-            let listeArticlesText = cart.map(i => `• ${i.quantity}x ${i.title} (${i.subtitle || i.weight + 'g' || ''})`).join('\n');
-
-            const paramsMail = {
-                to_email: "debstyle-coiffure@hotmail.com",
-                reply_to: utilisateurActuel.email,
-                client_email: utilisateurActuel.email,
-                client_name: `${prenom} ${nom}`,
-                client_phone: telephone,
-                delivery_address: adresseComplete,
-                point_relais: pointRelaisVal,
-                articles_list: listeArticlesText,
-                subtotal: sousTotal.toFixed(2).replace('.', ',') + " €",
-                discount: promoApplique ? `- ${reduction.toFixed(2).replace('.', ',')} €` : "0,00 €",
-                shipping: fraisPort === 0 ? "OFFERTS" : fraisPort.toFixed(2).replace('.', ',') + " €",
-                total: totalFinal.toFixed(2).replace('.', ',') + " €",
-                date: new Date().toLocaleDateString('fr-FR')
+            const payload = {
+                amount: totalFinal,
+                sousTotal: sousTotal,
+                fraisDePort: fraisDePort,
+                estLivraisonOfferte: fraisDePort === 0,
+                pointRelais: `${pointRelaisVal} (${prenom} ${nom}, ${adresse}, ${cp} ${ville}, Tél: ${tel})`,
+                clientEmail: utilisateurActuel.email,
+                cart: cart
             };
 
-            // Envoi de l'e-mail avec journalisation dans la console
             try {
-                if (typeof emailjs !== 'undefined') {
-                    console.log("Tentative d'envoi EmailJS avec les paramètres :", paramsMail);
-                    const resEmail = await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateOrderID, paramsMail, EMAILJS_CONFIG.publicKey);
-                    console.log("EmailJS envoyé avec succès :", resEmail.status, resEmail.text);
+                const response = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+
+                if (response.ok && data.url) {
+                    localStorage.removeItem(getCartKey());
+                    window.location.href = data.url; // Redirige vers SumUp au montant exact ET envoie l'email via Resend
                 } else {
-                    console.error("Erreur : emailjs n'est pas défini.");
+                    // SECOURS si l'API SumUp n'est pas encore active sur Vercel : redirection vers le lien fixe avec message
+                    console.warn("API SumUp non configurée, bascule sur le lien fixe.");
+                    window.location.href = "https://pay.sumup.com/b2c/QDCB1T3C";
                 }
             } catch (err) {
-                console.error("Erreur critique EmailJS :", err);
+                console.error(err);
+                window.location.href = "https://pay.sumup.com/b2c/QDCB1T3C";
             }
-
-            // Redirection vers le lien SumUp (avec le montant passé en paramètre si supporté par ton type de lien, sinon lien direct)
-            // Si ton lien SumUp accepte les paramètres de montant (ex: ?amount=XX), tu peux l'ajouter, sinon il redirigera vers ton lien fixe
-            const LIEN_SUMUP = `https://pay.sumup.com/b2c/QDCB1T3C`;
-            window.location.href = LIEN_SUMUP;
         }
 
         function afficherToast(message, type = "success") {
