@@ -17,35 +17,20 @@
     <!-- Supabase JS Client SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+    <!-- JQUERY (Requis par le widget Mondial Relay) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <!-- WIDGET MONDIAL RELAY -->
+    <script src="https://widget.mondialrelay.com/parcelshop-picker/v4_0/scripts/jquery.plugin.mondialrelay.parcelshoppicker.min.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        sauge: {
-                            50: '#f4f6f4',
-                            100: '#e4ebe4',
-                            200: '#c8d6c9',
-                            500: '#849987',
-                            600: '#6b7f71',
-                            700: '#55665a',
-                            800: '#3e4b42',
-                        },
-                        ocre: {
-                            50: '#fdf9f3',
-                            100: '#f8eedc',
-                            200: '#efd9b7',
-                            500: '#d4a373',
-                            600: '#c88b4a',
-                            700: '#a66e35',
-                        },
-                        creme: {
-                            50: '#fbf9f5',
-                            100: '#f5f0e6',
-                            200: '#eadfcf',
-                            800: '#434743',
-                            900: '#2d312e',
-                        }
+                        sauge: { 50: '#f4f6f4', 100: '#e4ebe4', 200: '#c8d6c9', 500: '#849987', 600: '#6b7f71', 700: '#55665a', 800: '#3e4b42' },
+                        ocre: { 50: '#fdf9f3', 100: '#f8eedc', 200: '#efd9b7', 500: '#d4a373', 600: '#c88b4a', 700: '#a66e35' },
+                        creme: { 50: '#fbf9f5', 100: '#f5f0e6', 200: '#eadfcf', 800: '#434743', 900: '#2d312e' }
                     },
                     fontFamily: {
                         serif: ['Playfair Display', 'Georgia', 'serif'],
@@ -63,12 +48,14 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: #f5f0e6; border-radius: 8px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #c8d6c9; border-radius: 8px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #6b7f71; }
+        
+        /* Personnalisation légère du widget Mondial Relay pour l'intégrer au design */
+        #Zone_Widget { margin-top: 10px; border-radius: 12px; overflow: hidden; border: 1px solid #c8d6c9; }
     </style>
 </head>
 <body class="h-full font-sans text-creme-900 antialiased bg-[#fbf9f5]">
 
-    <!-- EN-TÊTE DE LA PAGE DE PAIEMENT -->
-    <header class="bg-white border-b border-creme-200 py-4">
+    <header class="bg-white border-b border-creme-200 py-4 sticky top-0 z-30 shadow-xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-3">
                 <img src="logo_pause_fondante.jpeg" alt="Logo" class="w-10 h-10 rounded-full object-cover border border-sauge-200" onerror="this.onerror=null; this.src='https://placehold.co/100x100/6b7f71/ffffff?text=LPF';">
@@ -81,10 +68,9 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-12">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             
-            <!-- COLONNE GAUCHE : ADRESSE ET LIVRAISON -->
+            <!-- COLONNE GAUCHE -->
             <div class="lg:col-span-7 space-y-8">
                 
-                <!-- ALERTE SI NON CONNECTÉ -->
                 <div id="auth-alert" class="hidden bg-amber-50 border border-amber-200 p-4 rounded-2xl flex items-center justify-between gap-4">
                     <div class="flex items-center gap-3 text-xs text-amber-900">
                         <i data-lucide="lock" class="w-5 h-5 text-amber-600 shrink-0"></i>
@@ -95,117 +81,131 @@
                     </a>
                 </div>
 
-                <!-- 1. COORDONNÉES ET ADRESSE -->
                 <section class="space-y-4">
                     <h2 class="font-serif text-xl font-bold text-creme-900 flex items-center gap-2">
-                        <i data-lucide="map-pin" class="w-5 h-5 text-sauge-600"></i> Adresse de livraison
+                        <i data-lucide="map-pin" class="w-5 h-5 text-sauge-600"></i> Adresse de livraison & Coordonnées
                     </h2>
 
                     <form id="form-livraison" class="space-y-3 text-xs">
                         <div class="space-y-1">
                             <label class="font-bold text-creme-800 uppercase tracking-wider">Pays / région</label>
                             <select id="input-pays" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
-                                <option value="France">France</option>
-                                <option value="Belgique">Belgique</option>
+                                <option value="FR">France Métropolitaine</option>
+                                <option value="BE">Belgique</option>
                             </select>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div class="space-y-1">
                                 <label class="font-bold text-creme-800 uppercase tracking-wider">Prénom <span class="text-red-500">*</span></label>
-                                <input type="text" id="input-prenom" required placeholder="Lucas" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
+                                <input type="text" id="input-prenom" required placeholder="Ex: Marie" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
                             </div>
                             <div class="space-y-1">
                                 <label class="font-bold text-creme-800 uppercase tracking-wider">Nom <span class="text-red-500">*</span></label>
-                                <input type="text" id="input-nom" required placeholder="RENAUT" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
+                                <input type="text" id="input-nom" required placeholder="Ex: Dupont" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
                             </div>
                         </div>
 
                         <div class="space-y-1">
-                            <label class="font-bold text-creme-800 uppercase tracking-wider">Entreprise (optionnel)</label>
-                            <input type="text" id="input-entreprise" placeholder="Nom de société" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500">
-                        </div>
-
-                        <div class="space-y-1">
-                            <label class="font-bold text-creme-800 uppercase tracking-wider">Adresse <span class="text-red-500">*</span></label>
-                            <input type="text" id="input-adresse" required placeholder="41, rue de la Marne" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
-                        </div>
-
-                        <div class="space-y-1">
-                            <label class="font-bold text-creme-800 uppercase tracking-wider">Appartement, suite, etc. (optionnel)</label>
-                            <input type="text" id="input-complement" placeholder="Bâtiment A, Appt 12..." class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500">
+                            <label class="font-bold text-creme-800 uppercase tracking-wider">Adresse rue et numéro <span class="text-red-500">*</span></label>
+                            <input type="text" id="input-adresse" required placeholder="Ex: 12 Rue des Fleurs" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div class="space-y-1">
                                 <label class="font-bold text-creme-800 uppercase tracking-wider">Code postal <span class="text-red-500">*</span></label>
-                                <input type="text" id="input-cp" required placeholder="59124" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
+                                <!-- onblur : recharge la carte dès qu'on quitte le champ Code Postal -->
+                                <input type="text" id="input-cp" required onblur="chargerWidgetMondialRelay()" placeholder="Ex: 59000" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
                             </div>
                             <div class="space-y-1">
                                 <label class="font-bold text-creme-800 uppercase tracking-wider">Ville <span class="text-red-500">*</span></label>
-                                <input type="text" id="input-ville" required placeholder="Escaudain" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
+                                <input type="text" id="input-ville" required placeholder="Ex: Lille" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
                             </div>
                         </div>
 
                         <div class="space-y-1">
                             <label class="font-bold text-creme-800 uppercase tracking-wider">Téléphone <span class="text-red-500">*</span></label>
-                            <input type="tel" id="input-telephone" required placeholder="06 10 70 76 59" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
-                        </div>
-
-                        <div class="pt-2 flex items-center gap-2">
-                            <input type="checkbox" id="check-newsletter" class="w-4 h-4 rounded border-creme-300 text-sauge-600 focus:ring-sauge-500">
-                            <label for="check-newsletter" class="text-xs text-creme-800 cursor-pointer">Envoyez-moi des nouvelles et des offres par SMS / e-mail</label>
+                            <input type="tel" id="input-telephone" required placeholder="Ex: 06 12 34 56 78" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
                         </div>
                     </form>
                 </section>
 
-                <!-- 2. MODE D'EXPÉDITION (TRANSPORTEURS) -->
                 <section class="space-y-4">
-                    <h2 class="font-serif text-xl font-bold text-creme-900 flex items-center gap-2">
-                        <i data-lucide="truck" class="w-5 h-5 text-sauge-600"></i> Mode d'expédition
-                    </h2>
+                    <div class="flex items-center justify-between">
+                        <h2 class="font-serif text-xl font-bold text-creme-900 flex items-center gap-2">
+                            <i data-lucide="truck" class="w-5 h-5 text-sauge-600"></i> Mode d'expédition
+                        </h2>
+                        <span id="badge-poids-total" class="text-xs bg-sauge-100 border border-sauge-300 text-sauge-800 font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
+                            <i data-lucide="scale" class="w-3.5 h-3.5 text-sauge-600"></i> Poids estimé : 0 g
+                        </span>
+                    </div>
 
                     <div class="bg-white rounded-2xl border border-creme-300 overflow-hidden shadow-sm divide-y divide-creme-200" id="shipping-methods-container">
                         
-                        <!-- CHRONOPOST 2SHOP -->
+                        <!-- MONDIAL RELAY -->
                         <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-sauge-50/50 transition-colors">
                             <div class="flex items-center gap-3">
-                                <input type="radio" name="shipping_mode" value="chronopost" data-price="3.95" data-relais="true" checked onchange="changerModeExpedition()" class="w-4 h-4 text-sauge-600 focus:ring-sauge-500">
-                                <span class="text-xs font-bold text-creme-900">Livraison en point relais Chronopost (2Shop)</span>
+                                <input type="radio" name="shipping_mode" value="mondial_relay" data-relais="true" checked onchange="changerModeExpedition()" class="w-4 h-4 text-sauge-600 focus:ring-sauge-500">
+                                <div>
+                                    <span class="text-xs font-bold text-creme-900 block">Mondial Relay (Lockers & Points Relais®)</span>
+                                    <span class="text-[11px] text-creme-800">Livraison sous 3 à 5 jours ouvrés</span>
+                                </div>
                             </div>
-                            <span class="text-xs font-bold text-sauge-700" id="price-shipping-chronopost">3,95 €</span>
+                            <span class="text-xs font-bold text-sauge-700 font-serif text-sm" id="price-shipping-mondial-relay">4,15 €</span>
                         </label>
 
                         <!-- COLISSIMO RELAIS -->
                         <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-sauge-50/50 transition-colors">
                             <div class="flex items-center gap-3">
-                                <input type="radio" name="shipping_mode" value="colissimo_relais" data-price="4.95" data-relais="true" onchange="changerModeExpedition()" class="w-4 h-4 text-sauge-600 focus:ring-sauge-500">
-                                <span class="text-xs font-bold text-creme-900">Livraison en point relais Colissimo</span>
+                                <input type="radio" name="shipping_mode" value="colissimo_relais" data-relais="true" onchange="changerModeExpedition()" class="w-4 h-4 text-sauge-600 focus:ring-sauge-500">
+                                <div>
+                                    <span class="text-xs font-bold text-creme-900 block">Colissimo Point de Retrait (La Poste / Pickup)</span>
+                                    <span class="text-[11px] text-creme-800">Livraison sous 48h en bureau de Poste ou Relais Pickup</span>
+                                </div>
                             </div>
-                            <span class="text-xs font-bold text-sauge-700" id="price-shipping-colissimo-relais">4,95 €</span>
+                            <span class="text-xs font-bold text-sauge-700 font-serif text-sm" id="price-shipping-colissimo-relais">4,79 €</span>
                         </label>
 
                         <!-- COLISSIMO DOMICILE -->
-                        <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-sauge-50/50 transition-colors">
+                        <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-sauge-50/50 transition-colors border-l-4 border-l-ocre-500 bg-ocre-50/30">
                             <div class="flex items-center gap-3">
-                                <input type="radio" name="shipping_mode" value="colissimo_domicile" data-price="8.95" data-relais="false" onchange="changerModeExpedition()" class="w-4 h-4 text-sauge-600 focus:ring-sauge-500">
-                                <span class="text-xs font-bold text-creme-900">Livraison à domicile avec Colissimo</span>
+                                <input type="radio" name="shipping_mode" value="colissimo_domicile" data-relais="false" onchange="changerModeExpedition()" class="w-4 h-4 text-ocre-600 focus:ring-ocre-500">
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold text-creme-900">Colissimo Domicile</span>
+                                        <span class="text-[9px] bg-ocre-600 text-white font-bold px-2 py-0.5 rounded-full uppercase">Chez vous</span>
+                                    </div>
+                                    <span class="text-[11px] text-creme-800">Remise directe sans signature</span>
+                                </div>
                             </div>
-                            <span class="text-xs font-bold text-sauge-700" id="price-shipping-colissimo-domicile">8,95 €</span>
+                            <span class="text-xs font-bold text-ocre-700 font-serif text-sm" id="price-shipping-colissimo-domicile">5,49 €</span>
                         </label>
                     </div>
 
-                    <!-- SAISIE NOM & ADRESSE DU POINT RELAIS -->
-                    <div id="section-point-relais" class="bg-sauge-50 border border-sauge-200 p-4 rounded-2xl space-y-2 text-xs">
-                        <label class="font-bold text-sauge-900 uppercase tracking-wider flex items-center gap-1.5">
-                            <i data-lucide="map-pin" class="w-4 h-4 text-sauge-600"></i> Nom & Adresse du Point Relais sélectionné <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" id="input-point-relais" placeholder="Ex: Presse Saint-Waast, 12 rue de Lille, Valenciennes" class="w-full px-4 py-3 bg-white border border-sauge-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
-                        <p class="text-[11px] text-sauge-700 italic">Indique le point relais de ton choix pour l'expédition.</p>
+                    <!-- MODULE CARTE POINT RELAIS (WIDGET MONDIAL RELAY OFFICIEL) -->
+                    <div id="section-point-relais" class="bg-sauge-50 border border-sauge-200 p-5 rounded-3xl space-y-4">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-sauge-200 pb-3">
+                            <div>
+                                <label class="font-bold text-sauge-900 uppercase tracking-wider flex items-center gap-2 text-xs">
+                                    <i data-lucide="map" class="w-4 h-4 text-sauge-600"></i> Carte des Points Relais
+                                </label>
+                                <p class="text-[11px] text-sauge-700">Sélectionnez le commerce de votre choix sur la carte ci-dessous.</p>
+                            </div>
+                            <button type="button" onclick="chargerWidgetMondialRelay()" class="px-3 py-1.5 bg-white border border-sauge-300 text-sauge-800 text-[11px] font-bold rounded-xl shadow-xs hover:bg-sauge-100 transition-all flex items-center gap-1.5 shrink-0">
+                                <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-sauge-600"></i> Actualiser la carte
+                            </button>
+                        </div>
+
+                        <!-- CONTENEUR DU WIDGET OFFICIEL MONDIAL RELAY -->
+                        <div id="Zone_Widget" class="w-full bg-white h-[450px]"></div>
+
+                        <div class="space-y-1.5 pt-2">
+                            <label class="text-[11px] font-bold text-sauge-900 uppercase tracking-wider">Point Relais sélectionné <span class="text-red-500">*</span></label>
+                            <input type="text" id="input-point-relais" required readonly placeholder="Cliquez sur 'Choisir ce point' sur la carte..." class="w-full px-4 py-3 bg-white border border-sauge-300 rounded-xl focus:outline-none text-xs font-bold text-sauge-900 cursor-not-allowed">
+                        </div>
                     </div>
                 </section>
 
-                <!-- BOUTON DE PAIEMENT -->
                 <button id="btn-payer-sumup" onclick="traiterPaiementSumUp()" class="w-full py-4 bg-ocre-600 hover:bg-ocre-700 text-white font-bold rounded-2xl shadow-lg transition-all text-sm uppercase tracking-wider text-center flex items-center justify-center gap-2">
                     Payer avec SumUp
                 </button>
@@ -218,10 +218,8 @@
                     Récapitulatif de la commande
                 </h2>
 
-                <!-- LISTE DES ARTICLES -->
                 <div id="order-items-list" class="space-y-4 max-h-80 overflow-y-auto custom-scrollbar pr-1"></div>
 
-                <!-- CODE PROMO -->
                 <div class="pt-2 border-t border-creme-200 space-y-2">
                     <div class="flex gap-2">
                         <input type="text" id="promo-code-input" placeholder="Code de réduction" class="flex-grow px-4 py-2.5 bg-creme-50 border border-creme-300 rounded-xl text-xs uppercase focus:outline-none focus:border-sauge-500 font-bold tracking-wider">
@@ -232,10 +230,9 @@
                     <div id="applied-promo-container"></div>
                 </div>
 
-                <!-- DÉTAIL DES PRIX -->
-                <div class="pt-4 border-t border-creme-200 space-y-2 text-xs text-creme-800">
+                <div class="pt-4 border-t border-creme-200 space-y-2.5 text-xs text-creme-800">
                     <div class="flex justify-between">
-                        <span>Sous-total</span>
+                        <span>Sous-total articles</span>
                         <span id="summary-subtotal" class="font-semibold text-creme-900">0,00 €</span>
                     </div>
 
@@ -245,12 +242,12 @@
                     </div>
 
                     <div class="flex justify-between items-center">
-                        <span class="flex items-center gap-1">Expédition <i data-lucide="help-circle" class="w-3.5 h-3.5 text-creme-800" title="Frais de livraison calculés selon le mode choisi"></i></span>
-                        <span id="summary-shipping" class="font-semibold text-creme-900">3,95 €</span>
+                        <span class="flex items-center gap-1">Frais d'expédition (selon poids)</span>
+                        <span id="summary-shipping" class="font-bold text-creme-900">4,15 €</span>
                     </div>
 
                     <div class="flex justify-between items-center pt-3 border-t border-creme-200 text-sm">
-                        <span class="font-bold text-creme-900">Total</span>
+                        <span class="font-bold text-creme-900">Total Général</span>
                         <div class="text-right">
                             <span class="text-[10px] text-creme-800 font-semibold mr-1">EUR</span>
                             <span id="summary-total" class="font-serif text-2xl font-bold text-ocre-600">0,00 €</span>
@@ -262,7 +259,6 @@
         </div>
     </main>
 
-    <!-- TOAST CONTAINER -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
     <script>
@@ -282,14 +278,13 @@
         let utilisateurActuel = null;
         let cart = [];
         let promoApplique = null;
-        let modeLivraisonSelectionne = { type: 'chronopost', price: 3.95, isRelais: true };
+        let modeLivraisonSelectionne = { type: 'mondial_relay', isRelais: true };
 
         window.onload = function() {
             chargerUtilisateur();
             chargerPanier();
-            initialiserFormulairePrerempli();
+            chargerWidgetMondialRelay(); // Initialise le widget de base
 
-            // Vérification si le retour de paiement SumUp est validé
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('payment') === 'success' || urlParams.get('paid') === 'true' || urlParams.get('status') === 'success') {
                 const pendingData = sessionStorage.getItem('lpf_pending_checkout');
@@ -298,7 +293,7 @@
                     envoyerEmailConfirmationCommande(data);
                     sessionStorage.removeItem('lpf_pending_checkout');
                     localStorage.removeItem(getCartKey());
-                    afficherToast("Paiement validé avec succès ! Ta commande a été transmise.", "success");
+                    afficherToast("Paiement validé avec succès ! Votre commande a été transmise.", "success");
                     setTimeout(() => { window.location.href = 'index.html'; }, 3000);
                 }
             }
@@ -327,15 +322,6 @@
             });
         }
 
-        function initialiserFormulairePrerempli() {
-            document.getElementById('input-prenom').value = "Lucas";
-            document.getElementById('input-nom').value = "RENAUT";
-            document.getElementById('input-adresse').value = "41, rue de la Marne";
-            document.getElementById('input-cp').value = "59124";
-            document.getElementById('input-ville').value = "Escaudain";
-            document.getElementById('input-telephone').value = "06 10 70 76 59";
-        }
-
         function chargerPanier() {
             try {
                 const data = localStorage.getItem(getCartKey());
@@ -346,22 +332,102 @@
             renderCheckoutSummary();
         }
 
+        function calculerPoidsTotalEnGrammes() {
+            let poidsTotal = 0;
+            cart.forEach(item => {
+                let poidsUnitaire = item.weight || 100;
+                poidsTotal += poidsUnitaire * item.quantity;
+            });
+            return Math.max(50, poidsTotal);
+        }
+
+        function obtenirPrixExpeditionSelonPoids(mode, poidsGrammes, sousTotal) {
+            if (sousTotal >= 70.00) return 0;
+            if (mode === 'mondial_relay') {
+                if (poidsGrammes <= 500) return 4.15;
+                if (poidsGrammes <= 1000) return 5.99;
+                if (poidsGrammes <= 3000) return 7.99;
+                if (poidsGrammes <= 4000) return 9.99;
+                if (poidsGrammes <= 10000) return 15.99;
+                return 25.99;
+            }
+            if (mode === 'colissimo_relais') {
+                if (poidsGrammes <= 250) return 4.79;
+                if (poidsGrammes <= 500) return 6.89;
+                if (poidsGrammes <= 750) return 8.59;
+                if (poidsGrammes <= 1000) return 8.89;
+                if (poidsGrammes <= 2000) return 10.49;
+                return 16.69;
+            }
+            if (mode === 'colissimo_domicile') {
+                if (poidsGrammes <= 250) return 5.49;
+                if (poidsGrammes <= 500) return 7.59;
+                if (poidsGrammes <= 750) return 9.29;
+                if (poidsGrammes <= 1000) return 9.59;
+                if (poidsGrammes <= 2000) return 11.19;
+                if (poidsGrammes <= 5000) return 17.39;
+                if (poidsGrammes <= 10000) return 25.29;
+                if (poidsGrammes <= 15000) return 31.99;
+                return 39.59;
+            }
+            return 4.15;
+        }
+
         function changerModeExpedition() {
             const checkedRadio = document.querySelector('input[name="shipping_mode"]:checked');
             if (!checkedRadio) return;
 
-            const price = parseFloat(checkedRadio.dataset.price);
             const isRelais = checkedRadio.dataset.relais === "true";
-            modeLivraisonSelectionne = { type: checkedRadio.value, price: price, isRelais: isRelais };
+            modeLivraisonSelectionne = { type: checkedRadio.value, isRelais: isRelais };
 
             const sectionRelais = document.getElementById('section-point-relais');
             if (isRelais) {
                 sectionRelais.classList.remove('hidden');
+                chargerWidgetMondialRelay(); // Recharge le widget si on repasse en relais
             } else {
                 sectionRelais.classList.add('hidden');
             }
 
             renderCheckoutSummary();
+        }
+
+        // ==========================================
+        // VRAI WIDGET CARTE MONDIAL RELAY
+        // ==========================================
+        function chargerWidgetMondialRelay() {
+            // On récupère le code postal et pays saisi (ou Valenciennes par défaut)
+            let cpSaisi = document.getElementById('input-cp').value.trim();
+            let paysSaisi = document.getElementById('input-pays').value || 'FR';
+            
+            // Si vide, on met un code postal par défaut pour que la carte s'affiche quand même (Escaudain)
+            if (cpSaisi.length < 4) {
+                cpSaisi = "59124"; 
+            }
+
+            // On vide le conteneur avant de recharger
+            $("#Zone_Widget").empty();
+
+            // Initialisation du Widget Officiel de Mondial Relay
+            $("#Zone_Widget").MR_ParcelShopPicker({
+                Target: "#input-point-relais", // Champ texte qui recevra les infos du point relais
+                Brand: "BDTEST13", // Clé API Test (Remplace par ta clé Enseigne Mondial Relay en production)
+                Country: paysSaisi,
+                PostCode: cpSaisi,
+                ColiLivMod: "24R", // Mode relais
+                Weight: calculerPoidsTotalEnGrammes(),
+                // Fonction déclenchée quand le client clique sur "Choisir ce point"
+                OnParcelShopSelected: function(data) {
+                    const texteRelais = `${data.Nom} - ${data.Adresse1}, ${data.CP} ${data.Ville}`;
+                    document.getElementById('input-point-relais').value = texteRelais;
+                    
+                    // Si l'utilisateur avait sélectionné Colissimo Relais, on précise que la carte utilisée est celle de MR
+                    if (modeLivraisonSelectionne.type === 'colissimo_relais') {
+                        afficherToast("Point de retrait validé ! (Réseau partenaire sélectionné)");
+                    } else {
+                        afficherToast("Point Mondial Relay sélectionné !");
+                    }
+                }
+            });
         }
 
         function validerCodePromo() {
@@ -394,8 +460,14 @@
             const labelDiscount = document.getElementById('label-discount');
             const amountDiscount = document.getElementById('amount-discount');
             const appliedPromoContainer = document.getElementById('applied-promo-container');
+            const badgePoids = document.getElementById('badge-poids-total');
 
             let sousTotal = 0;
+            const poidsTotal = calculerPoidsTotalEnGrammes();
+
+            if (badgePoids) {
+                badgePoids.innerHTML = `<i data-lucide="scale" class="w-3.5 h-3.5 text-sauge-600"></i> Poids estimé : <strong>${poidsTotal} g</strong>`;
+            }
 
             if (cart.length === 0) {
                 container.innerHTML = `<p class="text-xs text-creme-800 italic text-center py-6">Ton panier est vide.</p>`;
@@ -425,15 +497,22 @@
                 });
             }
 
-            // Port offert si sous-total >= 70€
-            let fraisLivraison = sousTotal >= 70.00 ? 0 : modeLivraisonSelectionne.price;
+            const priceMondialRelay = obtenirPrixExpeditionSelonPoids('mondial_relay', poidsTotal, sousTotal);
+            const priceColissimoRelais = obtenirPrixExpeditionSelonPoids('colissimo_relais', poidsTotal, sousTotal);
+            const priceColissimoDomicile = obtenirPrixExpeditionSelonPoids('colissimo_domicile', poidsTotal, sousTotal);
+
+            document.getElementById('price-shipping-mondial-relay').textContent = priceMondialRelay === 0 ? "OFFERT" : priceMondialRelay.toFixed(2).replace('.', ',') + " €";
+            document.getElementById('price-shipping-colissimo-relais').textContent = priceColissimoRelais === 0 ? "OFFERT" : priceColissimoRelais.toFixed(2).replace('.', ',') + " €";
+            document.getElementById('price-shipping-colissimo-domicile').textContent = priceColissimoDomicile === 0 ? "OFFERT" : priceColissimoDomicile.toFixed(2).replace('.', ',') + " €";
+
+            let fraisLivraison = obtenirPrixExpeditionSelonPoids(modeLivraisonSelectionne.type, poidsTotal, sousTotal);
+
             if (fraisLivraison === 0 && cart.length > 0) {
-                shippingEl.innerHTML = `<span class="text-sauge-700 font-bold">OFFERTE</span>`;
+                shippingEl.innerHTML = `<span class="text-sauge-700 font-bold bg-sauge-100 px-2 py-0.5 rounded-md">OFFERTS</span>`;
             } else {
                 shippingEl.textContent = fraisLivraison.toFixed(2).replace('.', ',') + " €";
             }
 
-            // Calcul réduction
             let reduction = 0;
             if (promoApplique) {
                 if (promoApplique.type === 'percent') reduction = (sousTotal * promoApplique.val) / 100;
@@ -486,12 +565,11 @@
                 return;
             }
 
-            let pointRelaisVal = "Livraison à domicile (Colissimo)";
+            let pointRelaisVal = "Livraison à domicile (Colissimo Domicile)";
             if (modeLivraisonSelectionne.isRelais) {
                 pointRelaisVal = document.getElementById('input-point-relais').value.trim();
                 if (!pointRelaisVal) {
-                    afficherToast("Merci de préciser le nom et l'adresse du point relais.", "warning");
-                    document.getElementById('input-point-relais').focus();
+                    afficherToast("Merci de cliquer sur un point relais sur la carte !", "warning");
                     return;
                 }
             }
@@ -506,6 +584,7 @@
                 adresseLivraison: `${adresse}, ${cp} ${ville} (${document.getElementById('input-pays').value})`,
                 telephone: tel,
                 pointRelais: pointRelaisVal,
+                poidsTotalGrammes: calculerPoidsTotalEnGrammes(),
                 articles: cart,
                 promo: promoApplique,
                 modeLivraison: modeLivraisonSelectionne.type,
