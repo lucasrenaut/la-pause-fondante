@@ -268,7 +268,7 @@
                     </button>
 
                     <p class="text-[11px] text-creme-800 text-center leading-relaxed">
-                        En cliquant sur Payer par Carte, vous serez redirigé vers la plateforme de paiement 100% sécurisée SumUp avec votre montant pré-rempli.
+                        En cliquant sur Payer par Carte, vous serez redirigé vers la plateforme de paiement 100% sécurisée SumUp.
                     </p>
                 </div>
             </div>
@@ -281,10 +281,10 @@
     <script>
         const SUPABASE_URL = "https://ewmdyjcjxwibhfjejhwe.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_esIheB1MfmllTZQWBivCWA_QFFuWkX8";
-        const SUMUP_BASE_URL = "https://pay.sumup.com/b2c/QDCB1T3C";
+        const SUMUP_PAYMENT_URL = "https://pay.sumup.com/b2c/QDCB1T3C";
         const SEUIL_PORT_GRATUIT = 70.00;
 
-        // MAP DES CODES PROMO MASQUÉS (Base64 pour masquer dans les sources)
+        // MAP DES CODES PROMO MASQUÉS (Base64)
         const PROMO_CODES_DB = {
             "UEFVU0UxMA==": { code: "PAUSE10", type: "percent", value: 10, label: "10% de réduction" },
             "UkVEVUMxMA==": { code: "REDUC10", type: "percent", value: 10, label: "10% de réduction" },
@@ -579,21 +579,18 @@
                 remarques: remarques || "Aucune"
             };
 
-            // GENERATION DE L'URL SUMUP AVEC LE MONTANT PRÉ-REMPLI
-            const sumupUrlAvecPrix = `${SUMUP_BASE_URL}?amount=${totalFinalFormatted}&currency=EUR`;
-
             try {
                 if (window.emailjs) {
                     await window.emailjs.send('service_cbfk3mr', 'template_jeryfp3', templateParams);
                 }
                 afficherToast("Commande enregistrée ! Redirection vers SumUp...", "success");
                 setTimeout(() => {
-                    window.location.href = sumupUrlAvecPrix;
+                    window.location.href = SUMUP_PAYMENT_URL;
                 }, 1000);
             } catch (err) {
                 afficherToast("Erreur d'envoi mail. Redirection vers SumUp...", "warning");
                 setTimeout(() => {
-                    window.location.href = sumupUrlAvecPrix;
+                    window.location.href = SUMUP_PAYMENT_URL;
                 }, 1200);
             }
         };
