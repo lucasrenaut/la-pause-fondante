@@ -218,13 +218,31 @@
                     </div>
 
                     <!-- LISTE DES ARTICLES EN COMMANDE -->
-                    <div id="checkout-articles-list" class="max-h-64 overflow-y-auto space-y-3 pr-1 custom-scrollbar"></div>
+                    <div id="checkout-articles-list" class="max-h-56 overflow-y-auto space-y-3 pr-1 custom-scrollbar"></div>
+
+                    <!-- MODULE CODE PROMO SUR LA PAGE DE PAIEMENT -->
+                    <div class="pt-4 border-t border-creme-100 space-y-2">
+                        <label class="text-xs font-bold text-creme-900 flex items-center gap-1.5">
+                            <i data-lucide="ticket" class="w-4 h-4 text-ocre-600"></i> Code Promo ou Réduction
+                        </label>
+                        <div class="flex gap-2">
+                            <input type="text" id="checkout-promo-code-input" placeholder="ENTREZ VOTRE CODE..." class="flex-grow px-3.5 py-2.5 bg-creme-50 border border-creme-200 rounded-xl text-xs uppercase focus:outline-none focus:border-sauge-500 font-bold tracking-wider">
+                            <button type="button" onclick="appliquerCodePromo()" class="px-4 py-2.5 bg-sauge-600 hover:bg-sauge-700 text-white font-bold text-xs rounded-xl transition-all shadow-sm shrink-0">
+                                Appliquer
+                            </button>
+                        </div>
+                        <div id="checkout-applied-promo-badge"></div>
+                    </div>
 
                     <!-- CALCUL DES MONTANTS ET FRAIS -->
                     <div class="space-y-2 pt-4 border-t border-creme-100 text-xs text-creme-800">
                         <div class="flex justify-between">
                             <span>Sous-total articles</span>
                             <span id="checkout-subtotal" class="font-semibold text-creme-900">0,00 €</span>
+                        </div>
+                        <div id="checkout-discount-row" class="flex justify-between text-ocre-700 font-semibold hidden">
+                            <span id="checkout-discount-label">Réduction</span>
+                            <span id="checkout-discount-amount">-0,00 €</span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span>Frais de port & expédition</span>
@@ -250,7 +268,7 @@
                     </button>
 
                     <p class="text-[11px] text-creme-800 text-center leading-relaxed">
-                        En cliquant sur Payer par Carte, vous serez redirigé vers la plateforme de paiement 100% sécurisée SumUp. Un e-mail de confirmation vous sera transmis dès la validation du règlement.
+                        En cliquant sur Payer par Carte, vous serez redirigé vers la plateforme de paiement 100% sécurisée SumUp avec votre montant pré-rempli.
                     </p>
                 </div>
             </div>
@@ -263,8 +281,17 @@
     <script>
         const SUPABASE_URL = "https://ewmdyjcjxwibhfjejhwe.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_esIheB1MfmllTZQWBivCWA_QFFuWkX8";
-        const SUMUP_PAYMENT_URL = "https://pay.sumup.com/b2c/QDCB1T3C";
+        const SUMUP_BASE_URL = "https://pay.sumup.com/b2c/QDCB1T3C";
         const SEUIL_PORT_GRATUIT = 70.00;
+
+        // MAP DES CODES PROMO MASQUÉS (Base64 pour masquer dans les sources)
+        const PROMO_CODES_DB = {
+            "UEFVU0UxMA==": { code: "PAUSE10", type: "percent", value: 10, label: "10% de réduction" },
+            "UkVEVUMxMA==": { code: "REDUC10", type: "percent", value: 10, label: "10% de réduction" },
+            "QklFTlZFTlVF": { code: "BIENVENUE", type: "percent", value: 15, label: "15% de bienvenue" },
+            "T0ZGRVJUMQ==": { code: "OFFERT", type: "free_order", value: 100, label: "Commande offerte (100%)" },
+            "T0ZGRVJU": { code: "OFFERT", type: "free_order", value: 100, label: "Commande offerte (100%)" }
+        };
 
         let supabaseClient = null;
         if (window.supabase && typeof window.supabase.createClient === 'function') {
@@ -273,6 +300,7 @@
 
         let cart = [];
         let utilisateur = null;
+        let codePromoApplique = null;
 
         window.onload = async function() {
             if (window.emailjs) {
@@ -317,6 +345,35 @@
             }
         }
 
+        window.appliquerCodePromo = function() {
+            const input = document.getElementById('checkout-promo-code-input');
+            if (!input) return;
+            const codeSaisi = input.value.trim().toUpperCase();
+
+            if (!codeSaisi) {
+                afficherToast("Veuillez saisir un code promo.", "warning");
+                return;
+            }
+
+            const encoded = btoa(codeSaisi);
+            const promoTrouve = PROMO_CODES_DB[encoded];
+
+            if (promoTrouve) {
+                codePromoApplique = promoTrouve;
+                afficherToast(`Code promo ${promoTrouve.code} appliqué ! (${promoTrouve.label})`);
+                input.value = '';
+                calculerEtAfficherCheckout();
+            } else {
+                afficherToast("Code promo invalide ou expiré.", "warning");
+            }
+        }
+
+        window.retirerCodePromo = function() {
+            codePromoApplique = null;
+            afficherToast("Code promo retiré.");
+            calculerEtAfficherCheckout();
+        }
+
         function calculerTotauxPanier() {
             let sousTotalArticles = 0;
             let nombreTablettes = 0;
@@ -337,10 +394,22 @@
 
             sousTotalArticles += prixTotalTablettes;
 
+            let montantReduction = 0;
+            if (codePromoApplique) {
+                if (codePromoApplique.type === 'percent') {
+                    montantReduction = (sousTotalArticles * codePromoApplique.value) / 100;
+                } else if (codePromoApplique.type === 'free_order') {
+                    montantReduction = sousTotalArticles;
+                }
+            }
+
+            const sousTotalApresReduction = Math.max(0, sousTotalArticles - montantReduction);
             const estLivraisonOfferte = sousTotalArticles >= SEUIL_PORT_GRATUIT;
 
             return {
                 sousTotalArticles,
+                montantReduction,
+                sousTotalApresReduction,
                 nombreTablettes,
                 lotsDeTrois,
                 poidsTotalGrammes,
@@ -373,9 +442,9 @@
             const modeSelected = document.querySelector('input[name="mode_livraison"]:checked')?.value || 'relais';
 
             const fraisPort = calculerFraisPort(modeSelected, totaux.poidsTotalGrammes, totaux.estLivraisonOfferte);
-            const totalFinal = totaux.sousTotalArticles + fraisPort;
+            const totalFinal = totaux.sousTotalApresReduction + fraisPort;
 
-            // Mise à jour des éléments UI
+            // Mise à jour des badges
             document.getElementById('poids-colis-badge').textContent = `Poids estimé : ${totaux.poidsTotalGrammes} g`;
             document.getElementById('total-articles-count').textContent = `${cart.reduce((a, b) => a + b.quantity, 0)} article(s)`;
 
@@ -398,7 +467,7 @@
                 inputRelais.removeAttribute('required');
             }
 
-            // Bannière promo tablettes
+            // Display promo tablettes
             const bannerTablettes = document.getElementById('recap-promo-tablettes-banner');
             const textTablettes = document.getElementById('recap-promo-tablettes-text');
             if (totaux.lotsDeTrois > 0) {
@@ -406,6 +475,29 @@
                 textTablettes.textContent = `Offre appliquée : ${totaux.lotsDeTrois} lot(s) de 3 tablettes à 12,00 € !`;
             } else {
                 bannerTablettes.classList.add('hidden');
+            }
+
+            // Display promo code appliqué
+            const appliedBadgeContainer = document.getElementById('checkout-applied-promo-badge');
+            const discountRow = document.getElementById('checkout-discount-row');
+            const discountLabel = document.getElementById('checkout-discount-label');
+            const discountAmount = document.getElementById('checkout-discount-amount');
+
+            if (codePromoApplique) {
+                appliedBadgeContainer.innerHTML = `
+                    <div class="flex items-center justify-between bg-ocre-50 border border-ocre-200 px-3 py-1.5 rounded-xl text-xs mt-1">
+                        <span class="font-bold text-ocre-700 flex items-center gap-1.5">
+                            <i data-lucide="tag" class="w-3.5 h-3.5"></i> Code <strong>${codePromoApplique.code}</strong> (${codePromoApplique.label})
+                        </span>
+                        <button type="button" onclick="retirerCodePromo()" title="Supprimer le code" class="text-ocre-600 hover:text-red-500"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                    </div>
+                `;
+                discountRow.classList.remove('hidden');
+                discountLabel.textContent = `Réduction (${codePromoApplique.code})`;
+                discountAmount.textContent = `- ${totaux.montantReduction.toFixed(2).replace('.', ',')} €`;
+            } else {
+                appliedBadgeContainer.innerHTML = '';
+                discountRow.classList.add('hidden');
             }
 
             // Rendu de la liste des articles
@@ -441,6 +533,7 @@
             }
 
             document.getElementById('checkout-total-final').textContent = totalFinal.toFixed(2).replace('.', ',') + " €";
+            if (window.lucide) window.lucide.createIcons();
         }
 
         window.traiterCommande = async function(event) {
@@ -462,11 +555,15 @@
 
             const totaux = calculerTotauxPanier();
             const fraisPort = calculerFraisPort(mode, totaux.poidsTotalGrammes, totaux.estLivraisonOfferte);
-            const totalFinal = totaux.sousTotalArticles + fraisPort;
+            const totalFinal = totaux.sousTotalApresReduction + fraisPort;
+            const totalFinalFormatted = totalFinal.toFixed(2);
 
             let recapText = cart.map(i => `- ${i.title} (x${i.quantity}) : ${((i.type === 'tablette' ? 4.50 : i.price) * i.quantity).toFixed(2)} €`).join('\n');
             if (totaux.lotsDeTrois > 0) {
-                recapText += `\n* Remise appliquée : ${totaux.lotsDeTrois} lot(s) de 3 tablettes à 12,00 €`;
+                recapText += `\n* Offre appliquée : ${totaux.lotsDeTrois} lot(s) de 3 tablettes à 12,00 €`;
+            }
+            if (codePromoApplique) {
+                recapText += `\n* Code promo appliqué : ${codePromoApplique.code} (-${totaux.montantReduction.toFixed(2)} €)`;
             }
 
             const templateParams = {
@@ -478,9 +575,12 @@
                 detail_commande: recapText,
                 sous_total: totaux.sousTotalArticles.toFixed(2) + " €",
                 frais_port: totaux.estLivraisonOfferte ? "OFFERTS" : fraisPort.toFixed(2) + " €",
-                total_commande: totalFinal.toFixed(2) + " €",
+                total_commande: totalFinalFormatted + " €",
                 remarques: remarques || "Aucune"
             };
+
+            // GENERATION DE L'URL SUMUP AVEC LE MONTANT PRÉ-REMPLI
+            const sumupUrlAvecPrix = `${SUMUP_BASE_URL}?amount=${totalFinalFormatted}&currency=EUR`;
 
             try {
                 if (window.emailjs) {
@@ -488,12 +588,12 @@
                 }
                 afficherToast("Commande enregistrée ! Redirection vers SumUp...", "success");
                 setTimeout(() => {
-                    window.location.href = SUMUP_PAYMENT_URL;
+                    window.location.href = sumupUrlAvecPrix;
                 }, 1000);
             } catch (err) {
-                afficherToast("Erreur d'envoi. Redirection vers SumUp...", "warning");
+                afficherToast("Erreur d'envoi mail. Redirection vers SumUp...", "warning");
                 setTimeout(() => {
-                    window.location.href = SUMUP_PAYMENT_URL;
+                    window.location.href = sumupUrlAvecPrix;
                 }, 1200);
             }
         };
