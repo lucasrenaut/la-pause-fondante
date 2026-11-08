@@ -921,9 +921,9 @@
                 { id: 23, nom: "Cire et Miel", categorie: "Épicés & Cocooning", description: "Nectar de miel brut", icone: "sparkles", couleur: "#fef3c7" }
             ],
             plateaux: [
-                { id: 'plat-zen', nom: "Plateau Zen", prix: 19.00, weight: 1200, badge: "Sérénité", image: "plateau_zen_lpf.jpeg", description: "10 fondants hasard + 10 chauffe-plat + fondoir zen + décoration galets.", elements: ["10 fondants relaxants", "10 chauffe-plats", "1 fondoir céramique zen", "1 déco galets et sable"] },
-                { id: 'plat-noel', nom: "Plateau Noël", prix: 18.00, weight: 1200, badge: "Édition Limitée • Spécial Noël 🎄", image: "plateau_noel_lpf.jpeg", description: "10 fondants hasard + 10 chauffe-plat + fondoir chalet + décoration cannelle.", elements: ["10 fondants de fêtes", "10 chauffe-plats", "1 fondoir esprit chalet", "1 déco cannelle & pommes de pin"] },
-                { id: 'plat-naturel', nom: "Plateau Naturel", prix: 17.00, weight: 1200, badge: "Bucolique", image: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400", description: "10 fondants hasard + 10 chauffe-plat + fondoir grès + décoration bois.", elements: ["10 fondants boisés/floraux", "10 chauffe-plats", "1 fondoir grès brut", "1 déco fleurs séchées & bois"] }
+                { id: 'plat-zen', nom: "Plateau Zen", prix: 19.00, weight: 1200, badge: "Permanent", image: "plateau_zen_lpf.jpeg", description: "10 fondants hasard + 10 chauffe-plat + fondoir zen + décoration galets.", elements: ["10 fondants relaxants", "10 chauffe-plats", "1 fondoir : tête de buddha", "décoration ZEN" , "1 plateau"] },
+                { id: 'plat-noel', nom: "Plateau Noël", prix: 18.00, weight: 1200, badge: "Édition Limitée • Spécial Noël 🎄", image: "plateau_noel_lpf.jpeg", description: "10 fondants hasard + 10 chauffe-plat + fondoir chalet + décoration cannelle.", elements: ["10 fondants de fêtes", "10 chauffe-plats", "1 fondoir esprit chalet", "décoration Hivernale" , "1 plateau"] },
+                { id: 'plat-naturel', nom: "Plateau Naturel", prix: 17.00, weight: 1200, badge: "Permanent", image: "plateau_nature_lpf.jpeg", description: "10 fondants hasard + 10 chauffe-plat + fondoir grès + décoration bois.", elements: ["10 fondants boisés/floraux", "10 chauffe-plats", "1 fondoir", "décoration Naturel" , "1 plateau"] }
             ],
             creations: [
                 { 
@@ -1758,13 +1758,28 @@
         // --- NOTIFICATION E-MAIL DE COMMANDE VIA EMAILJS (AVANT PAIEMENT) ---
         async function envoyerNotificationEmailCommande(resTotal) {
             const clientEmail = window.utilisateurActuel ? window.utilisateurActuel.email : "Client invité";
-            let articlesText = cart.map(item => `- ${item.quantity}x ${item.title} (${item.subtitle})`).join('\n');
             
+            let articlesText = cart.map(item => `• ${item.quantity}x ${item.title} (${item.subtitle})`).join('\n');
+            
+            const dateFormatee = new Date().toLocaleDateString('fr-FR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
             const orderParams = {
                 to_email: "debstyle-coiffure@hotmail.com",
-                from_name: "La Pause Fondante - Site",
-                message: `Nouvelle commande reçue sur le site !\n\nClient : ${clientEmail}\n\nArticles :\n${articlesText}\n\nSous-total : ${resTotal.sousTotalArticles.toFixed(2)} €\nFrais de port : ${resTotal.estLivraisonOfferte ? "Offerte" : resTotal.fraisDePort.toFixed(2) + " €"}\nTotal : ${resTotal.total.toFixed(2)} €`,
-                reply_to: clientEmail
+                reply_to: clientEmail,
+                date: dateFormatee,
+                client_email: clientEmail,
+                point_relais: "Non renseigné / Livraison à domicile",
+                articles_list: articlesText,
+                subtotal: resTotal.sousTotalArticles.toFixed(2).replace('.', ',') + " €",
+                discount: resTotal.montantReduction > 0 ? `- ${resTotal.montantReduction.toFixed(2).replace('.', ',')} € (${codePromoApplique.code})` : "Aucune (0,00 €)",
+                shipping: resTotal.estLivraisonOfferte ? "OFFERTS (0,00 €)" : resTotal.fraisDePort.toFixed(2).replace('.', ',') + " €",
+                total: resTotal.total.toFixed(2).replace('.', ',') + " €"
             };
 
             if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.serviceID) {
