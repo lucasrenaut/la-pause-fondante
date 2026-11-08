@@ -63,11 +63,11 @@ export default async function handler(req, res) {
 
     if (checkoutResponse.ok && checkoutData.hosted_checkout_url) {
       
-      // 3. ENVOI DE L'E-MAIL DE NOTIFICATION VIA EMAILJS (API REST)
+      // 3. ENVOI DE L'E-MAIL DE NOTIFICATION VIA EMAILJS
       const serviceId = process.env.EMAILJS_SERVICE_ID || "service_cbfk3mr";
       const templateId = process.env.EMAILJS_TEMPLATE_ID || "template_jeryfp3";
       const publicKey = process.env.EMAILJS_PUBLIC_KEY || "rnYePJTMswP2wkX6O";
-      const privateKey = process.env.EMAILJS_PRIVATE_KEY; // Nécessaire seulement si la clé privée est activée
+      const privateKey = process.env.EMAILJS_PRIVATE_KEY;
 
       const dateFormatee = new Date().toLocaleDateString('fr-FR', {
         day: '2-digit',
@@ -97,7 +97,7 @@ export default async function handler(req, res) {
         total: `${parseFloat(amount).toFixed(2).replace('.', ',')} €`
       };
 
-      const emailjsBody = {
+      const emailjsPayload = {
         service_id: serviceId,
         template_id: templateId,
         user_id: publicKey,
@@ -105,17 +105,24 @@ export default async function handler(req, res) {
       };
 
       if (privateKey) {
-        emailjsBody.accessToken = privateKey;
+        emailjsPayload.accessToken = privateKey;
       }
 
       try {
-        await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        const emailjsRes = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(emailjsBody)
+          body: JSON.stringify(emailjsPayload)
         });
+
+        if (!emailjsRes.ok) {
+          const errorDetails = await emailjsRes.text();
+          console.error("Échec envoi EmailJS :", emailjsRes.status, errorDetails);
+        } else {
+          console.log("E-mail envoyé avec succès via EmailJS !");
+        }
       } catch (err) {
-        console.error("Erreur d'envoi d'email EmailJS :", err);
+        console.error("Erreur réseau EmailJS :", err);
       }
 
       return res.status(200).json({ url: checkoutData.hosted_checkout_url });
