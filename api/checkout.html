@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-[#fbf9f5]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Pause Fondante | Validation de Commande & Paiement</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <!-- Supabase JS Client SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Palette de couleurs & Typographie -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sauge: {
+                            50: '#f4f6f4',
+                            100: '#e4ebe4',
+                            200: '#c8d6c9',
+                            500: '#849987',
+                            600: '#6b7f71',
+                            700: '#55665a',
+                            800: '#3e4b42',
+                        },
+                        ocre: {
+                            50: '#fdf9f3',
+                            100: '#f8eedc',
+                            200: '#efd9b7',
+                            500: '#d4a373',
+                            600: '#c88b4a',
+                            700: '#a66e35',
+                        },
+                        creme: {
+                            50: '#fbf9f5',
+                            100: '#f5f0e6',
+                            200: '#eadfcf',
+                            800: '#434743',
+                            900: '#2d312e',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f5f0e6; border-radius: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #c8d6c9; border-radius: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #6b7f71; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+    </style>
+</head>
+<body class="h-full font-sans text-creme-900 antialiased flex flex-col selection:bg-ocre-100 selection:text-ocre-700">
+
+    <!-- EN-TÊTE SIMPLIFIÉ DE PAIEMENT -->
+    <header class="bg-[#fbf9f5]/95 backdrop-blur-md border-b border-creme-200 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 group text-left">
+                <img src="logo_pause_fondante.jpeg" alt="Logo La Pause Fondante" class="w-12 h-12 rounded-full object-cover border-2 border-sauge-200 shadow-sm group-hover:scale-105 transition-transform" onerror="this.onerror=null; this.src='https://placehold.co/100x100/6b7f71/ffffff?text=LPF';">
+                <div>
+                    <span class="font-serif text-xl sm:text-2xl font-bold text-creme-900 block leading-tight tracking-wide">La pause Fondante</span>
+                    <span class="text-[11px] text-sauge-600 font-medium tracking-widest uppercase block">Validation de votre Commande</span>
+                </div>
+            </a>
+
+            <a href="index.html" class="px-4 py-2 bg-creme-100 hover:bg-creme-200 text-creme-800 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 border border-creme-200 shadow-sm">
+                <i data-lucide="arrow-left" class="w-4 h-4 text-sauge-600"></i> Modifier le panier
+            </a>
+        </div>
+    </header>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 md:py-12">
+        <form onsubmit="traiterCommande(event)" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- INFORMATIONS CLIENT ET LIVRAISON -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- BLOC IDENTIFICATION COMPTE -->
+                <div class="bg-white p-6 sm:p-8 rounded-3xl border border-creme-200 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between border-b border-creme-100 pb-4">
+                        <h2 class="font-serif text-xl font-bold text-creme-900 flex items-center gap-2">
+                            <i data-lucide="user" class="w-5 h-5 text-sauge-600"></i> 1. Informations Compte Client
+                        </h2>
+                        <span id="account-email-badge" class="text-xs bg-sauge-100 text-sauge-800 font-bold px-3 py-1 rounded-full border border-sauge-200">Vérification...</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                        <div class="space-y-1">
+                            <label class="font-bold text-creme-800 uppercase tracking-wider">Nom <span class="text-red-500">*</span></label>
+                            <input type="text" id="checkout-nom" required placeholder="Dupont" class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="font-bold text-creme-800 uppercase tracking-wider">Prénom <span class="text-red-500">*</span></label>
+                            <input type="text" id="checkout-prenom" required placeholder="Marie" class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                        <div class="space-y-1">
+                            <label class="font-bold text-creme-800 uppercase tracking-wider">Adresse E-mail <span class="text-red-500">*</span></label>
+                            <input type="email" id="checkout-email" required readonly class="w-full px-4 py-3 bg-creme-100 text-creme-800 border border-creme-200 rounded-xl focus:outline-none font-semibold cursor-not-allowed">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="font-bold text-creme-800 uppercase tracking-wider">Téléphone <span class="text-red-500">*</span></label>
+                            <input type="tel" id="checkout-telephone" required placeholder="06 12 34 56 78" class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BLOC CHOIX DE LIVRAISON -->
+                <div class="bg-white p-6 sm:p-8 rounded-3xl border border-creme-200 shadow-sm space-y-6">
+                    <div class="border-b border-creme-100 pb-4 flex items-center justify-between">
+                        <h2 class="font-serif text-xl font-bold text-creme-900 flex items-center gap-2">
+                            <i data-lucide="truck" class="w-5 h-5 text-sauge-600"></i> 2. Mode de Livraison
+                        </h2>
+                        <span id="poids-colis-badge" class="text-xs font-semibold text-creme-800 bg-creme-100 px-3 py-1 rounded-full">Poids estimé : 0 g</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <!-- OPTION RELAIS -->
+                        <label class="cursor-pointer border-2 rounded-2xl p-4 flex items-start justify-between transition-all bg-creme-50/50 hover:bg-white border-creme-200" id="label-livraison-relais">
+                            <div class="flex items-start gap-3">
+                                <input type="radio" name="mode_livraison" value="relais" checked onchange="majChoixLivraison()" class="mt-1 text-sauge-600 focus:ring-sauge-500">
+                                <div>
+                                    <span class="font-bold text-sm text-creme-900 block">Livraison en Point Relais (Mondial Relay / Colissimo Relais)</span>
+                                    <span class="text-xs text-creme-800">Retrait sous 3 à 5 jours ouvrés dans le point relais de votre choix.</span>
+                                </div>
+                            </div>
+                            <span id="tarif-relais-label" class="font-serif font-bold text-sm text-ocre-600 shrink-0 ml-2">4,90 €</span>
+                        </label>
+
+                        <!-- OPTION DOMICILE -->
+                        <label class="cursor-pointer border-2 rounded-2xl p-4 flex items-start justify-between transition-all bg-creme-50/50 hover:bg-white border-creme-200" id="label-livraison-domicile">
+                            <div class="flex items-start gap-3">
+                                <input type="radio" name="mode_livraison" value="domicile" onchange="majChoixLivraison()" class="mt-1 text-sauge-600 focus:ring-sauge-500">
+                                <div>
+                                    <span class="font-bold text-sm text-creme-900 block">Livraison à Domicile (Colissimo Suivi)</span>
+                                    <span class="text-xs text-creme-800">Livraison directement dans votre boîte aux lettres sous 48h.</span>
+                                </div>
+                            </div>
+                            <span id="tarif-domicile-label" class="font-serif font-bold text-sm text-ocre-600 shrink-0 ml-2">6,90 €</span>
+                        </label>
+                    </div>
+
+                    <!-- ADRESSE DE LIVRAISON ET POINT RELAIS -->
+                    <div class="space-y-4 pt-4 border-t border-creme-100 text-xs">
+                        <div class="space-y-1">
+                            <label class="font-bold text-creme-800 uppercase tracking-wider">Adresse postale <span class="text-red-500">*</span></label>
+                            <input type="text" id="checkout-adresse" required placeholder="41 rue de la Marne" class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="font-bold text-creme-800 uppercase tracking-wider">Code Postal <span class="text-red-500">*</span></label>
+                                <input type="text" id="checkout-cp" required placeholder="59124" class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="font-bold text-creme-800 uppercase tracking-wider">Ville <span class="text-red-500">*</span></label>
+                                <input type="text" id="checkout-ville" required placeholder="Escaudain" class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500">
+                            </div>
+                        </div>
+
+                        <!-- SAISIE NOM DU POINT RELAIS -->
+                        <div id="champ-point-relais-container" class="space-y-1 bg-sauge-50 p-4 rounded-2xl border border-sauge-200">
+                            <label class="font-bold text-sauge-800 uppercase tracking-wider flex items-center gap-1.5">
+                                <i data-lucide="map-pin" class="w-4 h-4 text-sauge-600"></i> Nom ou adresse du Point Relais souhaité <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="checkout-point-relais" placeholder="Ex: Tabac Presse de la Gare, 59000 Lille" class="w-full px-4 py-3 bg-white border border-sauge-300 rounded-xl focus:outline-none focus:border-sauge-600">
+                            <p class="text-[11px] text-sauge-700 mt-1 italic">Indiquez le point relais de votre choix ou la ville souhaitée. Nous validerons le dépôt le plus proche.</p>
+                        </div>
+                    </div>
+
+                    <!-- REMARQUES / CONSIGNES -->
+                    <div class="space-y-1 text-xs">
+                        <label class="font-bold text-creme-800 uppercase tracking-wider">Instructions particulières (Optionnel)</label>
+                        <textarea id="checkout-remarques" rows="2" placeholder="Informations complémentaires pour l'emballage ou la livraison..." class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500 custom-scrollbar"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RÉCAPITULATIF COMMANDE & PAIEMENT SUMUP -->
+            <div class="lg:col-span-5 sticky top-28 space-y-6">
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-creme-200 shadow-xl space-y-6">
+                    <div class="border-b border-creme-100 pb-3 flex items-center justify-between">
+                        <h3 class="font-serif text-xl font-bold text-creme-900 flex items-center gap-2">
+                            <i data-lucide="shopping-bag" class="w-5 h-5 text-sauge-600"></i> Récapitulatif
+                        </h3>
+                        <span id="total-articles-count" class="text-xs font-bold text-sauge-700 bg-sauge-50 px-2.5 py-1 rounded-md">0 article(s)</span>
+                    </div>
+
+                    <!-- BANNIÈRE PROMO COMMANDE TABLETTES SI APPLICABLE -->
+                    <div id="recap-promo-tablettes-banner" class="hidden bg-sauge-50 border border-sauge-200 p-3 rounded-2xl text-xs text-sauge-800 font-medium flex items-center gap-2">
+                        <i data-lucide="tag" class="w-4 h-4 text-sauge-600 shrink-0"></i>
+                        <span id="recap-promo-tablettes-text">Offre 3 tablettes = 12 € appliquée !</span>
+                    </div>
+
+                    <!-- LISTE DES ARTICLES EN COMMANDE -->
+                    <div id="checkout-articles-list" class="max-h-56 overflow-y-auto space-y-3 pr-1 custom-scrollbar"></div>
+
+                    <!-- MODULE CODE PROMO SUR LA PAGE DE PAIEMENT -->
+                    <div class="pt-4 border-t border-creme-100 space-y-2">
+                        <label class="text-xs font-bold text-creme-900 flex items-center gap-1.5">
+                            <i data-lucide="ticket" class="w-4 h-4 text-ocre-600"></i> Code Promo ou Réduction
+                        </label>
+                        <div class="flex gap-2">
+                            <input type="text" id="checkout-promo-code-input" placeholder="ENTREZ VOTRE CODE..." class="flex-grow px-3.5 py-2.5 bg-creme-50 border border-creme-200 rounded-xl text-xs uppercase focus:outline-none focus:border-sauge-500 font-bold tracking-wider">
+                            <button type="button" onclick="appliquerCodePromo()" class="px-4 py-2.5 bg-sauge-600 hover:bg-sauge-700 text-white font-bold text-xs rounded-xl transition-all shadow-sm shrink-0">
+                                Appliquer
+                            </button>
+                        </div>
+                        <div id="checkout-applied-promo-badge"></div>
+                    </div>
+
+                    <!-- CALCUL DES MONTANTS ET FRAIS -->
+                    <div class="space-y-2 pt-4 border-t border-creme-100 text-xs text-creme-800">
+                        <div class="flex justify-between">
+                            <span>Sous-total articles</span>
+                            <span id="checkout-subtotal" class="font-semibold text-creme-900">0,00 €</span>
+                        </div>
+                        <div id="checkout-discount-row" class="flex justify-between text-ocre-700 font-semibold hidden">
+                            <span id="checkout-discount-label">Réduction</span>
+                            <span id="checkout-discount-amount">-0,00 €</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>Frais de port & expédition</span>
+                            <span id="checkout-shipping" class="font-semibold text-sauge-700">0,00 €</span>
+                        </div>
+                        <div id="checkout-free-shipping-note" class="hidden text-[11px] text-sauge-700 font-bold bg-sauge-50 p-2 rounded-xl text-center">
+                            🎉 Vos frais de livraison sont totalement offerts dès 70 € d'achats !
+                        </div>
+                    </div>
+
+                    <!-- TOTAL FINAL -->
+                    <div class="pt-4 border-t border-creme-200 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-creme-800 block">Total à régler</span>
+                            <span class="text-[11px] text-creme-800 italic">TVA non applicable, art. 293 B du CGI</span>
+                        </div>
+                        <span id="checkout-total-final" class="font-serif text-3xl font-bold text-ocre-600">0,00 €</span>
+                    </div>
+
+                    <!-- BOUTON DE CONFIRMATION ET PAIEMENT SUMUP -->
+                    <button type="submit" id="btn-valider-paiement" class="w-full py-4 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-2xl shadow-xl transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wider">
+                        <i data-lucide="credit-card" class="w-5 h-5"></i> Payer par Carte (SumUp)
+                    </button>
+
+                    <p class="text-[11px] text-creme-800 text-center leading-relaxed">
+                        En cliquant sur Payer par Carte, vous serez redirigé vers la page de paiement sécurisée SumUp pré-remplie avec votre montant exact.
+                    </p>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <script>
+        const SUPABASE_URL = "https://ewmdyjcjxwibhfjejhwe.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_esIheB1MfmllTZQWBivCWA_QFFuWkX8";
+        const SEUIL_PORT_GRATUIT = 70.00;
+
+        // MAP DES CODES PROMO MASQUÉS (Base64)
+        const PROMO_CODES_DB = {
+            "UEFVU0UxMA==": { code: "PAUSE10", type: "percent", value: 10, label: "10% de réduction" },
+            "UkVEVUMxMA==": { code: "REDUC10", type: "percent", value: 10, label: "10% de réduction" },
+            "QklFTlZFTlVF": { code: "BIENVENUE", type: "percent", value: 15, label: "15% de bienvenue" },
+            "T0ZGRVJUMQ==": { code: "OFFERT", type: "free_order", value: 100, label: "Commande offerte (100%)" },
+            "T0ZGRVJU": { code: "OFFERT", type: "free_order", value: 100, label: "Commande offerte (100%)" }
+        };
+
+        let supabaseClient = null;
+        if (window.supabase && typeof window.supabase.createClient === 'function') {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+
+        let cart = [];
+        let utilisateur = null;
+        let codePromoApplique = null;
+
+        window.onload = async function() {
+            chargerPanier();
+
+            if (supabaseClient) {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (session && session.user) {
+                    utilisateur = session.user;
+                    const emailInput = document.getElementById('checkout-email');
+                    const badge = document.getElementById('account-email-badge');
+                    if (emailInput) emailInput.value = utilisateur.email;
+                    if (badge) {
+                        badge.textContent = "Connecté";
+                        badge.className = "text-xs bg-sauge-600 text-white font-bold px-3 py-1 rounded-full";
+                    }
+                } else {
+                    afficherToast("Vous devez être connecté pour accéder au paiement.", "warning");
+                    setTimeout(() => window.location.href = 'index.html', 1500);
+                    return;
+                }
+            }
+
+            calculerEtAfficherCheckout();
+            if (window.lucide) window.lucide.createIcons();
+        };
+
+        function chargerPanier() {
+            try {
+                const stored = localStorage.getItem('lpf_cart');
+                cart = stored ? JSON.parse(stored) : [];
+            } catch (e) {
+                cart = [];
+            }
+
+            if (!cart || cart.length === 0) {
+                afficherToast("Votre panier est vide. Redirection vers l'accueil...", "warning");
+                setTimeout(() => window.location.href = 'index.html', 1500);
+            }
+        }
+
+        window.appliquerCodePromo = function() {
+            const input = document.getElementById('checkout-promo-code-input');
+            if (!input) return;
+            const codeSaisi = input.value.trim().toUpperCase();
+
+            if (!codeSaisi) {
+                afficherToast("Veuillez saisir un code promo.", "warning");
+                return;
+            }
+
+            const encoded = btoa(codeSaisi);
+            const promoTrouve = PROMO_CODES_DB[encoded];
+
+            if (promoTrouve) {
+                codePromoApplique = promoTrouve;
+                afficherToast(`Code promo ${promoTrouve.code} appliqué ! (${promoTrouve.label})`);
+                input.value = '';
+                calculerEtAfficherCheckout();
+            } else {
+                afficherToast("Code promo invalide ou expiré.", "warning");
+            }
+        }
+
+        window.retirerCodePromo = function() {
+            codePromoApplique = null;
+            afficherToast("Code promo retiré.");
+            calculerEtAfficherCheckout();
+        }
+
+        function calculerTotauxPanier() {
+            let sousTotalArticles = 0;
+            let nombreTablettes = 0;
+            let poidsTotalGrammes = 0;
+
+            cart.forEach(item => {
+                poidsTotalGrammes += (item.weight || 80) * item.quantity;
+                if (item.type === 'tablette') {
+                    nombreTablettes += item.quantity;
+                } else {
+                    sousTotalArticles += item.price * item.quantity;
+                }
+            });
+
+            const lotsDeTrois = Math.floor(nombreTablettes / 3);
+            const tablettesRestantes = nombreTablettes % 3;
+            const prixTotalTablettes = (lotsDeTrois * 12.00) + (tablettesRestantes * 4.50);
+
+            sousTotalArticles += prixTotalTablettes;
+
+            let montantReduction = 0;
+            if (codePromoApplique) {
+                if (codePromoApplique.type === 'percent') {
+                    montantReduction = (sousTotalArticles * codePromoApplique.value) / 100;
+                } else if (codePromoApplique.type === 'free_order') {
+                    montantReduction = sousTotalArticles;
+                }
+            }
+
+            const sousTotalApresReduction = Math.max(0, sousTotalArticles - montantReduction);
+            const estLivraisonOfferte = sousTotalArticles >= SEUIL_PORT_GRATUIT;
+
+            return {
+                sousTotalArticles,
+                montantReduction,
+                sousTotalApresReduction,
+                nombreTablettes,
+                lotsDeTrois,
+                poidsTotalGrammes,
+                estLivraisonOfferte
+            };
+        }
+
+        function calculerFraisPort(mode, poidsGrammes, estGratuit) {
+            if (estGratuit) return 0.00;
+
+            if (mode === 'relais') {
+                if (poidsGrammes <= 500) return 4.90;
+                if (poidsGrammes <= 1000) return 5.90;
+                if (poidsGrammes <= 2000) return 6.90;
+                return 8.90;
+            } else {
+                if (poidsGrammes <= 500) return 6.90;
+                if (poidsGrammes <= 1000) return 7.90;
+                if (poidsGrammes <= 2000) return 8.90;
+                return 11.90;
+            }
+        }
+
+        window.majChoixLivraison = function() {
+            calculerEtAfficherCheckout();
+        };
+
+        function calculerEtAfficherCheckout() {
+            const totaux = calculerTotauxPanier();
+            const modeSelected = document.querySelector('input[name="mode_livraison"]:checked')?.value || 'relais';
+
+            const fraisPort = calculerFraisPort(modeSelected, totaux.poidsTotalGrammes, totaux.estLivraisonOfferte);
+            const totalFinal = totaux.sousTotalApresReduction + fraisPort;
+
+            // Mise à jour des badges
+            document.getElementById('poids-colis-badge').textContent = `Poids estimé : ${totaux.poidsTotalGrammes} g`;
+            document.getElementById('total-articles-count').textContent = `${cart.reduce((a, b) => a + b.quantity, 0)} article(s)`;
+
+            const labelRelaisPrice = document.getElementById('tarif-relais-label');
+            const labelDomicilePrice = document.getElementById('tarif-domicile-label');
+            const champRelaisContainer = document.getElementById('champ-point-relais-container');
+            const inputRelais = document.getElementById('checkout-point-relais');
+
+            const tarifRelais = calculerFraisPort('relais', totaux.poidsTotalGrammes, totaux.estLivraisonOfferte);
+            const tarifDomicile = calculerFraisPort('domicile', totaux.poidsTotalGrammes, totaux.estLivraisonOfferte);
+
+            labelRelaisPrice.textContent = totaux.estLivraisonOfferte ? "OFFERT" : `${tarifRelais.toFixed(2).replace('.', ',')} €`;
+            labelDomicilePrice.textContent = totaux.estLivraisonOfferte ? "OFFERT" : `${tarifDomicile.toFixed(2).replace('.', ',')} €`;
+
+            if (modeSelected === 'relais') {
+                champRelaisContainer.classList.remove('hidden');
+                inputRelais.setAttribute('required', 'required');
+            } else {
+                champRelaisContainer.classList.add('hidden');
+                inputRelais.removeAttribute('required');
+            }
+
+            // Display promo tablettes
+            const bannerTablettes = document.getElementById('recap-promo-tablettes-banner');
+            const textTablettes = document.getElementById('recap-promo-tablettes-text');
+            if (totaux.lotsDeTrois > 0) {
+                bannerTablettes.classList.remove('hidden');
+                textTablettes.textContent = `Offre appliquée : ${totaux.lotsDeTrois} lot(s) de 3 tablettes à 12,00 € !`;
+            } else {
+                bannerTablettes.classList.add('hidden');
+            }
+
+            // Display promo code appliqué
+            const appliedBadgeContainer = document.getElementById('checkout-applied-promo-badge');
+            const discountRow = document.getElementById('checkout-discount-row');
+            const discountLabel = document.getElementById('checkout-discount-label');
+            const discountAmount = document.getElementById('checkout-discount-amount');
+
+            if (codePromoApplique) {
+                appliedBadgeContainer.innerHTML = `
+                    <div class="flex items-center justify-between bg-ocre-50 border border-ocre-200 px-3 py-1.5 rounded-xl text-xs mt-1">
+                        <span class="font-bold text-ocre-700 flex items-center gap-1.5">
+                            <i data-lucide="tag" class="w-3.5 h-3.5"></i> Code <strong>${codePromoApplique.code}</strong> (${codePromoApplique.label})
+                        </span>
+                        <button type="button" onclick="retirerCodePromo()" title="Supprimer le code" class="text-ocre-600 hover:text-red-500"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                    </div>
+                `;
+                discountRow.classList.remove('hidden');
+                discountLabel.textContent = `Réduction (${codePromoApplique.code})`;
+                discountAmount.textContent = `- ${totaux.montantReduction.toFixed(2).replace('.', ',')} €`;
+            } else {
+                appliedBadgeContainer.innerHTML = '';
+                discountRow.classList.add('hidden');
+            }
+
+            // Rendu de la liste des articles
+            const listContainer = document.getElementById('checkout-articles-list');
+            listContainer.innerHTML = '';
+            cart.forEach(item => {
+                const row = document.createElement('div');
+                row.className = "flex justify-between items-center bg-creme-50 p-3 rounded-2xl border border-creme-200 text-xs";
+                let itemPriceLigne = item.price * item.quantity;
+                if (item.type === 'tablette') itemPriceLigne = item.quantity * 4.50;
+
+                row.innerHTML = `
+                    <div class="space-y-0.5">
+                        <span class="font-bold text-creme-900 block">${item.title}</span>
+                        <span class="text-[11px] text-creme-800 block">${item.subtitle}</span>
+                        <span class="text-[10px] font-semibold text-sauge-700 bg-white px-2 py-0.5 rounded border border-creme-200 inline-block">Quantité : ${item.quantity}</span>
+                    </div>
+                    <span class="font-serif font-bold text-ocre-600 text-sm ml-2">${itemPriceLigne.toFixed(2).replace('.', ',')} €</span>
+                `;
+                listContainer.appendChild(row);
+            });
+
+            document.getElementById('checkout-subtotal').textContent = totaux.sousTotalArticles.toFixed(2).replace('.', ',') + " €";
+            
+            const shippingElem = document.getElementById('checkout-shipping');
+            const freeNote = document.getElementById('checkout-free-shipping-note');
+            if (totaux.estLivraisonOfferte) {
+                shippingElem.innerHTML = `<span class="text-sauge-700 font-bold bg-sauge-100 px-2 py-0.5 rounded-md">OFFERTS</span>`;
+                freeNote.classList.remove('hidden');
+            } else {
+                shippingElem.textContent = fraisPort.toFixed(2).replace('.', ',') + " €";
+                freeNote.classList.add('hidden');
+            }
+
+            document.getElementById('checkout-total-final').textContent = totalFinal.toFixed(2).replace('.', ',') + " €";
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        window.traiterCommande = async function(event) {
+            event.preventDefault();
+            const btn = document.getElementById('btn-valider-paiement');
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Préparation de votre paiement sécurisé...`;
+
+            const nom = document.getElementById('checkout-nom').value.trim();
+            const prenom = document.getElementById('checkout-prenom').value.trim();
+            const email = document.getElementById('checkout-email').value.trim();
+            const telephone = document.getElementById('checkout-telephone').value.trim();
+            const adresse = document.getElementById('checkout-adresse').value.trim();
+            const cp = document.getElementById('checkout-cp').value.trim();
+            const ville = document.getElementById('checkout-ville').value.trim();
+            const mode = document.querySelector('input[name="mode_livraison"]:checked')?.value;
+            const pointRelais = document.getElementById('checkout-point-relais').value.trim();
+
+            const totaux = calculerTotauxPanier();
+            const fraisPort = calculerFraisPort(mode, totaux.poidsTotalGrammes, totaux.estLivraisonOfferte);
+            const totalFinal = totaux.sousTotalApresReduction + fraisPort;
+
+            const payload = {
+                amount: parseFloat(totalFinal.toFixed(2)),
+                sousTotal: totaux.sousTotalArticles,
+                fraisDePort: fraisPort,
+                estLivraisonOfferte: totaux.estLivraisonOfferte,
+                pointRelais: mode === 'relais' ? pointRelais : 'Livraison à domicile',
+                clientEmail: email,
+                cart: cart,
+                clientName: `${prenom} ${nom}`,
+                clientPhone: telephone,
+                deliveryAddress: `${adresse}, ${cp} ${ville}`,
+                discount: codePromoApplique ? `${totaux.montantReduction.toFixed(2).replace('.', ',')} €` : '0,00 €'
+            };
+
+            try {
+                // APPEL A VOTRE API SERVEUR VERCEL (/api/checkout)
+                const res = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.url) {
+                    afficherToast("Redirection vers la page de paiement sécurisée...", "success");
+                    // Vider le panier après validation
+                    localStorage.removeItem('lpf_cart');
+                    setTimeout(() => {
+                        window.location.href = data.url;
+                    }, 800);
+                } else {
+                    throw new Error(data.error || "Erreur lors de l'initialisation du paiement SumUp.");
+                }
+            } catch (err) {
+                console.error("Erreur Checkout API :", err);
+                afficherToast(err.message || "Erreur de connexion avec le service de paiement.", "warning");
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="credit-card" class="w-5 h-5"></i> Payer par Carte (SumUp)`;
+                if (window.lucide) window.lucide.createIcons();
+            }
+        };
+
+        function afficherToast(message, type = "success") {
+            const container = document.getElementById('toast-container');
+            if(!container) return;
+            const toast = document.createElement('div');
+            toast.className = `pointer-events-auto px-4 py-3 rounded-2xl shadow-xl text-xs font-bold text-white transition-all animate-fade-in flex items-center gap-2 ${type === 'warning' ? 'bg-amber-600' : 'bg-sauge-800'} border border-white/20`;
+            toast.innerHTML = `<i data-lucide="${type === 'warning' ? 'alert-triangle' : 'check-circle'}" class="w-4 h-4"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            if (window.lucide) window.lucide.createIcons();
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
