@@ -11,9 +11,6 @@
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- EmailJS SDK -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
     <!-- Supabase JS Client SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -36,13 +33,6 @@
     </script>
 
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <style>
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #f5f0e6; border-radius: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #c8d6c9; border-radius: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #6b7f71; }
-    </style>
 </head>
 <body class="h-full font-sans text-creme-900 antialiased bg-[#fbf9f5]">
 
@@ -130,36 +120,32 @@
                         </span>
                     </div>
 
-                    <div class="bg-white rounded-2xl border border-creme-300 overflow-hidden shadow-sm divide-y divide-creme-200" id="shipping-methods-container">
-                        
-                        <!-- CHRONOPOST RELAIS -->
+                    <div class="bg-white rounded-2xl border border-creme-300 overflow-hidden shadow-sm divide-y divide-creme-200">
                         <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-sauge-50/50 transition-colors">
                             <div class="flex items-center gap-3">
-                                <input type="radio" name="shipping_mode" value="chronopost" data-relais="true" checked onchange="changerModeExpedition()" class="w-4 h-4 text-sauge-600 focus:ring-sauge-500">
+                                <input type="radio" name="shipping_mode" value="chronopost" data-relais="true" checked onchange="renderCheckoutSummary()" class="w-4 h-4 text-sauge-600 focus:ring-sauge-500">
                                 <div>
                                     <span class="text-xs font-bold text-creme-900 block">Chronopost Point Relais (Shop2Shop)</span>
-                                    <span class="text-[11px] text-creme-800">Livraison sous 2 à 4 jours en point relais</span>
+                                    <span class="text-[11px] text-creme-800">Livraison sous 2 à 4 jours</span>
                                 </div>
                             </div>
                             <span class="text-xs font-bold text-sauge-700 font-serif text-sm" id="price-shipping-chronopost">3,95 €</span>
                         </label>
 
-                        <!-- COLISSIMO RELAIS -->
                         <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-sauge-50/50 transition-colors">
                             <div class="flex items-center gap-3">
-                                <input type="radio" name="shipping_mode" value="colissimo_relais" data-relais="true" onchange="changerModeExpedition()" class="w-4 h-4 text-sauge-600 focus:ring-sauge-500">
+                                <input type="radio" name="shipping_mode" value="colissimo_relais" data-relais="true" onchange="renderCheckoutSummary()" class="w-4 h-4 text-sauge-600 focus:ring-sauge-500">
                                 <div>
                                     <span class="text-xs font-bold text-creme-900 block">Colissimo Point de Retrait (La Poste / Pickup)</span>
-                                    <span class="text-[11px] text-creme-800">Livraison sous 48h en bureau de Poste ou Relais Pickup</span>
+                                    <span class="text-[11px] text-creme-800">Livraison sous 48h</span>
                                 </div>
                             </div>
                             <span class="text-xs font-bold text-sauge-700 font-serif text-sm" id="price-shipping-colissimo-relais">4,79 €</span>
                         </label>
 
-                        <!-- COLISSIMO DOMICILE -->
                         <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-sauge-50/50 transition-colors border-l-4 border-l-ocre-500 bg-ocre-50/30">
                             <div class="flex items-center gap-3">
-                                <input type="radio" name="shipping_mode" value="colissimo_domicile" data-relais="false" onchange="changerModeExpedition()" class="w-4 h-4 text-ocre-600 focus:ring-ocre-500">
+                                <input type="radio" name="shipping_mode" value="colissimo_domicile" data-relais="false" onchange="renderCheckoutSummary()" class="w-4 h-4 text-ocre-600 focus:ring-ocre-500">
                                 <div>
                                     <div class="flex items-center gap-2">
                                         <span class="text-xs font-bold text-creme-900">Colissimo Domicile</span>
@@ -178,34 +164,26 @@
                             <label class="font-bold text-sauge-900 uppercase tracking-wider flex items-center gap-2 text-xs">
                                 <i data-lucide="map-pin" class="w-4 h-4 text-sauge-600"></i> Indiquez votre Point Relais choisi <span class="text-red-500">*</span>
                             </label>
-                            <p class="text-[11px] text-sauge-700 mt-1">
-                                Indiquez le nom et l'adresse exacte du commerce ou bureau de poste choisi.
-                            </p>
+                            <p class="text-[11px] text-sauge-700 mt-1">Nom et adresse exacte du commerce/bureau de poste.</p>
                         </div>
-                        <input type="text" id="input-point-relais" required placeholder="Ex: Bureau de Poste - 12 rue de la République 59124 Escaudain" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 text-xs font-medium text-creme-900">
+                        <input type="text" id="input-point-relais" placeholder="Ex: Bureau de Poste - 12 rue de la République 59124 Escaudain" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 text-xs font-medium text-creme-900">
                     </div>
                 </section>
 
-                <button id="btn-payer-sumup" onclick="traiterPaiementSumUp()" class="w-full py-4 bg-ocre-600 hover:bg-ocre-700 text-white font-bold rounded-2xl shadow-lg transition-all text-sm uppercase tracking-wider text-center flex items-center justify-center gap-2">
+                <button id="btn-payer-sumup" onclick="lancerPaiementAPI()" class="w-full py-4 bg-ocre-600 hover:bg-ocre-700 text-white font-bold rounded-2xl shadow-lg transition-all text-sm uppercase tracking-wider text-center flex items-center justify-center gap-2">
                     Payer avec SumUp
                 </button>
             </div>
 
             <!-- COLONNE DROITE : RÉCAPITULATIF COMMANDE -->
             <div class="lg:col-span-5 bg-white p-6 sm:p-8 rounded-3xl border border-creme-200 shadow-sm space-y-6">
-                
-                <h2 class="font-serif text-xl font-bold text-creme-900 pb-2 border-b border-creme-200">
-                    Récapitulatif de la commande
-                </h2>
-
-                <div id="order-items-list" class="space-y-4 max-h-80 overflow-y-auto custom-scrollbar pr-1"></div>
+                <h2 class="font-serif text-xl font-bold text-creme-900 pb-2 border-b border-creme-200">Récapitulatif de la commande</h2>
+                <div id="order-items-list" class="space-y-4 max-h-80 overflow-y-auto pr-1"></div>
 
                 <div class="pt-2 border-t border-creme-200 space-y-2">
                     <div class="flex gap-2">
-                        <input type="text" id="promo-code-input" placeholder="Code de réduction" class="flex-grow px-4 py-2.5 bg-creme-50 border border-creme-300 rounded-xl text-xs uppercase focus:outline-none focus:border-sauge-500 font-bold tracking-wider">
-                        <button onclick="validerCodePromo()" class="px-5 py-2.5 bg-creme-200 hover:bg-creme-300 text-creme-900 font-bold text-xs rounded-xl transition-all shrink-0">
-                            Valider
-                        </button>
+                        <input type="text" id="promo-code-input" placeholder="Code de réduction" class="flex-grow px-4 py-2.5 bg-creme-50 border border-creme-300 rounded-xl text-xs uppercase focus:outline-none focus:border-sauge-500 font-bold">
+                        <button onclick="validerCodePromo()" class="px-5 py-2.5 bg-creme-200 hover:bg-creme-300 text-creme-900 font-bold text-xs rounded-xl">Valider</button>
                     </div>
                     <div id="applied-promo-container"></div>
                 </div>
@@ -215,26 +193,21 @@
                         <span>Sous-total articles</span>
                         <span id="summary-subtotal" class="font-semibold text-creme-900">0,00 €</span>
                     </div>
-
                     <div id="row-discount" class="flex justify-between text-ocre-700 hidden font-semibold">
                         <span id="label-discount">Réduction</span>
                         <span id="amount-discount">-0,00 €</span>
                     </div>
-
                     <div class="flex justify-between items-center">
-                        <span class="flex items-center gap-1">Frais d'expédition (selon poids)</span>
+                        <span>Frais d'expédition</span>
                         <span id="summary-shipping" class="font-bold text-creme-900">3,95 €</span>
                     </div>
-
                     <div class="flex justify-between items-center pt-3 border-t border-creme-200 text-sm">
                         <span class="font-bold text-creme-900">Total Général</span>
                         <div class="text-right">
-                            <span class="text-[10px] text-creme-800 font-semibold mr-1">EUR</span>
                             <span id="summary-total" class="font-serif text-2xl font-bold text-ocre-600">0,00 €</span>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </main>
@@ -248,33 +221,13 @@
         let supabaseClient = null;
         if (window.supabase) supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const EMAILJS_CONFIG = {
-            publicKey: "rnYePJTMswP2wkX6O",
-            serviceID: "service_cbfk3mr",
-            templateOrderID: "template_jeryfp3"
-        };
-        if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey) emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey });
-
         let utilisateurActuel = null;
         let cart = [];
         let promoApplique = null;
-        let modeLivraisonSelectionne = { type: 'chronopost', isRelais: true };
 
         window.onload = function() {
             chargerUtilisateur();
             chargerPanier();
-
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('payment') === 'success' || urlParams.get('paid') === 'true' || urlParams.get('status') === 'success') {
-                const pendingData = sessionStorage.getItem('lpf_pending_checkout');
-                if (pendingData) {
-                    sessionStorage.removeItem('lpf_pending_checkout');
-                    localStorage.removeItem(getCartKey());
-                    afficherToast("Paiement validé avec succès !", "success");
-                    setTimeout(() => { window.location.href = 'index.html'; }, 3000);
-                }
-            }
-
             if (window.lucide) window.lucide.createIcons();
         };
 
@@ -312,13 +265,12 @@
         function calculerPoidsTotalEnGrammes() {
             let poidsTotal = 0;
             cart.forEach(item => {
-                let poidsUnitaire = item.weight || 100;
-                poidsTotal += poidsUnitaire * item.quantity;
+                poidsTotal += (item.weight || 100) * item.quantity;
             });
             return Math.max(50, poidsTotal);
         }
 
-        function obtenirPrixExpeditionSelonPoids(mode, poidsGrammes, sousTotal) {
+        function obtenirFraisPort(mode, poidsGrammes, sousTotal) {
             if (sousTotal >= 70.00) return 0; // Offert dès 70 € d'achat
 
             if (mode === 'chronopost') {
@@ -327,7 +279,6 @@
                 if (poidsGrammes <= 2000) return 6.50;
                 return 7.90;
             }
-
             if (mode === 'colissimo_relais') {
                 if (poidsGrammes <= 250) return 4.79;
                 if (poidsGrammes <= 500) return 6.89;
@@ -336,7 +287,6 @@
                 if (poidsGrammes <= 2000) return 10.49;
                 return 16.69;
             }
-
             if (mode === 'colissimo_domicile') {
                 if (poidsGrammes <= 250) return 5.49;
                 if (poidsGrammes <= 500) return 7.59;
@@ -348,31 +298,12 @@
                 if (poidsGrammes <= 15000) return 31.99;
                 return 39.59;
             }
-
             return 3.95;
-        }
-
-        function changerModeExpedition() {
-            const checkedRadio = document.querySelector('input[name="shipping_mode"]:checked');
-            if (!checkedRadio) return;
-
-            const isRelais = checkedRadio.dataset.relais === "true";
-            modeLivraisonSelectionne = { type: checkedRadio.value, isRelais: isRelais };
-
-            const sectionRelais = document.getElementById('section-point-relais');
-            if (isRelais) {
-                sectionRelais.classList.remove('hidden');
-            } else {
-                sectionRelais.classList.add('hidden');
-            }
-
-            renderCheckoutSummary();
         }
 
         function validerCodePromo() {
             const input = document.getElementById('promo-code-input');
             const code = input.value.trim().toUpperCase();
-
             const codesValides = {
                 'PAUSE10': { type: 'percent', val: 10, label: '10% de réduction' },
                 'REDUC10': { type: 'percent', val: 10, label: '10% de réduction' },
@@ -403,90 +334,50 @@
 
             let sousTotal = 0;
             const poidsTotal = calculerPoidsTotalEnGrammes();
+            if (badgePoids) badgePoids.innerHTML = `<i data-lucide="scale" class="w-3.5 h-3.5 text-sauge-600"></i> Poids : <strong>${poidsTotal} g</strong>`;
 
-            if (badgePoids) {
-                badgePoids.innerHTML = `<i data-lucide="scale" class="w-3.5 h-3.5 text-sauge-600"></i> Poids estimé : <strong>${poidsTotal} g</strong>`;
-            }
+            container.innerHTML = '';
+            cart.forEach(item => {
+                sousTotal += item.price * item.quantity;
+                container.innerHTML += `
+                    <div class="flex items-center justify-between text-xs">
+                        <div><strong>${item.quantity}x ${item.title}</strong><br/><span class="text-[11px] text-creme-800">${item.subtitle || ''}</span></div>
+                        <span class="font-bold">${(item.price * item.quantity).toFixed(2).replace('.', ',')} €</span>
+                    </div>`;
+            });
 
-            if (cart.length === 0) {
-                container.innerHTML = `<p class="text-xs text-creme-800 italic text-center py-6">Ton panier est vide.</p>`;
-            } else {
-                container.innerHTML = '';
-                cart.forEach(item => {
-                    sousTotal += item.price * item.quantity;
+            const modeInput = document.querySelector('input[name="shipping_mode"]:checked');
+            const mode = modeInput ? modeInput.value : 'chronopost';
+            const fraisPort = obtenirFraisPort(mode, poidsTotal, sousTotal);
 
-                    const itemRow = document.createElement('div');
-                    itemRow.className = "flex items-center justify-between gap-3 text-xs";
-                    itemRow.innerHTML = `
-                        <div class="flex items-center gap-3">
-                            <div class="relative shrink-0">
-                                <div class="w-12 h-12 bg-creme-100 rounded-xl border border-creme-200 flex items-center justify-center font-serif text-xs font-bold text-sauge-700 overflow-hidden">
-                                    <i data-lucide="box" class="w-5 h-5 text-sauge-600"></i>
-                                </div>
-                                <span class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-creme-800 text-white text-[10px] font-bold rounded-full flex items-center justify-center">${item.quantity}</span>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-creme-900">${item.title}</h4>
-                                <p class="text-[11px] text-creme-800 line-clamp-1">${item.subtitle || ''}</p>
-                            </div>
-                        </div>
-                        <span class="font-bold text-creme-900 shrink-0">${(item.price * item.quantity).toFixed(2).replace('.', ',')} €</span>
-                    `;
-                    container.appendChild(itemRow);
-                });
-            }
-
-            const priceChronopost = obtenirPrixExpeditionSelonPoids('chronopost', poidsTotal, sousTotal);
-            const priceColissimoRelais = obtenirPrixExpeditionSelonPoids('colissimo_relais', poidsTotal, sousTotal);
-            const priceColissimoDomicile = obtenirPrixExpeditionSelonPoids('colissimo_domicile', poidsTotal, sousTotal);
-
-            document.getElementById('price-shipping-chronopost').textContent = priceChronopost === 0 ? "OFFERT" : priceChronopost.toFixed(2).replace('.', ',') + " €";
-            document.getElementById('price-shipping-colissimo-relais').textContent = priceColissimoRelais === 0 ? "OFFERT" : priceColissimoRelais.toFixed(2).replace('.', ',') + " €";
-            document.getElementById('price-shipping-colissimo-domicile').textContent = priceColissimoDomicile === 0 ? "OFFERT" : priceColissimoDomicile.toFixed(2).replace('.', ',') + " €";
-
-            let fraisLivraison = obtenirPrixExpeditionSelonPoids(modeLivraisonSelectionne.type, poidsTotal, sousTotal);
-
-            if (fraisLivraison === 0 && cart.length > 0) {
-                shippingEl.innerHTML = `<span class="text-sauge-700 font-bold bg-sauge-100 px-2.5 py-0.5 rounded-md">OFFERTS</span>`;
-            } else {
-                shippingEl.textContent = fraisLivraison.toFixed(2).replace('.', ',') + " €";
-            }
+            shippingEl.textContent = fraisPort === 0 ? "OFFERTS" : fraisPort.toFixed(2).replace('.', ',') + " €";
 
             let reduction = 0;
             if (promoApplique) {
                 if (promoApplique.type === 'percent') reduction = (sousTotal * promoApplique.val) / 100;
                 else if (promoApplique.type === 'free') reduction = sousTotal;
-
                 rowDiscount.classList.remove('hidden');
                 labelDiscount.textContent = `Réduction (${promoApplique.code})`;
                 amountDiscount.textContent = `- ${reduction.toFixed(2).replace('.', ',')} €`;
-
-                appliedPromoContainer.innerHTML = `
-                    <div class="flex justify-between items-center bg-ocre-50 border border-ocre-200 px-3 py-1 rounded-xl text-xs text-ocre-800 font-semibold">
-                        <span>Code <strong>${promoApplique.code}</strong> (${promoApplique.label})</span>
-                        <button onclick="promoApplique=null; renderCheckoutSummary();" class="text-red-600 font-bold">×</button>
-                    </div>
-                `;
+                appliedPromoContainer.innerHTML = `<div class="flex justify-between items-center bg-ocre-50 px-3 py-1 rounded-xl text-xs text-ocre-800 font-semibold"><span>Promo ${promoApplique.code}</span><button onclick="promoApplique=null; renderCheckoutSummary();" class="text-red-600 font-bold">×</button></div>`;
             } else {
                 rowDiscount.classList.add('hidden');
                 appliedPromoContainer.innerHTML = '';
             }
 
-            const totalFinal = Math.max(0, (sousTotal - reduction) + fraisLivraison);
-
+            const totalFinal = Math.max(0, (sousTotal - reduction) + fraisPort);
             subtotalEl.textContent = sousTotal.toFixed(2).replace('.', ',') + " €";
             totalEl.textContent = totalFinal.toFixed(2).replace('.', ',') + " €";
 
             if (window.lucide) window.lucide.createIcons();
         }
 
-        // ENVOI DE L'EMAIL PUIS REDIRECTION VERS LE LIEN SUMUP OFFICIEL
-        async function traiterPaiementSumUp() {
+        // APPEL DE L'API BACKEND POUR GÉNÉRER LE PAIEMENT SUMUP ET ENVOYER L'EMAIL
+        async function lancerPaiementAPI() {
             if (!utilisateurActuel) {
-                afficherToast("Tu dois être connecté à ton compte pour commander.", "warning");
+                afficherToast("Connecte-toi pour commander.", "warning");
                 return;
             }
-
             if (cart.length === 0) {
                 afficherToast("Ton panier est vide.", "warning");
                 return;
@@ -497,98 +388,83 @@
             const adresse = document.getElementById('input-adresse').value.trim();
             const cp = document.getElementById('input-cp').value.trim();
             const ville = document.getElementById('input-ville').value.trim();
-            const pays = document.getElementById('input-pays').value.trim();
-            const telephone = document.getElementById('input-telephone').value.trim();
+            const tel = document.getElementById('input-telephone').value.trim();
 
-            if (!prenom || !nom || !adresse || !cp || !ville || !telephone) {
-                afficherToast("Merci de remplir tous les champs obligatoires (adresse et téléphone).", "warning");
+            if (!prenom || !nom || !adresse || !cp || !ville || !tel) {
+                afficherToast("Remplis tous les champs d'adresse et le téléphone.", "warning");
                 return;
             }
 
-            let pointRelaisVal = "Livraison à domicile (Colissimo Domicile)";
-            if (modeLivraisonSelectionne.isRelais) {
+            const modeInput = document.querySelector('input[name="shipping_mode"]:checked');
+            const modeLivraison = modeInput ? modeInput.value : 'chronopost';
+            const isRelais = modeInput ? modeInput.dataset.relais === "true" : true;
+
+            let pointRelaisVal = "Livraison à domicile";
+            if (isRelais) {
                 pointRelaisVal = document.getElementById('input-point-relais').value.trim();
                 if (!pointRelaisVal) {
-                    afficherToast("Merci d'indiquer le nom et l'adresse de votre Point Relais.", "warning");
-                    document.getElementById('input-point-relais').focus();
+                    afficherToast("Indique ton Point Relais choisi.", "warning");
                     return;
                 }
             }
 
             const btnPayer = document.getElementById('btn-payer-sumup');
             btnPayer.disabled = true;
-            btnPayer.textContent = "Transmission & Redirection SumUp...";
+            btnPayer.textContent = "Génération du paiement sécurisé...";
 
-            const adresseComplete = `${adresse}, ${cp} ${ville} (${pays})`;
-
+            // Calculs finaux à envoyer au serveur
             let sousTotal = 0;
             cart.forEach(i => sousTotal += i.price * i.quantity);
             const poidsTotal = calculerPoidsTotalEnGrammes();
-            let fraisLivraison = obtenirPrixExpeditionSelonPoids(modeLivraisonSelectionne.type, poidsTotal, sousTotal);
+            const fraisDePort = obtenirFraisPort(modeLivraison, poidsTotal, sousTotal);
             let reduction = 0;
             if (promoApplique) {
                 if (promoApplique.type === 'percent') reduction = (sousTotal * promoApplique.val) / 100;
                 else if (promoApplique.type === 'free') reduction = sousTotal;
             }
-            const totalFinal = Math.max(0, (sousTotal - reduction) + fraisLivraison);
+            const totalFinal = Math.max(1.00, (sousTotal - reduction) + fraisDePort); // Min 1€ pour SumUp
 
-            const checkoutPayload = {
+            const payload = {
+                amount: totalFinal,
+                sousTotal: sousTotal,
+                fraisDePort: fraisDePort,
+                estLivraisonOfferte: fraisDePort === 0,
+                pointRelais: `${pointRelaisVal} (Client: ${prenom} ${nom}, ${adresse}, ${cp} ${ville}, Tél: ${tel})`,
                 clientEmail: utilisateurActuel.email,
-                nomClient: `${prenom} ${nom}`,
-                adresseLivraison: adresseComplete,
-                telephone: telephone,
-                pointRelais: pointRelaisVal,
-                poidsTotalGrammes: poidsTotal,
-                articles: cart,
-                promo: promoApplique,
-                modeLivraison: modeLivraisonSelectionne.type,
-                date: new Date().toLocaleDateString('fr-FR')
+                cart: cart
             };
 
-            // Préparation des variables pour EmailJS correspondant à ton template
-            let listeArticlesText = checkoutPayload.articles.map(i => `• ${i.quantity}x ${i.title} (${i.subtitle || i.weight + 'g' || ''})`).join('\n');
-
-            const paramsMail = {
-                to_email: "debstyle-coiffure@hotmail.com",
-                reply_to: checkoutPayload.clientEmail,
-                client_email: checkoutPayload.clientEmail,
-                client_name: checkoutPayload.nomClient,
-                client_phone: checkoutPayload.telephone,
-                delivery_address: checkoutPayload.adresseLivraison,
-                point_relais: checkoutPayload.pointRelais,
-                articles_list: listeArticlesText,
-                subtotal: sousTotal.toFixed(2).replace('.', ',') + " €",
-                discount: promoApplique ? `- ${reduction.toFixed(2).replace('.', ',')} €` : "0,00 €",
-                shipping: fraisLivraison === 0 ? "OFFERTS" : fraisLivraison.toFixed(2).replace('.', ',') + " €",
-                total: totalFinal.toFixed(2).replace('.', ',') + " €",
-                date: checkoutPayload.date
-            };
-
-            // 1. ENVOI DE L'EMAIL AVANT REDIRECTION
             try {
-                if (typeof emailjs !== 'undefined') {
-                    await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateOrderID, paramsMail, EMAILJS_CONFIG.publicKey);
-                    console.log("E-mail envoyé avec succès à debstyle-coiffure@hotmail.com");
+                const response = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+
+                if (response.ok && data.url) {
+                    localStorage.removeItem(getCartKey());
+                    window.location.href = data.url; // Redirection vers la page SumUp au montant exact généré par l'API
+                } else {
+                    afficherToast(data.error || "Erreur lors de la redirection vers SumUp.", "warning");
+                    btnPayer.disabled = false;
+                    btnPayer.textContent = "Payer avec SumUp";
                 }
             } catch (err) {
-                console.error("Erreur lors de l'envoi de l'e-mail EmailJS :", err);
+                console.error(err);
+                afficherToast("Erreur de connexion au serveur de paiement.", "warning");
+                btnPayer.disabled = false;
+                btnPayer.textContent = "Payer avec SumUp";
             }
-
-            sessionStorage.setItem('lpf_pending_checkout', JSON.stringify(checkoutPayload));
-
-            // 2. REDIRECTION VERS TON LIEN SUMUP OFFICIEL
-            const LIEN_SUMUP = "https://pay.sumup.com/b2c/QDCB1T3C";
-            window.location.href = LIEN_SUMUP;
         }
 
         function afficherToast(message, type = "success") {
             const container = document.getElementById('toast-container');
             if(!container) return;
             const toast = document.createElement('div');
-            toast.className = `pointer-events-auto px-4 py-3 rounded-2xl shadow-xl text-xs font-bold text-white transition-all flex items-center gap-2 ${type === 'warning' ? 'bg-amber-600' : 'bg-sauge-800'} border border-white/20`;
-            toast.innerHTML = `<i data-lucide="${type === 'warning' ? 'alert-triangle' : 'check-circle'}" class="w-4 h-4"></i> <span>${message}</span>`;
+            toast.className = `pointer-events-auto px-4 py-3 rounded-2xl shadow-xl text-xs font-bold text-white transition-all flex items-center gap-2 ${type === 'warning' ? 'bg-amber-600' : 'bg-sauge-800'}`;
+            toast.innerHTML = `<span>${message}</span>`;
             container.appendChild(toast);
-            if (window.lucide) window.lucide.createIcons();
             setTimeout(() => { toast.remove(); }, 3500);
         }
     </script>
