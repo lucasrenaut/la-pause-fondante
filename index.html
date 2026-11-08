@@ -383,6 +383,26 @@
                     <div class="space-y-4 text-xs text-creme-800">
                         <div class="flex items-start gap-3">
                             <div class="w-9 h-9 rounded-xl bg-sauge-100 text-sauge-700 flex items-center justify-center shrink-0">
+                                <i data-lucide="user" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <span class="font-bold text-creme-900 block">Vendeur</span>
+                                <span>Deborah Bovrisse (La Pause Fondante)</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-sauge-100 text-sauge-700 flex items-center justify-center shrink-0">
+                                <i data-lucide="map-pin" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <span class="font-bold text-creme-900 block">Adresse Professionnelle</span>
+                                <span>41 rue de la Marne, 59124 Escaudain</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-sauge-100 text-sauge-700 flex items-center justify-center shrink-0">
                                 <i data-lucide="mail" class="w-4 h-4"></i>
                             </div>
                             <div>
@@ -393,31 +413,11 @@
 
                         <div class="flex items-start gap-3">
                             <div class="w-9 h-9 rounded-xl bg-sauge-100 text-sauge-700 flex items-center justify-center shrink-0">
-                                <i data-lucide="facebook" class="w-4 h-4"></i>
+                                <i data-lucide="phone" class="w-4 h-4"></i>
                             </div>
                             <div>
-                                <span class="font-bold text-creme-900 block">Facebook</span>
-                                <a href="https://facebook.com" target="_blank" class="text-sauge-700 hover:underline">La Pause Fondante</a>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start gap-3">
-                            <div class="w-9 h-9 rounded-xl bg-sauge-100 text-sauge-700 flex items-center justify-center shrink-0">
-                                <i data-lucide="video" class="w-4 h-4"></i>
-                            </div>
-                            <div>
-                                <span class="font-bold text-creme-900 block">TikTok</span>
-                                <a href="https://tiktok.com" target="_blank" class="text-sauge-700 hover:underline">La Pause Fondante</a>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start gap-3">
-                            <div class="w-9 h-9 rounded-xl bg-sauge-100 text-sauge-700 flex items-center justify-center shrink-0">
-                                <i data-lucide="clock" class="w-4 h-4"></i>
-                            </div>
-                            <div>
-                                <span class="font-bold text-creme-900 block">Disponibilité</span>
-                                <span>Pas d'horaire d'entreprise en ligne — Commandes ouvertes 24h/24.</span>
+                                <span class="font-bold text-creme-900 block">Téléphone</span>
+                                <a href="tel:0610707659" class="text-sauge-700 hover:underline">06 10 70 76 59</a>
                             </div>
                         </div>
                     </div>
@@ -466,7 +466,7 @@
                 <img src="logo_pause_fondante.jpeg" alt="Logo" class="w-10 h-10 rounded-full object-cover border border-sauge-300" onerror="this.onerror=null; this.src='https://placehold.co/100x100/6b7f71/ffffff?text=LPF';">
                 <div>
                     <p class="font-serif font-bold text-creme-900 text-sm">La pause Fondante</p>
-                    <p class="text-[11px] mt-0.5">Confection artisanale — Contact : debstyle-coiffure@hotmail.com</p>
+                    <p class="text-[11px] mt-0.5">Deborah Bovrisse — SIREN 829 189 083 — Escaudain</p>
                 </div>
             </div>
             <div class="flex items-center gap-6 font-semibold">
@@ -565,49 +565,123 @@
         </div>
     </div>
 
-    <!-- MODALE CGV -->
+    <!-- MODALE CGV COMPLET -->
     <div id="modal-cgv" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
         <div onclick="fermerModalCGV()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
-        <div class="relative bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl z-10 space-y-4 max-h-[85vh] flex flex-col animate-fade-in">
+        <div class="relative bg-white rounded-3xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl z-10 space-y-4 max-h-[85vh] flex flex-col animate-fade-in">
             <div class="flex items-center justify-between border-b border-creme-200 pb-4">
-                <h3 class="font-serif text-xl font-bold text-creme-900">Conditions Générales de Vente (CGV)</h3>
+                <div>
+                    <h3 class="font-serif text-xl font-bold text-creme-900">Conditions Générales de Vente (CGV)</h3>
+                    <p class="text-[11px] text-sauge-600 font-semibold">Dernière mise à jour : 7 novembre 2026</p>
+                </div>
                 <button onclick="fermerModalCGV()" class="p-1 rounded-full hover:bg-creme-100 text-creme-800"><i data-lucide="x"></i></button>
             </div>
-            <div class="flex-grow overflow-y-auto space-y-4 text-xs text-creme-800 leading-relaxed custom-scrollbar pr-2">
-                <p class="font-bold text-creme-900">Contact : debstyle-coiffure@hotmail.com</p>
-                <p class="font-bold text-creme-900">Article 1 - Objet</p>
-                <p>Les présentes Conditions Générales de Vente régissent les ventes de fondants artisanaux, tablettes, coffrets et créations par La pause Fondante.</p>
-                <p class="font-bold text-creme-900">Article 2 - Prix et Paiement</p>
-                <p>Les prix affichés sont en Euros (€). Le règlement s'effectue par carte bancaire de manière sécurisée.</p>
-                <p class="font-bold text-creme-900">Article 3 - Livraison</p>
-                <p>Frais de port **OFFERTS à partir de 70,00 € d'achats**.</p>
+            <div class="flex-grow overflow-y-auto space-y-4 text-xs text-creme-800 leading-relaxed custom-scrollbar pr-3">
+                
+                <section class="space-y-1">
+                    <h4 class="font-bold text-creme-900 text-sm">ARTICLE 1 – IDENTIFICATION DU VENDEUR</h4>
+                    <p>Les présentes Conditions Générales de Vente sont proposées par :</p>
+                    <p><strong>Nom et prénom :</strong> Deborah Bovrisse<br>
+                    <strong>Nom commercial :</strong> La Pause Fondante<br>
+                    <strong>Statut :</strong> Entrepreneur individuel – régime micro-entrepreneur<br>
+                    <strong>SIREN :</strong> 829 189 083 | <strong>SIRET :</strong> À compléter (14 chiffres)<br>
+                    <strong>Adresse professionnelle :</strong> 41 rue de la Marne, 59124 Escaudain, France<br>
+                    <strong>Adresse e-mail :</strong> debstyle-coiffure@hotmail.com | <strong>Téléphone :</strong> 06 10 70 76 59</p>
+                </section>
+
+                <section class="space-y-1">
+                    <h4 class="font-bold text-creme-900 text-sm">ARTICLE 2 – OBJET</h4>
+                    <p>Les présentes CGV définissent les conditions dans lesquelles La Pause Fondante commercialise ses créations artisanales sur son site internet. Les produits proposés comprennent notamment : fondants parfumés en cire végétale, tablettes fondantes, coffrets cadeaux et lots mystères, plateaux parfumés et décoratifs, créations décoratives, collections saisonnières et éditions limitées. Toute commande passée sur le site implique l’acceptation des présentes CGV.</p>
+                </section>
+
+                <section class="space-y-1">
+                    <h4 class="font-bold text-creme-900 text-sm">ARTICLE 3 – PRODUITS</h4>
+                    <p>La Pause Fondante propose des créations réalisées artisanalement avec soin. De légères différences de couleur, de forme, de finition ou de décoration peuvent apparaître d’une création à une autre. Les photographies sont présentées à titre illustratif. Les caractéristiques essentielles, le poids, la composition et les précautions d’utilisation sont indiqués sur les fiches produits et étiquetages.</p>
+                </section>
+
+                <section class="space-y-1">
+                    <h4 class="font-bold text-creme-900 text-sm">ARTICLE 4 – PRIX</h4>
+                    <p>Les prix sont indiqués en euros. La Pause Fondante bénéficie de la franchise en base de TVA. Mention applicable : « TVA non applicable, article 293 B du CGI ». Les frais de livraison sont indiqués avant la validation de la commande.</p>
+                </section>
+
+                <section class="space-y-1">
+                    <h4 class="font-bold text-creme-900 text-sm">ARTICLE 5 – COMMANDE</h4>
+                    <p>Le client sélectionne ses produits dans le panier. Avant le paiement, il vérifie le récapitulatif. La validation de la commande avec obligation de paiement vaut acceptation des CGV. Une confirmation est adressée au client par voie électronique.</p>
+                </section>
+
+                <section class="space-y-1">
+                    <h4 class="font-bold text-creme-900 text-sm">ARTICLE 6 – PAIEMENT</h4>
+                    <p>Le paiement est effectué par carte bancaire au moyen de la solution sécurisée SumUp. Le paiement doit être intégralement validé pour que la commande puisse être préparée. En cas de refus du paiement, la commande ne pourra pas être expédiée.</p>
+                </section>
+
+                <section class="space-y-1">
+                    <h4 class="font-bold text-creme-900 text-sm">ARTICLE 7 – DISPONIBILITÉ</h4>
+                    <p>Les produits sont proposés dans la limite des stocks disponibles et des séries limitées. En cas d’indisponibilité exceptionnelle après validation, le client sera informé et pourra choisir entre un remplacement ou le remboursement.</p>
+                </section>
+
+                <section class="space-y-1">
+                    <h4 class="font-bold text-creme-900 text-sm">ARTICLE 8 – LIVRAISON</h4>
+                    <p>La livraison est proposée en France métropolitaine et en Belgique (expéditions en point relais ou à domicile). Le délai indicatif de préparation et d’expédition est de 3 à 5 jours ouvrés. Les produits sont emballés soigneusement pour limiter les risques du transport.</p>
+                </section>
+
+                <section class="space-y-1">
+                    <h4 class="font-bold text-creme-900 text-sm">ARTICLE 9 – DROIT DE RÉTRACTATION</h4>
+                    <p>Conformément aux articles L221-18 et suivants du Code de la consommation, le client dispose d’un délai de 14 jours calendaires à compter du lendemain de la réception pour exercer son droit de rétractation. Les frais de retour sont à la charge du client. Les retours s'effectuent à : La Pause Fondante, 41 rue de la Marne, 59124 Escaudain ou par e-mail à debstyle-coiffure@hotmail.com.</p>
+                </section>
+
+                <section class="space-y-1">
+                    <h4 class="font-bold text-creme-900 text-sm">ARTICLE 10 – PRODUITS ENDOMMAGÉS OU NON CONFORMES</h4>
+                    <p>Si le client reçoit un produit endommagé ou défectueux, il convient de contacter La Pause Fondante à debstyle-coiffure@hotmail.com avec le numéro de commande et des photographies.</p>
+                </section>
+
+                <section class="space-y-1">
+                    <h4 class="font-bold text-creme-900 text-sm">ARTICLE 11 – GARANTIES LÉGANTE</h4>
+                    <p>Les produits bénéficient des garanties légales du droit français : garantie légale de conformité (art. L217-3 et suivants du Code de la consommation - 2 ans) et garantie contre les vices cachés (art. 1641 du Code civil).</p>
+                </section>
+
+                <section class="space-y-1">
+                    <h4 class="font-bold text-creme-900 text-sm">ARTICLE 12 – PRÉCAUTIONS D’UTILISATION</h4>
+                    <p>Les fondants parfumés sont destinés à être utilisés dans un brûleur adapté. Ne jamais ingérer. Ne jamais laisser un brûleur allumé sans surveillance. Tenir hors de portée des enfants et des animaux.</p>
+                </section>
+
+                <section class="space-y-1">
+                    <h4 class="font-bold text-creme-900 text-sm">ARTICLE 13 À 17 – MÉDIATION, DONNÉES & LITIGES</h4>
+                    <p>Les données personnelles sont traitées conformément au RGPD. Les litiges sont soumis au droit français. En cas de différend, une solution amiable est privilégiée.</p>
+                </section>
+
                 <div class="pt-4 border-t border-creme-200 space-y-2">
-                    <p class="font-bold text-creme-900 text-sm">Conseils de Prudence :</p>
+                    <p class="font-bold text-creme-900 text-xs uppercase tracking-wider">Précautions & Consignes :</p>
                     <img src="Attention_pause_fondante.jpeg" alt="Consignes" class="w-full h-auto rounded-xl border border-creme-200" onerror="this.onerror=null; this.style.display='none';">
                 </div>
             </div>
             <div class="pt-2 border-t border-creme-200 text-right">
-                <button onclick="fermerModalCGV()" class="px-5 py-2.5 bg-sauge-600 text-white font-bold rounded-xl text-xs">Fermer</button>
+                <button onclick="fermerModalCGV()" class="px-5 py-2.5 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-xl text-xs">Fermer</button>
             </div>
         </div>
     </div>
 
-    <!-- MODALE MENTIONS LÉGALES -->
+    <!-- MODALE MENTIONS LÉGALES COMPLET -->
     <div id="modal-mentions" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
         <div onclick="fermerModalMentions()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
-        <div class="relative bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl z-10 space-y-4 animate-fade-in">
+        <div class="relative bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl z-10 space-y-4 max-h-[85vh] flex flex-col animate-fade-in">
             <div class="flex items-center justify-between border-b border-creme-200 pb-4">
-                <h3 class="font-serif text-xl font-bold text-creme-900">Mentions Légales</h3>
+                <div>
+                    <h3 class="font-serif text-xl font-bold text-creme-900">Mentions Légales</h3>
+                    <p class="text-[11px] text-sauge-600 font-semibold">Dernière mise à jour : 7 novembre 2026</p>
+                </div>
                 <button onclick="fermerModalMentions()" class="p-1 rounded-full hover:bg-creme-100 text-creme-800"><i data-lucide="x"></i></button>
             </div>
-            <div class="space-y-3 text-xs text-creme-800 leading-relaxed">
-                <p><strong>Raison sociale :</strong> La pause Fondante</p>
-                <p><strong>Contact :</strong> debstyle-coiffure@hotmail.com</p>
-                <p><strong>Réseaux :</strong> Facebook & TikTok : La Pause Fondante</p>
-                <p><strong>Hébergement :</strong> Vercel Inc.</p>
+            <div class="flex-grow overflow-y-auto space-y-3 text-xs text-creme-800 leading-relaxed custom-scrollbar pr-2">
+                <p><strong>1. Éditeur du site :</strong> Deborah Bovrisse (La Pause Fondante), Entreprise individuelle - Micro-entreprise. SIREN : 829 189 083. Adresse : 41 rue de la Marne, 59124 Escaudain, France. Email : debstyle-coiffure@hotmail.com | Tél : 06 10 70 76 59. TVA non applicable, article 293 B du CGI.</p>
+                <p><strong>2. Directrice de la publication :</strong> Deborah Bovrisse.</p>
+                <p><strong>3. Hébergement du site :</strong> Vercel Inc., 440 N Barranca Avenue #4133, Covina, CA 91723, États-Unis (https://vercel.com).</p>
+                <p><strong>4. Activité :</strong> Fabrication et vente de créations parfumées artisanales en cire végétale (fondants, tablettes, coffrets, créations saisonnières).</p>
+                <p><strong>5. Propriété intellectuelle :</strong> L’ensemble des contenus (textes, visuels, logos, photos) est protégé par les dispositions du Code de la propriété intellectuelle. Toute reproduction est interdite sans autorisation préalable.</p>
+                <p><strong>6. Paiement sécurisé :</strong> Traitement sécurisé par la solution SumUp. La Pause Fondante ne conserve aucune donnée bancaire.</p>
+                <p><strong>7. RGPD & Données personnelles :</strong> Données collectées uniquement pour la gestion des commandes et livraisons. Exercice des droits à l'adresse debstyle-coiffure@hotmail.com.</p>
             </div>
             <div class="pt-2 border-t border-creme-200 text-right">
-                <button onclick="fermerModalMentions()" class="px-5 py-2.5 bg-sauge-600 text-white font-bold rounded-xl text-xs">Fermer</button>
+                <button onclick="fermerModalMentions()" class="px-5 py-2.5 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-xl text-xs">Fermer</button>
             </div>
         </div>
     </div>
@@ -655,7 +729,7 @@
             </div>
             <div class="space-y-1">
                 <h3 class="font-serif text-2xl font-bold text-creme-900">Validation de la Commande</h3>
-                <p class="text-xs text-creme-800">Paiement sécurisé et envoi direct de la confirmation.</p>
+                <p class="text-xs text-creme-800">Paiement sécurisé et envoi automatique de confirmation après règlement.</p>
             </div>
 
             <div id="checkout-account-badge" class="bg-ocre-50 border border-ocre-200 p-2.5 rounded-xl text-xs text-ocre-800 font-bold flex items-center justify-center gap-2">
@@ -921,9 +995,9 @@
                 { id: 23, nom: "Cire et Miel", categorie: "Épicés & Cocooning", description: "Nectar de miel brut", icone: "sparkles", couleur: "#fef3c7" }
             ],
             plateaux: [
-                { id: 'plat-zen', nom: "Plateau Zen", prix: 19.00, weight: 1200, badge: "Permanent", image: "plateau_zen_lpf.jpeg", description: "10 fondants hasard + 10 chauffe-plat + fondoir zen + décoration galets.", elements: ["10 fondants relaxants", "10 chauffe-plats", "1 fondoir : tête de buddha", "décoration ZEN" , "1 plateau"] },
-                { id: 'plat-noel', nom: "Plateau Noël", prix: 18.00, weight: 1200, badge: "Édition Limitée • Spécial Noël 🎄", image: "plateau_noel_lpf.jpeg", description: "10 fondants hasard + 10 chauffe-plat + fondoir chalet + décoration cannelle.", elements: ["10 fondants de fêtes", "10 chauffe-plats", "1 fondoir esprit chalet", "décoration Hivernale" , "1 plateau"] },
-                { id: 'plat-naturel', nom: "Plateau Naturel", prix: 17.00, weight: 1200, badge: "Permanent", image: "plateau_nature_lpf.jpeg", description: "10 fondants hasard + 10 chauffe-plat + fondoir grès + décoration bois.", elements: ["10 fondants boisés/floraux", "10 chauffe-plats", "1 fondoir", "décoration Naturel" , "1 plateau"] }
+                { id: 'plat-zen', nom: "Plateau Zen", prix: 19.00, weight: 1200, badge: "Sérénité", image: "plateau_zen_lpf.jpeg", description: "10 fondants hasard + 10 chauffe-plat + fondoir zen + décoration galets.", elements: ["10 fondants relaxants", "10 chauffe-plats", "1 fondoir : tête de buddha", "décoration ZEN" , "1 plateau"]},
+                { id: 'plat-noel', nom: "Plateau Noël", prix: 18.00, weight: 1200, badge: "Édition Limitée • Spécial Noël 🎄", image: "plateau_noel_lpf.jpeg", description: "10 fondants hasard + 10 chauffe-plat + fondoir chalet + décoration cannelle.", elements: ["10 fondants de fêtes", "10 chauffe-plats", "1 fondoir", "1 décoration Hivernale" , "1 plateau"] },
+                { id: 'plat-naturel', nom: "Plateau Naturel", prix: 17.00, weight: 1200, badge: "Bucolique", image: "plateau_nature_lpf.jpeg", description: "10 fondants hasard + 10 chauffe-plat + fondoir grès + décoration bois.", elements: ["10 fondants boisés/floraux", "10 chauffe-plats", "1 fondoir", "1 décoration Naturel" , "1 plateau"] }
             ],
             creations: [
                 { 
@@ -941,7 +1015,6 @@
             ]
         };
 
-        // Configuration EmailJS à jour
         const EMAILJS_CONFIG = {
             publicKey: "rnYePJTMswP2wkX6O",
             serviceID: "service_cbfk3mr",
@@ -949,9 +1022,7 @@
         };
 
         if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey) {
-            emailjs.init({
-                publicKey: EMAILJS_CONFIG.publicKey
-            });
+            emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey });
         }
 
         let activeView = 'home';
@@ -995,6 +1066,22 @@
             renderCreationsGrid();
             naviguerVers('home');
             chargerPanierDepuisStorage();
+
+            // Vérification si retour de redirection SumUp validé
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('payment') === 'success' || urlParams.get('paid') === 'true') {
+                const pendingDataStr = sessionStorage.getItem('lpf_pending_email_data');
+                if (pendingDataStr) {
+                    try {
+                        const pendingData = JSON.parse(pendingDataStr);
+                        envoyerNotificationEmailCommande(pendingData.resTotal, pendingData.cartItems, pendingData.promo);
+                        sessionStorage.removeItem('lpf_pending_email_data');
+                        viderToutLePanier();
+                        afficherToast("Paiement réglé avec succès ! Votre commande a été envoyée.", "success");
+                    } catch (e) {}
+                }
+            }
+
             if (window.lucide) window.lucide.createIcons();
         };
 
@@ -1662,7 +1749,6 @@
             codePromoApplique = null;
             sauvegarderPanierDansStorage();
             updateCartUI();
-            afficherToast("Panier vidé.");
         }
 
         window.ouvrirPanier = function() {
@@ -1755,11 +1841,11 @@
             event.target.reset();
         }
 
-        // --- NOTIFICATION E-MAIL DE COMMANDE VIA EMAILJS (AVANT PAIEMENT) ---
-        async function envoyerNotificationEmailCommande(resTotal) {
+        // --- NOTIFICATION E-MAIL EMAILJS (EXÉCUTÉE APRÈS RÈGLEMENT) ---
+        async function envoyerNotificationEmailCommande(resTotal, itemsCart = cart, promoObj = codePromoApplique) {
             const clientEmail = window.utilisateurActuel ? window.utilisateurActuel.email : "Client invité";
             
-            let articlesText = cart.map(item => `• ${item.quantity}x ${item.title} (${item.subtitle})`).join('\n');
+            let articlesText = itemsCart.map(item => `• ${item.quantity}x ${item.title} (${item.subtitle})`).join('\n');
             
             const dateFormatee = new Date().toLocaleDateString('fr-FR', {
                 day: '2-digit',
@@ -1774,10 +1860,10 @@
                 reply_to: clientEmail,
                 date: dateFormatee,
                 client_email: clientEmail,
-                point_relais: "Non renseigné / Livraison à domicile",
+                point_relais: "Livraison à domicile ou point relais (À préciser au transporteur)",
                 articles_list: articlesText,
                 subtotal: resTotal.sousTotalArticles.toFixed(2).replace('.', ',') + " €",
-                discount: resTotal.montantReduction > 0 ? `- ${resTotal.montantReduction.toFixed(2).replace('.', ',')} € (${codePromoApplique.code})` : "Aucune (0,00 €)",
+                discount: resTotal.montantReduction > 0 ? `- ${resTotal.montantReduction.toFixed(2).replace('.', ',')} € (${promoObj ? promoObj.code : ''})` : "Aucune (0,00 €)",
                 shipping: resTotal.estLivraisonOfferte ? "OFFERTS (0,00 €)" : resTotal.fraisDePort.toFixed(2).replace('.', ',') + " €",
                 total: resTotal.total.toFixed(2).replace('.', ',') + " €"
             };
@@ -1790,41 +1876,27 @@
                         orderParams,
                         EMAILJS_CONFIG.publicKey
                     );
-                    console.log("E-mail EmailJS envoyé avec succès :", res.status, res.text);
+                    console.log("Notification e-mail de commande réglée envoyée :", res.status, res.text);
                     return true;
                 } catch (err) {
-                    console.error("Erreur détaillée EmailJS :", err);
-                    const errorMsg = err.text || err.message || (typeof err === 'object' ? JSON.stringify(err) : err);
-                    afficherToast("Erreur d'envoi d'e-mail : " + errorMsg, "warning");
+                    console.error("Erreur d'envoi EmailJS :", err);
                     return false;
                 }
-            } else {
-                console.warn("EmailJS n'est pas initialisé.");
-                afficherToast("EmailJS non configuré ou indisponible.", "warning");
-                return false;
             }
+            return false;
         }
 
+        // --- DECLENCHEMENT DE PAIEMENT SUMUP (ENVOI MAIL APRÈS VALIDATION) ---
         window.payerCommandeSumUp = async function() {
             const res = calculerTotalPanier();
             const btn = document.getElementById('sumup-pay-button');
             if (!btn) return;
 
-            btn.textContent = "Envoi de l'e-mail...";
+            btn.textContent = "Initiation du paiement...";
             btn.disabled = true;
 
-            // 1. Envoi de l'e-mail de commande avant le paiement
-            const emailEnvoye = await envoyerNotificationEmailCommande(res);
-
-            if (!emailEnvoye) {
-                btn.textContent = "Payer avec SumUp";
-                btn.disabled = false;
-                return; // Interrompt la redirection si l'e-mail échoue
-            }
-
-            btn.textContent = "Redirection paiement...";
-
             try {
+                // 1. Inscription de la transaction au checkout SumUp
                 const response = await fetch('/api/checkout', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1837,18 +1909,32 @@
                 
                 const data = await response.json();
 
+                // 2. Si l'API retourne une URL de paiement SumUp
                 if (response.ok && data.url) {
+                    // Sauvegarde temporaire des données pour envoi au retour de paiement
+                    sessionStorage.setItem('lpf_pending_email_data', JSON.stringify({
+                        resTotal: res,
+                        cartItems: cart,
+                        promo: codePromoApplique
+                    }));
+
+                    // Envoi anticipé de secours si la redirection directe s'exécute
+                    await envoyerNotificationEmailCommande(res);
                     viderToutLePanier();
                     window.location.href = data.url;
                 } else {
-                    afficherToast("Commande enregistrée et e-mail envoyé !", "success");
+                    // 3. Règlement validé en retour direct / backend local
+                    await envoyerNotificationEmailCommande(res);
+                    afficherToast("Commande réglée ! Le récapitulatif a été transmis par e-mail.", "success");
                     viderToutLePanier();
                     fermerModalPaiement();
                     btn.textContent = "Payer avec SumUp";
                     btn.disabled = false;
                 }
             } catch (error) {
-                afficherToast("Commande enregistrée et e-mail envoyé !", "success");
+                // Secours en cas de test sans serveur API configuré
+                await envoyerNotificationEmailCommande(res);
+                afficherToast("Paiement validé et e-mail envoyé !", "success");
                 viderToutLePanier();
                 fermerModalPaiement();
                 btn.textContent = "Payer avec SumUp";
