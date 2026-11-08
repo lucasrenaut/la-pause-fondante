@@ -224,7 +224,6 @@
         let supabaseClient = null;
         if (window.supabase) supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Configuration EmailJS avec ton Template ID exact
         const EMAILJS_CONFIG = {
             publicKey: "rnYePJTMswP2wkX6O",
             serviceID: "service_cbfk3mr",
@@ -285,7 +284,7 @@
         }
 
         function obtenirFraisPort(mode, poidsGrammes, sousTotal) {
-            if (sousTotal >= 70.00) return 0; // Offert dès 70 € d'achat
+            if (sousTotal >= 70.00) return 0;
 
             if (mode === 'chronopost') {
                 if (poidsGrammes <= 500) return 3.95;
@@ -386,7 +385,6 @@
             if (window.lucide) window.lucide.createIcons();
         }
 
-        // ENVOI DE L'EMAIL VIA EMAILJS PUIS REDIRECTION VERS LE LIEN SUMUP FIXE
         async function traiterPaiementSumUp() {
             if (!utilisateurActuel) {
                 afficherToast("Tu dois être connecté à ton compte pour commander.", "warning");
@@ -425,7 +423,7 @@
 
             const btnPayer = document.getElementById('btn-payer-sumup');
             btnPayer.disabled = true;
-            btnPayer.textContent = "Envoi de l'e-mail & Redirection...";
+            btnPayer.textContent = "Traitement en cours...";
 
             // Calculs financiers
             let sousTotal = 0;
@@ -442,7 +440,6 @@
             const adresseComplete = `${adresse}, ${cp} ${ville} (${pays})`;
             let listeArticlesText = cart.map(i => `• ${i.quantity}x ${i.title} (${i.subtitle || i.weight + 'g' || ''})`).join('\n');
 
-            // Paramètres exacts correspondant ton template EmailJS `template_eadq46i`
             const paramsMail = {
                 to_email: "debstyle-coiffure@hotmail.com",
                 reply_to: utilisateurActuel.email,
@@ -459,20 +456,22 @@
                 date: new Date().toLocaleDateString('fr-FR')
             };
 
-            // Envoi de l'e-mail via EmailJS
+            // Envoi de l'e-mail avec journalisation dans la console
             try {
                 if (typeof emailjs !== 'undefined') {
+                    console.log("Tentative d'envoi EmailJS avec les paramètres :", paramsMail);
                     const resEmail = await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateOrderID, paramsMail, EMAILJS_CONFIG.publicKey);
-                    console.log("EmailJS succès :", resEmail.status, resEmail.text);
+                    console.log("EmailJS envoyé avec succès :", resEmail.status, resEmail.text);
                 } else {
-                    console.warn("EmailJS non chargé.");
+                    console.error("Erreur : emailjs n'est pas défini.");
                 }
             } catch (err) {
-                console.error("Erreur EmailJS détaillée :", err);
+                console.error("Erreur critique EmailJS :", err);
             }
 
-            // Redirection vers ton lien de paiement SumUp officiel
-            const LIEN_SUMUP = "https://pay.sumup.com/b2c/QDCB1T3C";
+            // Redirection vers le lien SumUp (avec le montant passé en paramètre si supporté par ton type de lien, sinon lien direct)
+            // Si ton lien SumUp accepte les paramètres de montant (ex: ?amount=XX), tu peux l'ajouter, sinon il redirigera vers ton lien fixe
+            const LIEN_SUMUP = `https://pay.sumup.com/b2c/QDCB1T3C`;
             window.location.href = LIEN_SUMUP;
         }
 
