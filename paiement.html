@@ -11,6 +11,9 @@
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
     <!-- Supabase JS Client SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -170,7 +173,7 @@
                     </div>
                 </section>
 
-                <button id="btn-payer-sumup" onclick="lancerPaiementAPI()" class="w-full py-4 bg-ocre-600 hover:bg-ocre-700 text-white font-bold rounded-2xl shadow-lg transition-all text-sm uppercase tracking-wider text-center flex items-center justify-center gap-2">
+                <button id="btn-payer-sumup" onclick="traiterPaiementSumUp()" class="w-full py-4 bg-ocre-600 hover:bg-ocre-700 text-white font-bold rounded-2xl shadow-lg transition-all text-sm uppercase tracking-wider text-center flex items-center justify-center gap-2">
                     Payer avec SumUp
                 </button>
             </div>
@@ -220,6 +223,17 @@
         
         let supabaseClient = null;
         if (window.supabase) supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Configuration EmailJS avec ton Template ID exact
+        const EMAILJS_CONFIG = {
+            publicKey: "rnYePJTMswP2wkX6O",
+            serviceID: "service_cbfk3mr",
+            templateOrderID: "template_eadq46i"
+        };
+        
+        if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey) {
+            emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey });
+        }
 
         let utilisateurActuel = null;
         let cart = [];
@@ -372,10 +386,10 @@
             if (window.lucide) window.lucide.createIcons();
         }
 
-        // APPEL DE L'API BACKEND POUR GÉNÉRER LE PAIEMENT SUMUP ET ENVOYER L'EMAIL
-        async function lancerPaiementAPI() {
+        // ENVOI DE L'EMAIL VIA EMAILJS PUIS REDIRECTION VERS LE LIEN SUMUP FIXE
+        async function traiterPaiementSumUp() {
             if (!utilisateurActuel) {
-                afficherToast("Connecte-toi pour commander.", "warning");
+                afficherToast("Tu dois être connecté à ton compte pour commander.", "warning");
                 return;
             }
             if (cart.length === 0) {
@@ -388,74 +402,78 @@
             const adresse = document.getElementById('input-adresse').value.trim();
             const cp = document.getElementById('input-cp').value.trim();
             const ville = document.getElementById('input-ville').value.trim();
-            const tel = document.getElementById('input-telephone').value.trim();
+            const pays = document.getElementById('input-pays').value.trim();
+            const telephone = document.getElementById('input-telephone').value.trim();
 
-            if (!prenom || !nom || !adresse || !cp || !ville || !tel) {
-                afficherToast("Remplis tous les champs d'adresse et le téléphone.", "warning");
+            if (!prenom || !nom || !adresse || !cp || !ville || !telephone) {
+                afficherToast("Merci de remplir tous les champs d'adresse et le téléphone.", "warning");
                 return;
             }
 
             const modeInput = document.querySelector('input[name="shipping_mode"]:checked');
-            const modeLivraison = modeInput ? modeInput.value : 'chronopost';
             const isRelais = modeInput ? modeInput.dataset.relais === "true" : true;
 
-            let pointRelaisVal = "Livraison à domicile";
+            let pointRelaisVal = "Livraison à domicile (Colissimo Domicile)";
             if (isRelais) {
                 pointRelaisVal = document.getElementById('input-point-relais').value.trim();
                 if (!pointRelaisVal) {
-                    afficherToast("Indique ton Point Relais choisi.", "warning");
+                    afficherToast("Merci d'indiquer ton Point Relais choisi.", "warning");
+                    document.getElementById('input-point-relais').focus();
                     return;
                 }
             }
 
             const btnPayer = document.getElementById('btn-payer-sumup');
             btnPayer.disabled = true;
-            btnPayer.textContent = "Génération du paiement sécurisé...";
+            btnPayer.textContent = "Envoi de l'e-mail & Redirection...";
 
-            // Calculs finaux à envoyer au serveur
+            // Calculs financiers
             let sousTotal = 0;
             cart.forEach(i => sousTotal += i.price * i.quantity);
             const poidsTotal = calculerPoidsTotalEnGrammes();
-            const fraisDePort = obtenirFraisPort(modeLivraison, poidsTotal, sousTotal);
+            const fraisPort = obtenirFraisPort(modeInput ? modeInput.value : 'chronopost', poidsTotal, sousTotal);
             let reduction = 0;
             if (promoApplique) {
                 if (promoApplique.type === 'percent') reduction = (sousTotal * promoApplique.val) / 100;
                 else if (promoApplique.type === 'free') reduction = sousTotal;
             }
-            const totalFinal = Math.max(1.00, (sousTotal - reduction) + fraisDePort); // Min 1€ pour SumUp
+            const totalFinal = Math.max(0, (sousTotal - reduction) + fraisPort);
 
-            const payload = {
-                amount: totalFinal,
-                sousTotal: sousTotal,
-                fraisDePort: fraisDePort,
-                estLivraisonOfferte: fraisDePort === 0,
-                pointRelais: `${pointRelaisVal} (Client: ${prenom} ${nom}, ${adresse}, ${cp} ${ville}, Tél: ${tel})`,
-                clientEmail: utilisateurActuel.email,
-                cart: cart
+            const adresseComplete = `${adresse}, ${cp} ${ville} (${pays})`;
+            let listeArticlesText = cart.map(i => `• ${i.quantity}x ${i.title} (${i.subtitle || i.weight + 'g' || ''})`).join('\n');
+
+            // Paramètres exacts correspondant ton template EmailJS `template_eadq46i`
+            const paramsMail = {
+                to_email: "debstyle-coiffure@hotmail.com",
+                reply_to: utilisateurActuel.email,
+                client_email: utilisateurActuel.email,
+                client_name: `${prenom} ${nom}`,
+                client_phone: telephone,
+                delivery_address: adresseComplete,
+                point_relais: pointRelaisVal,
+                articles_list: listeArticlesText,
+                subtotal: sousTotal.toFixed(2).replace('.', ',') + " €",
+                discount: promoApplique ? `- ${reduction.toFixed(2).replace('.', ',')} €` : "0,00 €",
+                shipping: fraisPort === 0 ? "OFFERTS" : fraisPort.toFixed(2).replace('.', ',') + " €",
+                total: totalFinal.toFixed(2).replace('.', ',') + " €",
+                date: new Date().toLocaleDateString('fr-FR')
             };
 
+            // Envoi de l'e-mail via EmailJS
             try {
-                const response = await fetch('/api/checkout', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const data = await response.json();
-
-                if (response.ok && data.url) {
-                    localStorage.removeItem(getCartKey());
-                    window.location.href = data.url; // Redirection vers la page SumUp au montant exact généré par l'API
+                if (typeof emailjs !== 'undefined') {
+                    const resEmail = await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateOrderID, paramsMail, EMAILJS_CONFIG.publicKey);
+                    console.log("EmailJS succès :", resEmail.status, resEmail.text);
                 } else {
-                    afficherToast(data.error || "Erreur lors de la redirection vers SumUp.", "warning");
-                    btnPayer.disabled = false;
-                    btnPayer.textContent = "Payer avec SumUp";
+                    console.warn("EmailJS non chargé.");
                 }
             } catch (err) {
-                console.error(err);
-                afficherToast("Erreur de connexion au serveur de paiement.", "warning");
-                btnPayer.disabled = false;
-                btnPayer.textContent = "Payer avec SumUp";
+                console.error("Erreur EmailJS détaillée :", err);
             }
+
+            // Redirection vers ton lien de paiement SumUp officiel
+            const LIEN_SUMUP = "https://pay.sumup.com/b2c/QDCB1T3C";
+            window.location.href = LIEN_SUMUP;
         }
 
         function afficherToast(message, type = "success") {
