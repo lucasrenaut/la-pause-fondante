@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Pause Fondante | Commander & Livraison</title>
+    <title>La Pause Fondante | Commande & Livraison</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -67,7 +67,7 @@
 </head>
 <body class="h-full font-sans text-creme-900 antialiased bg-[#fbf9f5]">
 
-    <!-- EN-TÊTE SIMPLIFIÉ STYLE CHECKOUT -->
+    <!-- EN-TÊTE DE LA PAGE DE PAIEMENT -->
     <header class="bg-white border-b border-creme-200 py-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-3">
@@ -81,18 +81,18 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-12">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             
-            <!-- COLONNE GAUCHE : COORDONNÉES ET LIVRAISON -->
+            <!-- COLONNE GAUCHE : ADRESSE ET LIVRAISON -->
             <div class="lg:col-span-7 space-y-8">
                 
                 <!-- ALERTE SI NON CONNECTÉ -->
                 <div id="auth-alert" class="hidden bg-amber-50 border border-amber-200 p-4 rounded-2xl flex items-center justify-between gap-4">
                     <div class="flex items-center gap-3 text-xs text-amber-900">
                         <i data-lucide="lock" class="w-5 h-5 text-amber-600 shrink-0"></i>
-                        <span>Tu dois être connecté à ton compte client pour pouvoir valider la commande.</span>
+                        <span>Tu dois être connecté à ton compte client pour valider la commande.</span>
                     </div>
-                    <button onclick="ouvrirModalAuth()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow-sm shrink-0">
-                        Se connecter
-                    </button>
+                    <a href="index.html" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow-sm shrink-0">
+                        Se connecter sur la boutique
+                    </a>
                 </div>
 
                 <!-- 1. COORDONNÉES ET ADRESSE -->
@@ -133,7 +133,7 @@
 
                         <div class="space-y-1">
                             <label class="font-bold text-creme-800 uppercase tracking-wider">Appartement, suite, etc. (optionnel)</label>
-                            <input type="text" id="input-complement" placeholder="Batiment A, Appt 12..." class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500">
+                            <input type="text" id="input-complement" placeholder="Bâtiment A, Appt 12..." class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500">
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -159,7 +159,7 @@
                     </form>
                 </section>
 
-                <!-- 2. MODE D'EXPÉDITION (CHOIX DU TRANSPORTEUR) -->
+                <!-- 2. MODE D'EXPÉDITION (TRANSPORTEURS) -->
                 <section class="space-y-4">
                     <h2 class="font-serif text-xl font-bold text-creme-900 flex items-center gap-2">
                         <i data-lucide="truck" class="w-5 h-5 text-sauge-600"></i> Mode d'expédition
@@ -195,7 +195,7 @@
                         </label>
                     </div>
 
-                    <!-- SAISIE NOM & ADRESSE DU POINT RELAIS (SI RELAIS SÉLECTIONNÉ) -->
+                    <!-- SAISIE NOM & ADRESSE DU POINT RELAIS -->
                     <div id="section-point-relais" class="bg-sauge-50 border border-sauge-200 p-4 rounded-2xl space-y-2 text-xs">
                         <label class="font-bold text-sauge-900 uppercase tracking-wider flex items-center gap-1.5">
                             <i data-lucide="map-pin" class="w-4 h-4 text-sauge-600"></i> Nom & Adresse du Point Relais sélectionné <span class="text-red-500">*</span>
@@ -211,7 +211,7 @@
                 </button>
             </div>
 
-            <!-- COLONNE DROITE : RÉCAPITULATIF DE LA COMMANDE -->
+            <!-- COLONNE DROITE : RÉCAPITULATIF COMMANDE -->
             <div class="lg:col-span-5 bg-white p-6 sm:p-8 rounded-3xl border border-creme-200 shadow-sm space-y-6">
                 
                 <h2 class="font-serif text-xl font-bold text-creme-900 pb-2 border-b border-creme-200">
@@ -291,7 +291,7 @@
 
             // Vérification si le retour de paiement SumUp est validé
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('payment') === 'success' || urlParams.get('paid') === 'true') {
+            if (urlParams.get('payment') === 'success' || urlParams.get('paid') === 'true' || urlParams.get('status') === 'success') {
                 const pendingData = sessionStorage.getItem('lpf_pending_checkout');
                 if (pendingData) {
                     const data = JSON.parse(pendingData);
@@ -321,14 +321,13 @@
                     badge.innerHTML = `<span class="bg-sauge-100 text-sauge-800 px-3 py-1.5 rounded-full border border-sauge-200">Connecté : <strong>${utilisateurActuel.email}</strong></span>`;
                     authAlert.classList.add('hidden');
                 } else {
-                    badge.innerHTML = `<button onclick="ouvrirModalAuth()" class="text-sauge-700 underline font-bold">Connexion requis</button>`;
+                    badge.innerHTML = `<a href="index.html" class="text-sauge-700 underline font-bold">Connexion requise</a>`;
                     authAlert.classList.remove('hidden');
                 }
             });
         }
 
         function initialiserFormulairePrerempli() {
-            // Pré-remplissage des champs selon les données mémorisées
             document.getElementById('input-prenom').value = "Lucas";
             document.getElementById('input-nom').value = "RENAUT";
             document.getElementById('input-adresse').value = "41, rue de la Marne";
@@ -397,7 +396,6 @@
             const appliedPromoContainer = document.getElementById('applied-promo-container');
 
             let sousTotal = 0;
-            let totalWeight = 0;
 
             if (cart.length === 0) {
                 container.innerHTML = `<p class="text-xs text-creme-800 italic text-center py-6">Ton panier est vide.</p>`;
@@ -405,7 +403,6 @@
                 container.innerHTML = '';
                 cart.forEach(item => {
                     sousTotal += item.price * item.quantity;
-                    totalWeight += (item.weight || 10) * item.quantity;
 
                     const itemRow = document.createElement('div');
                     itemRow.className = "flex items-center justify-between gap-3 text-xs";
@@ -428,7 +425,7 @@
                 });
             }
 
-            // Calcul frais d'expédition (Gratuit si sous-total >= 70€)
+            // Port offert si sous-total >= 70€
             let fraisLivraison = sousTotal >= 70.00 ? 0 : modeLivraisonSelectionne.price;
             if (fraisLivraison === 0 && cart.length > 0) {
                 shippingEl.innerHTML = `<span class="text-sauge-700 font-bold">OFFERTE</span>`;
@@ -436,7 +433,7 @@
                 shippingEl.textContent = fraisLivraison.toFixed(2).replace('.', ',') + " €";
             }
 
-            // Réduction
+            // Calcul réduction
             let reduction = 0;
             if (promoApplique) {
                 if (promoApplique.type === 'percent') reduction = (sousTotal * promoApplique.val) / 100;
@@ -468,7 +465,7 @@
         async function traiterPaiementSumUp() {
             if (!utilisateurActuel) {
                 afficherToast("Tu dois être connecté à ton compte pour commander.", "warning");
-                ouvrirModalAuth();
+                window.location.href = 'index.html';
                 return;
             }
 
@@ -503,7 +500,6 @@
             btnPayer.disabled = true;
             btnPayer.textContent = "Redirection SumUp...";
 
-            // Données de commande stockées temporairement en session
             const checkoutPayload = {
                 clientEmail: utilisateurActuel.email,
                 nomClient: `${prenom} ${nom}`,
@@ -529,7 +525,6 @@
                 if (resSumup.ok && data.url) {
                     window.location.href = data.url;
                 } else {
-                    // Test fallback local sans serveur API distant
                     envoyerEmailConfirmationCommande(checkoutPayload);
                     sessionStorage.removeItem('lpf_pending_checkout');
                     localStorage.removeItem(getCartKey());
@@ -564,13 +559,9 @@
 
             if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey) {
                 emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateOrderID, paramsMail, EMAILJS_CONFIG.publicKey)
-                    .then(() => console.log("E-mail de confirmation transmis avec succès à debstyle-coiffure@hotmail.com"))
-                    .catch(err => console.error("Erreur d'envoi e-mail EmailJS :", err));
+                    .then(() => console.log("E-mail transmis à debstyle-coiffure@hotmail.com"))
+                    .catch(err => console.error("Erreur EmailJS :", err));
             }
-        }
-
-        function ouvrirModalAuth() {
-            window.location.href = 'index.html';
         }
 
         function afficherToast(message, type = "success") {
