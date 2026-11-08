@@ -140,19 +140,67 @@
     </header>
 
     <!-- CONTENU PRINCIPAL -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 md:py-10">
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 md:py-10 space-y-12">
 
         <!-- ACCUEIL -->
-        <section id="view-home" class="space-y-16 animate-fade-in">
-            <div class="relative bg-gradient-to-br from-sauge-100 via-creme-100 to-ocre-50 rounded-3xl p-8 sm:p-12 md:p-16 border border-sauge-200 shadow-sm overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
-                <div class="max-w-2xl relative z-10 space-y-6">
+        <section id="view-home" class="space-y-12 animate-fade-in">
+            
+            <!-- BANNIÈRE ÉDITION LIMITÉE : GRAND JEU DE NOËL -->
+            <div class="relative bg-gradient-to-br from-[#2c1810] via-[#4a2518] to-[#2c1810] text-white rounded-3xl p-6 sm:p-10 md:p-12 border-2 border-[#d4af37] shadow-2xl overflow-hidden">
+                <!-- Décoration lumineuse de fond -->
+                <div class="absolute -right-10 -bottom-10 w-96 h-96 bg-[#d4af37]/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-[#d4af37] text-white text-xs font-bold rounded-full uppercase tracking-widest shadow-md">
+                            ✨ Nouveauté à durée limitée ✨
+                        </span>
+                        <h1 class="font-serif text-3xl sm:text-5xl font-bold tracking-wide text-[#fcf8f2]">
+                            Grand Jeu de Noël <span class="block text-[#d4af37] text-2xl sm:text-3xl mt-1 font-normal">Calendrier de l'Avent de La Pause Fondante 🤍</span>
+                        </h1>
+                        <p class="text-sm sm:text-base text-creme-100 opacity-90 leading-relaxed">
+                            De nombreuses surprises vous attendent dans ce magnifique calendrier ! Participez dès maintenant pour tenter votre chance avant le grand tirage au sort.
+                        </p>
+
+                        <!-- CARTE DES RÈGLES DU JEU -->
+                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20 max-w-lg mx-auto lg:mx-0 space-y-3 text-left">
+                            <div class="flex items-start gap-3">
+                                <span class="text-xl">🎁</span>
+                                <span class="text-xs sm:text-sm text-white">Passez une commande d'un minimum de <strong>15 €</strong> pendant tout le mois de novembre et tentez votre chance !</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="text-xl">📅</span>
+                                <span class="text-xs sm:text-sm text-white">Tirage au sort : <strong>Lundi 30 Novembre</strong> !</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 flex flex-wrap gap-4 justify-center lg:justify-start">
+                            <button onclick="naviguerVers('fondants')" class="px-8 py-4 bg-[#d4af37] hover:bg-[#bfa130] text-white font-bold rounded-2xl shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 text-sm uppercase tracking-wider">
+                                Découvrir le catalogue & Participer <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- VISUEL CALENDRIER DE L'AVENT -->
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="relative group">
+                            <div class="absolute -inset-1 bg-gradient-to-r from-[#d4af37] to-amber-600 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-300"></div>
+                            <img src="jeu_noel-lpf.png" alt="Grand Jeu de Noël Calendrier de l'Avent La Pause Fondante" class="relative w-full max-w-sm rounded-2xl object-cover border-2 border-[#d4af37]/60 shadow-2xl" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=500';">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HERO PRINCIPAL BOUTIQUE -->
+            <div class="bg-gradient-to-br from-sauge-100 via-creme-100 to-ocre-50 rounded-3xl p-8 sm:p-12 border border-sauge-200 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-8">
+                <div class="max-w-2xl space-y-6">
                     <span class="inline-flex items-center gap-2 px-3.5 py-1 bg-white/90 backdrop-blur-sm border border-sauge-200 rounded-full text-xs font-bold text-sauge-700 uppercase tracking-widest shadow-sm">
                         <i data-lucide="truck" class="w-3.5 h-3.5 text-sauge-600"></i> Confection artisanale & Port offert dès 70 €
                     </span>
-                    <h1 class="font-serif text-3xl sm:text-5xl font-bold text-creme-900 leading-tight">
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-creme-900 leading-tight">
                         La pause Fondante : Confection artisanale.
-                    </h1>
-                    <p class="text-creme-800 text-base sm:text-lg leading-relaxed">
+                    </h2>
+                    <p class="text-creme-800 text-sm sm:text-base leading-relaxed">
                         Créez votre lot sur-mesure parmi nos 23 fragrances, découvrez nos tablettes fondantes, nos coffrets plateaux ou notre boîte musicale de Noël.
                     </p>
                     <div class="pt-2 flex flex-wrap gap-4">
@@ -165,25 +213,26 @@
                     </div>
                 </div>
                 <div class="shrink-0 relative">
-                    <img src="logo_pause_fondante.jpeg" alt="La Pause Fondante" class="w-48 sm:w-64 h-48 sm:h-64 rounded-full object-cover border-4 border-white shadow-2xl" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300';">
+                    <img src="logo_pause_fondante.jpeg" alt="La Pause Fondante" class="w-48 sm:w-60 h-48 sm:h-60 rounded-full object-cover border-4 border-white shadow-xl" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300';">
                 </div>
             </div>
 
+            <!-- CARTES DE NAVIGATION RAPIDE -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div onclick="naviguerVers('fondants')" class="group cursor-pointer bg-white p-6 rounded-3xl border border-creme-200 hover:border-sauge-500 hover:shadow-xl transition-all flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="w-12 h-12 rounded-2xl bg-sauge-50 text-sauge-600 flex items-center justify-center"><i data-lucide="box" class="w-6 h-6"></i></div>
                         <h3 class="font-serif text-lg font-bold text-creme-900 group-hover:text-sauge-600">Bar à Fondants</h3>
-                        <p class="text-xs text-creme-800">Lots sur-mesure & Lot Mystère surprise de 20 fondants (8 €).</p>
+                        <p class="text-xs text-creme-800">Découvrez nos plus de 20 fragrances ! Composez vos lots ou faites vous surprendre par nos lots mystère .</p>
                     </div>
-                    <div class="pt-4 flex items-center text-xs font-bold text-sauge-600 gap-1.5">Composer <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></div>
+                    <div class="pt-4 flex items-center text-xs font-bold text-sauge-600 gap-1.5">Composer dès maintenant <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></div>
                 </div>
 
                 <div onclick="naviguerVers('tablettes')" class="group cursor-pointer bg-white p-6 rounded-3xl border border-creme-200 hover:border-sauge-500 hover:shadow-xl transition-all flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="w-12 h-12 rounded-2xl bg-sauge-50 text-sauge-600 flex items-center justify-center"><i data-lucide="tablet" class="w-6 h-6"></i></div>
                         <h3 class="font-serif text-lg font-bold text-creme-900 group-hover:text-sauge-600">Les tablettes fondantes</h3>
-                        <p class="text-xs text-creme-800">4,50 € / unité — Offre 3 achetées = 12 € (cumulable).</p>
+                        <p class="text-xs text-creme-800">Nos formats de fondants XXL à petit prix , offre du moment 3 tablettes pour 12 euros.</p>
                     </div>
                     <div class="pt-4 flex items-center text-xs font-bold text-sauge-600 gap-1.5">Découvrir <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></div>
                 </div>
@@ -192,7 +241,7 @@
                     <div class="space-y-3">
                         <div class="w-12 h-12 rounded-2xl bg-ocre-50 text-ocre-600 flex items-center justify-center"><i data-lucide="utensils" class="w-6 h-6"></i></div>
                         <h3 class="font-serif text-lg font-bold text-creme-900 group-hover:text-ocre-600">Coffrets Plateaux</h3>
-                        <p class="text-xs text-creme-800">Plateaux Zen (19€), Noël (18€) et Naturel (17€).</p>
+                        <p class="text-xs text-creme-800">Découvrez nos plateau pour une décoration chic et parfumant toute votre maison.</p>
                     </div>
                     <div class="pt-4 flex items-center text-xs font-bold text-ocre-600 gap-1.5">Explorer <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></div>
                 </div>
@@ -201,9 +250,9 @@
                     <div class="space-y-3">
                         <div class="w-12 h-12 rounded-2xl bg-sauge-50 text-sauge-600 flex items-center justify-center"><i data-lucide="sparkles" class="w-6 h-6"></i></div>
                         <h3 class="font-serif text-lg font-bold text-creme-900 group-hover:text-sauge-600">Créations Fondantes</h3>
-                        <p class="text-xs text-creme-800">Boîte Musicale de Noël (7 €) - Édition Limitée.</p>
+                        <p class="text-xs text-creme-800">Toutes nos création autre, laissez vous tenter.</p>
                     </div>
-                    <div class="pt-4 flex items-center text-xs font-bold text-sauge-600 gap-1.5">Voir la boîte <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></div>
+                    <div class="pt-4 flex items-center text-xs font-bold text-sauge-600 gap-1.5">Voir nos création <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></div>
                 </div>
             </div>
         </section>
@@ -899,8 +948,17 @@
                     image: "boite_musique_noel.png",
                     fallbackImage: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=500",
                     description: "Une petite boîte pleine de magie qui renferme 5 fondants parfumés d'environ 10g + une jolie boîte musicale !",
-                    elements: ["5 fondants parfumés (env. 50g)", "Boîte musicale mécanique de Noël", "Seulement 4 boîtes disponibles"] 
-                }
+                    elements: ["5 fondants parfumés (env. 50g)", "Boîte musicale mécanique de Noël", "Seulement 4 boîtes disponibles"] }
+                {
+                    id: "pot",
+                    type: "pot",
+                    nom: "bouquet de fondants"
+                    prix: 10.00
+                    weight: 150
+                    badge : "Nouveatée"
+                    image : "pot_lpf.png"
+                    description : "Découvrez mon joli petit bouquet de fondants parfumés, une création originale et entièrement décorative, confectionnée avec amour pour apporter une touche de charme à votre intérieur."
+                    elements: ["4 fondants + 1 gros fondant (env. 60g)", "Fragrance : épice de noël"]
             ]
         };
 
@@ -1277,7 +1335,6 @@
             }
         }
 
-        // REGROUPEMENT DES TABLETTES PAR PARFUM DANS LE PANIER
         window.ajouterTabletteAuPanier = function(parfumId) {
             const p = CONFIG.parfums.find(item => item.id == parfumId);
             if (!p) return;
@@ -1409,7 +1466,6 @@
             afficherToast(`${cObj.nom} ajoutée au panier ! 🎄`);
         }
 
-        // CALCUL DU PRIX GLOBAL DES TABLETTES (Offre 3 pour 12 € toutes senteurs confondues)
         function calculerTotalPanier() {
             let sousTotalArticles = 0;
             let nombreTablettes = 0;
