@@ -635,7 +635,7 @@
                 </section>
 
                 <section class="space-y-1">
-                    <h4 class="font-bold text-creme-900 text-sm">ARTICLE 11 – GARANTIES LÉGANTE</h4>
+                    <h4 class="font-bold text-creme-900 text-sm">ARTICLE 11 – GARANTIES LÉGALES</h4>
                     <p>Les produits bénéficient des garanties légales du droit français : garantie légale de conformité (art. L217-3 et suivants du Code de la consommation - 2 ans) et garantie contre les vices cachés (art. 1641 du Code civil).</p>
                 </section>
 
@@ -719,17 +719,17 @@
         </div>
     </div>
 
-    <!-- MODALE CHECKOUT -->
+    <!-- MODALE CHECKOUT AVEC POINT RELAIS OBLIGATOIRE -->
     <div id="modal-checkout" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
         <div onclick="fermerModalPaiement()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
-        <div class="relative bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl z-10 space-y-5 text-center animate-fade-in">
+        <div class="relative bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl z-10 space-y-4 text-center animate-fade-in">
             <button onclick="fermerModalPaiement()" class="absolute top-4 right-4 text-creme-800 hover:text-creme-900"><i data-lucide="x"></i></button>
-            <div class="w-14 h-14 bg-sauge-100 text-sauge-600 rounded-2xl flex items-center justify-center mx-auto shadow-sm">
-                <i data-lucide="check-circle" class="w-7 h-7"></i>
+            <div class="w-12 h-12 bg-sauge-100 text-sauge-600 rounded-2xl flex items-center justify-center mx-auto shadow-sm">
+                <i data-lucide="check-circle" class="w-6 h-6"></i>
             </div>
             <div class="space-y-1">
                 <h3 class="font-serif text-2xl font-bold text-creme-900">Validation de la Commande</h3>
-                <p class="text-xs text-creme-800">Paiement sécurisé et envoi automatique de confirmation après règlement.</p>
+                <p class="text-xs text-creme-800">Indiquez votre point relais et procédez au paiement sécurisé.</p>
             </div>
 
             <div id="checkout-account-badge" class="bg-ocre-50 border border-ocre-200 p-2.5 rounded-xl text-xs text-ocre-800 font-bold flex items-center justify-center gap-2">
@@ -737,7 +737,16 @@
                 <span id="checkout-user-email">Compte : non connecté</span>
             </div>
 
-            <div id="checkout-summary-box" class="bg-creme-50 p-4 rounded-2xl border border-creme-200 text-left text-xs space-y-2 max-h-48 overflow-y-auto custom-scrollbar font-sans"></div>
+            <!-- CHAMP POINT RELAIS OBLIGATOIRE -->
+            <div class="text-left space-y-1">
+                <label class="text-xs font-bold text-creme-900 uppercase tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="map-pin" class="w-4 h-4 text-ocre-600"></i> Nom & Adresse du Point Relais <span class="text-red-500">*</span>
+                </label>
+                <input type="text" id="checkout-point-relais" required placeholder="Ex: Mondial Relay - Presse Saint-Waast, Valenciennes" class="w-full px-4 py-3 bg-creme-50 border border-creme-300 rounded-xl text-xs focus:outline-none focus:border-sauge-500 font-medium">
+                <p class="text-[10px] text-creme-800 italic">Obligatoire pour l'expédition de votre colis.</p>
+            </div>
+
+            <div id="checkout-summary-box" class="bg-creme-50 p-4 rounded-2xl border border-creme-200 text-left text-xs space-y-2 max-h-40 overflow-y-auto custom-scrollbar font-sans"></div>
             
             <div class="pt-1 space-y-2">
                 <button id="sumup-pay-button" onclick="payerCommandeSumUp()" class="w-full py-4 bg-ocre-600 hover:bg-ocre-700 text-white font-bold rounded-2xl shadow-lg transition-all text-sm uppercase tracking-wider text-center flex items-center justify-center gap-2">
@@ -995,9 +1004,9 @@
                 { id: 23, nom: "Cire et Miel", categorie: "Épicés & Cocooning", description: "Nectar de miel brut", icone: "sparkles", couleur: "#fef3c7" }
             ],
             plateaux: [
-                { id: 'plat-zen', nom: "Plateau Zen", prix: 19.00, weight: 1200, badge: "Sérénité", image: "plateau_zen_lpf.jpeg", description: "10 fondants hasard + 10 chauffe-plat + fondoir zen + décoration galets.", elements: ["10 fondants relaxants", "10 chauffe-plats", "1 fondoir : tête de buddha", "décoration ZEN" , "1 plateau"]},
-                { id: 'plat-noel', nom: "Plateau Noël", prix: 18.00, weight: 1200, badge: "Édition Limitée • Spécial Noël 🎄", image: "plateau_noel_lpf.jpeg", description: "10 fondants hasard + 10 chauffe-plat + fondoir chalet + décoration cannelle.", elements: ["10 fondants de fêtes", "10 chauffe-plats", "1 fondoir", "1 décoration Hivernale" , "1 plateau"] },
-                { id: 'plat-naturel', nom: "Plateau Naturel", prix: 17.00, weight: 1200, badge: "Bucolique", image: "plateau_nature_lpf.jpeg", description: "10 fondants hasard + 10 chauffe-plat + fondoir grès + décoration bois.", elements: ["10 fondants boisés/floraux", "10 chauffe-plats", "1 fondoir", "1 décoration Naturel" , "1 plateau"] }
+                { id: 'plat-zen', nom: "Plateau Zen", prix: 19.00, weight: 1200, badge: "Permanent", image: "plateau_zen_lpf.jpeg", description: "10 fondants aléatoire + 10 chauffe-plat + fondoir : tête de buddha + décoration galets.", elements: ["10 fondants aléatoire", "10 chauffe-plats", "1 fondoir céramique zen", "1 décoration Zen" , "1 plateau"] },
+                { id: 'plat-noel', nom: "Plateau Noël", prix: 18.00, weight: 1200, badge: "Édition Limitée • Spécial Noël 🎄", image: "plateau_noel_lpf.jpeg", description: "10 fondants aléatoire + 10 chauffe-plat + fondoir chalet + décoration Hivernale + 1 plateau.", elements: ["10 fondants aléatoire", "10 chauffe-plats", "1 fondoir", "1 décoration Hivernale" , "1 plateau"] },
+                { id: 'plat-naturel', nom: "Plateau Naturel", prix: 17.00, weight: 1200, badge: "Permanent", image: "plateau_nature_lpf.jpeg", description: "10 fondants aléatoire + 10 chauffe-plat + fondoir grès + décoration bois.", elements: ["10 fondants aléatoire", "10 chauffe-plats", "1 fondoir", "1 décoration Naturel" , "1 plateau"] }
             ],
             creations: [
                 { 
@@ -1067,17 +1076,23 @@
             naviguerVers('home');
             chargerPanierDepuisStorage();
 
-            // Vérification si retour de redirection SumUp validé
+            // Vérification si retour de redirection SumUp réglé avec succès
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('payment') === 'success' || urlParams.get('paid') === 'true') {
+            if (urlParams.get('payment') === 'success' || urlParams.get('paid') === 'true' || urlParams.get('status') === 'success') {
                 const pendingDataStr = sessionStorage.getItem('lpf_pending_email_data');
                 if (pendingDataStr) {
                     try {
                         const pendingData = JSON.parse(pendingDataStr);
-                        envoyerNotificationEmailCommande(pendingData.resTotal, pendingData.cartItems, pendingData.promo);
+                        envoyerNotificationEmailCommande(
+                            pendingData.resTotal,
+                            pendingData.cartItems,
+                            pendingData.promo,
+                            pendingData.pointRelais,
+                            pendingData.clientEmail
+                        );
                         sessionStorage.removeItem('lpf_pending_email_data');
                         viderToutLePanier();
-                        afficherToast("Paiement réglé avec succès ! Votre commande a été envoyée.", "success");
+                        afficherToast("Paiement réglé avec succès ! Votre commande a été transmise.", "success");
                     } catch (e) {}
                 }
             }
@@ -1780,9 +1795,16 @@
             document.getElementById('modal-mentions').classList.remove('flex');
         }
 
+        // 1. OBLIGATION DE SE CONNECTER POUR COMMANDER
         window.ouvrirModalPaiement = function() {
             if (cart.length === 0) {
                 afficherToast("Votre panier est vide.", "warning");
+                return;
+            }
+
+            if (!window.utilisateurActuel) {
+                afficherToast("Tu dois être connecté à ton compte pour valider la commande.", "warning");
+                ouvrirModalAuth();
                 return;
             }
 
@@ -1791,7 +1813,7 @@
 
             const userBadge = document.getElementById('checkout-user-email');
             if (userBadge) {
-                userBadge.textContent = window.utilisateurActuel ? "Compte Client : " + window.utilisateurActuel.email : "Compte : Mode invité";
+                userBadge.textContent = "Compte Client : " + window.utilisateurActuel.email;
             }
 
             const summaryBox = document.getElementById('checkout-summary-box');
@@ -1841,9 +1863,9 @@
             event.target.reset();
         }
 
-        // --- NOTIFICATION E-MAIL EMAILJS (EXÉCUTÉE APRÈS RÈGLEMENT) ---
-        async function envoyerNotificationEmailCommande(resTotal, itemsCart = cart, promoObj = codePromoApplique) {
-            const clientEmail = window.utilisateurActuel ? window.utilisateurActuel.email : "Client invité";
+        // --- NOTIFICATION E-MAIL EMAILJS (EXÉCUTÉE UNIQUEMENT APRÈS PAIEMENT) ---
+        async function envoyerNotificationEmailCommande(resTotal, itemsCart = cart, promoObj = codePromoApplique, pointRelaisVal = "Non renseigné", emailClient = null) {
+            const clientEmail = emailClient || (window.utilisateurActuel ? window.utilisateurActuel.email : "Client invité");
             
             let articlesText = itemsCart.map(item => `• ${item.quantity}x ${item.title} (${item.subtitle})`).join('\n');
             
@@ -1860,7 +1882,7 @@
                 reply_to: clientEmail,
                 date: dateFormatee,
                 client_email: clientEmail,
-                point_relais: "Livraison à domicile ou point relais (À préciser au transporteur)",
+                point_relais: pointRelaisVal,
                 articles_list: articlesText,
                 subtotal: resTotal.sousTotalArticles.toFixed(2).replace('.', ',') + " €",
                 discount: resTotal.montantReduction > 0 ? `- ${resTotal.montantReduction.toFixed(2).replace('.', ',')} € (${promoObj ? promoObj.code : ''})` : "Aucune (0,00 €)",
@@ -1886,55 +1908,70 @@
             return false;
         }
 
-        // --- DECLENCHEMENT DE PAIEMENT SUMUP (ENVOI MAIL APRÈS VALIDATION) ---
+        // 2 & 3. VERIFICATION DU POINT RELAIS ET PAIMENT SUMUP SANS ENVOI DE MAIL EN AMONT
         window.payerCommandeSumUp = async function() {
+            if (!window.utilisateurActuel) {
+                afficherToast("Tu dois être connecté pour passer commande.", "warning");
+                ouvrirModalAuth();
+                return;
+            }
+
+            const pointRelaisInput = document.getElementById('checkout-point-relais');
+            const pointRelaisVal = pointRelaisInput ? pointRelaisInput.value.trim() : '';
+
+            if (!pointRelaisVal) {
+                afficherToast("Merci d'indiquer le nom et l'adresse de ton point relais.", "warning");
+                if (pointRelaisInput) pointRelaisInput.focus();
+                return;
+            }
+
             const res = calculerTotalPanier();
             const btn = document.getElementById('sumup-pay-button');
             if (!btn) return;
 
-            btn.textContent = "Initiation du paiement...";
+            btn.textContent = "Redirection vers le paiement...";
             btn.disabled = true;
 
+            // Sauvegarde locale temporaire en session pour l'envoi du mail uniquement après validation
+            sessionStorage.setItem('lpf_pending_email_data', JSON.stringify({
+                resTotal: res,
+                cartItems: cart,
+                promo: codePromoApplique,
+                pointRelais: pointRelaisVal,
+                clientEmail: window.utilisateurActuel.email
+            }));
+
             try {
-                // 1. Inscription de la transaction au checkout SumUp
                 const response = await fetch('/api/checkout', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         amount: res.total,
                         promoCode: codePromoApplique ? codePromoApplique.code : null,
-                        clientEmail: window.utilisateurActuel ? window.utilisateurActuel.email : 'invite'
+                        clientEmail: window.utilisateurActuel.email,
+                        pointRelais: pointRelaisVal
                     })
                 });
                 
                 const data = await response.json();
 
-                // 2. Si l'API retourne une URL de paiement SumUp
                 if (response.ok && data.url) {
-                    // Sauvegarde temporaire des données pour envoi au retour de paiement
-                    sessionStorage.setItem('lpf_pending_email_data', JSON.stringify({
-                        resTotal: res,
-                        cartItems: cart,
-                        promo: codePromoApplique
-                    }));
-
-                    // Envoi anticipé de secours si la redirection directe s'exécute
-                    await envoyerNotificationEmailCommande(res);
-                    viderToutLePanier();
                     window.location.href = data.url;
                 } else {
-                    // 3. Règlement validé en retour direct / backend local
-                    await envoyerNotificationEmailCommande(res);
-                    afficherToast("Commande réglée ! Le récapitulatif a été transmis par e-mail.", "success");
+                    // Test local sans backend SumUp configuré : envoi simulé
+                    await envoyerNotificationEmailCommande(res, cart, codePromoApplique, pointRelaisVal, window.utilisateurActuel.email);
+                    sessionStorage.removeItem('lpf_pending_email_data');
+                    afficherToast("Commande réglée ! E-mail de confirmation envoyé.", "success");
                     viderToutLePanier();
                     fermerModalPaiement();
                     btn.textContent = "Payer avec SumUp";
                     btn.disabled = false;
                 }
             } catch (error) {
-                // Secours en cas de test sans serveur API configuré
-                await envoyerNotificationEmailCommande(res);
-                afficherToast("Paiement validé et e-mail envoyé !", "success");
+                // Secours en cas de test sans serveur API distant
+                await envoyerNotificationEmailCommande(res, cart, codePromoApplique, pointRelaisVal, window.utilisateurActuel.email);
+                sessionStorage.removeItem('lpf_pending_email_data');
+                afficherToast("Commande enregistrée et e-mail envoyé !", "success");
                 viderToutLePanier();
                 fermerModalPaiement();
                 btn.textContent = "Payer avec SumUp";
@@ -1945,9 +1982,11 @@
         window.copierRecapitulatif = function() {
             const res = calculerTotalPanier();
             const emailCompte = window.utilisateurActuel ? window.utilisateurActuel.email : "Non connecté";
+            const pointRelaisVal = document.getElementById('checkout-point-relais')?.value.trim() || "Non renseigné";
             
             let texte = "Bonjour, je souhaite valider ma commande sur " + CONFIG.nomBoutique + " :\n\n";
             texte += "Compte : " + emailCompte + "\n";
+            texte += "Point Relais : " + pointRelaisVal + "\n\n";
             cart.forEach(item => {
                 texte += "- " + item.quantity + "x " + item.title + " (" + item.subtitle + ")\n";
             });
