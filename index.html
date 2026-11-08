@@ -941,7 +941,7 @@
             ]
         };
 
-        // Configuration EmailJS validée
+        // Configuration EmailJS avec initialisation conforme v4
         const EMAILJS_CONFIG = {
             publicKey: "rnYePJTMswP2wkX6O",
             serviceID: "service_cbfk3mr",
@@ -949,7 +949,9 @@
         };
 
         if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey) {
-            emailjs.init(EMAILJS_CONFIG.publicKey);
+            emailjs.init({
+                publicKey: EMAILJS_CONFIG.publicKey
+            });
         }
 
         let activeView = 'home';
@@ -1767,17 +1769,23 @@
 
             if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.serviceID) {
                 try {
-                    const res = await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateOrderID, orderParams);
+                    const res = await emailjs.send(
+                        EMAILJS_CONFIG.serviceID,
+                        EMAILJS_CONFIG.templateOrderID,
+                        orderParams,
+                        EMAILJS_CONFIG.publicKey
+                    );
                     console.log("E-mail EmailJS envoyé avec succès :", res.status, res.text);
                     return true;
                 } catch (err) {
                     console.error("Erreur détaillée EmailJS :", err);
-                    const errorMsg = err.text || err.message || JSON.stringify(err);
+                    const errorMsg = err.text || err.message || (typeof err === 'object' ? JSON.stringify(err) : err);
                     afficherToast("Erreur d'envoi d'e-mail : " + errorMsg, "warning");
                     return false;
                 }
             } else {
                 console.warn("EmailJS n'est pas initialisé.");
+                afficherToast("EmailJS non configuré ou indisponible.", "warning");
                 return false;
             }
         }
@@ -1787,11 +1795,19 @@
             const btn = document.getElementById('sumup-pay-button');
             if (!btn) return;
 
-            btn.textContent = "Envoi de l'e-mail & Paiement...";
+            btn.textContent = "Envoi de l'e-mail...";
             btn.disabled = true;
 
             // 1. Envoi de l'e-mail de commande avant le paiement
-            await envoyerNotificationEmailCommande(res);
+            const emailEnvoye = await envoyerNotificationEmailCommande(res);
+
+            if (!emailEnvoye) {
+                btn.textContent = "Payer avec SumUp";
+                btn.disabled = false;
+                return; // Interrompt la redirection si l'e-mail échoue
+            }
+
+            btn.textContent = "Redirection paiement...";
 
             try {
                 const response = await fetch('/api/checkout', {
@@ -1810,14 +1826,14 @@
                     viderToutLePanier();
                     window.location.href = data.url;
                 } else {
-                    afficherToast("Commande validée et e-mail envoyé !", "success");
+                    afficherToast("Commande enregistrée et e-mail envoyé !", "success");
                     viderToutLePanier();
                     fermerModalPaiement();
                     btn.textContent = "Payer avec SumUp";
                     btn.disabled = false;
                 }
             } catch (error) {
-                afficherToast("Commande validée et e-mail envoyé !", "success");
+                afficherToast("Commande enregistrée et e-mail envoyé !", "success");
                 viderToutLePanier();
                 fermerModalPaiement();
                 btn.textContent = "Payer avec SumUp";
