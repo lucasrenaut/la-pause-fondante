@@ -268,7 +268,7 @@
                     </button>
 
                     <p class="text-[11px] text-creme-800 text-center leading-relaxed">
-                        En cliquant sur Payer par Carte, vous serez redirigé vers la plateforme de paiement 100% sécurisée SumUp.
+                        En cliquant sur Payer par Carte, l'e-mail de confirmation est envoyé et vous êtes redirigé vers le paiement SumUp.
                     </p>
                 </div>
             </div>
@@ -540,7 +540,7 @@
             event.preventDefault();
             const btn = document.getElementById('btn-valider-paiement');
             btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Préparation du paiement...`;
+            btn.innerHTML = `<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Envoi de la commande...`;
 
             const nom = document.getElementById('checkout-nom').value.trim();
             const prenom = document.getElementById('checkout-prenom').value.trim();
@@ -556,43 +556,54 @@
             const totaux = calculerTotauxPanier();
             const fraisPort = calculerFraisPort(mode, totaux.poidsTotalGrammes, totaux.estLivraisonOfferte);
             const totalFinal = totaux.sousTotalApresReduction + fraisPort;
-            const totalFinalFormatted = totalFinal.toFixed(2);
+            const totalFinalFormatted = totalFinal.toFixed(2).replace('.', ',') + " €";
 
-            let recapText = cart.map(i => `- ${i.title} (x${i.quantity}) : ${((i.type === 'tablette' ? 4.50 : i.price) * i.quantity).toFixed(2)} €`).join('\n');
+            let recapText = cart.map(i => `• ${i.title} (x${i.quantity}) — ${((i.type === 'tablette' ? 4.50 : i.price) * i.quantity).toFixed(2).replace('.', ',')} €`).join('\n');
             if (totaux.lotsDeTrois > 0) {
                 recapText += `\n* Offre appliquée : ${totaux.lotsDeTrois} lot(s) de 3 tablettes à 12,00 €`;
             }
             if (codePromoApplique) {
-                recapText += `\n* Code promo appliqué : ${codePromoApplique.code} (-${totaux.montantReduction.toFixed(2)} €)`;
+                recapText += `\n* Code promo appliqué : ${codePromoApplique.code} (-${totaux.montantReduction.toFixed(2).replace('.', ',')} €)`;
             }
 
             const templateParams = {
-                client_nom: `${prenom} ${nom}`,
+                client_name: `${prenom} ${nom}`,
                 client_email: email,
-                client_telephone: telephone,
-                client_adresse: `${adresse}, ${cp} ${ville}`,
-                mode_livraison: mode === 'relais' ? `POINT RELAIS (${pointRelais})` : 'DOMICILE (Colissimo)',
-                detail_commande: recapText,
-                sous_total: totaux.sousTotalArticles.toFixed(2) + " €",
-                frais_port: totaux.estLivraisonOfferte ? "OFFERTS" : fraisPort.toFixed(2) + " €",
-                total_commande: totalFinalFormatted + " €",
+                client_phone: telephone,
+                delivery_address: `${adresse}, ${cp} ${ville}`,
+                point_relais: mode === 'relais' ? pointRelais : 'Livraison à domicile',
+                articles_list: recapText,
+                subtotal: totaux.sousTotalArticles.toFixed(2).replace('.', ',') + " €",
+                discount: codePromoApplique ? `${totaux.montantReduction.toFixed(2).replace('.', ',')} €` : '0,00 €',
+                shipping: totaux.estLivraisonOfferte ? "OFFERTS" : fraisPort.toFixed(2).replace('.', ',') + " €",
+                total: totalFinalFormatted,
                 remarques: remarques || "Aucune"
             };
+
+            // Copie automatique du montant dans le presse-papier pour le client
+            try {
+                await navigator.clipboard.writeText(totalFinal.toFixed(2));
+            } catch(e) {}
 
             try {
                 if (window.emailjs) {
                     await window.emailjs.send('service_cbfk3mr', 'template_jeryfp3', templateParams);
                 }
-                afficherToast("Commande enregistrée ! Redirection vers SumUp...", "success");
-                setTimeout(() => {
-                    window.location.href = SUMUP_PAYMENT_URL;
-                }, 1000);
             } catch (err) {
-                afficherToast("Erreur d'envoi mail. Redirection vers SumUp...", "warning");
-                setTimeout(() => {
-                    window.location.href = SUMUP_PAYMENT_URL;
-                }, 1200);
+                console.error("Erreur EmailJS direct :", err);
             }
+
+            afficherToast("E-mail envoyé ! Redirection vers SumUp...", "success");
+            
+            // Message explicatif avant la redirection
+            alert(`Votre commande est bien enregistrée ! \n\nMontant total : ${totalFinalFormatted}\n(Le montant de ${totalFinal.toFixed(2)} € a été copié dans votre presse-papier pour le coller sur SumUp).`);
+
+            // Nettoyage panier
+            localStorage.removeItem('lpf_cart');
+
+            setTimeout(() => {
+                window.location.href = SUMUP_PAYMENT_URL;
+            }, 500);
         };
 
         function afficherToast(message, type = "success") {
