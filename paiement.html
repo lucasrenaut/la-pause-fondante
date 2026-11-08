@@ -17,12 +17,6 @@
     <!-- Supabase JS Client SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- JQUERY (Requis par le widget Mondial Relay) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    
-    <!-- WIDGET MONDIAL RELAY -->
-    <script src="https://widget.mondialrelay.com/parcelshop-picker/v4_0/scripts/jquery.plugin.mondialrelay.parcelshoppicker.min.js"></script>
-
     <script>
         tailwind.config = {
             theme: {
@@ -48,9 +42,6 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: #f5f0e6; border-radius: 8px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #c8d6c9; border-radius: 8px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #6b7f71; }
-        
-        /* Personnalisation légère du widget Mondial Relay pour l'intégrer au design */
-        #Zone_Widget { margin-top: 10px; border-radius: 12px; overflow: hidden; border: 1px solid #c8d6c9; }
     </style>
 </head>
 <body class="h-full font-sans text-creme-900 antialiased bg-[#fbf9f5]">
@@ -68,7 +59,7 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-12">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             
-            <!-- COLONNE GAUCHE -->
+            <!-- COLONNE GAUCHE : ADRESSE ET LIVRAISON -->
             <div class="lg:col-span-7 space-y-8">
                 
                 <div id="auth-alert" class="hidden bg-amber-50 border border-amber-200 p-4 rounded-2xl flex items-center justify-between gap-4">
@@ -90,8 +81,8 @@
                         <div class="space-y-1">
                             <label class="font-bold text-creme-800 uppercase tracking-wider">Pays / région</label>
                             <select id="input-pays" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
-                                <option value="FR">France Métropolitaine</option>
-                                <option value="BE">Belgique</option>
+                                <option value="France Métropolitaine">France Métropolitaine</option>
+                                <option value="Belgique">Belgique</option>
                             </select>
                         </div>
 
@@ -114,12 +105,11 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div class="space-y-1">
                                 <label class="font-bold text-creme-800 uppercase tracking-wider">Code postal <span class="text-red-500">*</span></label>
-                                <!-- onblur : recharge la carte dès qu'on quitte le champ Code Postal -->
-                                <input type="text" id="input-cp" required onblur="chargerWidgetMondialRelay()" placeholder="Ex: 59000" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
+                                <input type="text" id="input-cp" required placeholder="Ex: 59124" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
                             </div>
                             <div class="space-y-1">
                                 <label class="font-bold text-creme-800 uppercase tracking-wider">Ville <span class="text-red-500">*</span></label>
-                                <input type="text" id="input-ville" required placeholder="Ex: Lille" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
+                                <input type="text" id="input-ville" required placeholder="Ex: Escaudain" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 font-medium">
                             </div>
                         </div>
 
@@ -142,16 +132,16 @@
 
                     <div class="bg-white rounded-2xl border border-creme-300 overflow-hidden shadow-sm divide-y divide-creme-200" id="shipping-methods-container">
                         
-                        <!-- MONDIAL RELAY -->
+                        <!-- CHRONOPOST RELAIS -->
                         <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-sauge-50/50 transition-colors">
                             <div class="flex items-center gap-3">
-                                <input type="radio" name="shipping_mode" value="mondial_relay" data-relais="true" checked onchange="changerModeExpedition()" class="w-4 h-4 text-sauge-600 focus:ring-sauge-500">
+                                <input type="radio" name="shipping_mode" value="chronopost" data-relais="true" checked onchange="changerModeExpedition()" class="w-4 h-4 text-sauge-600 focus:ring-sauge-500">
                                 <div>
-                                    <span class="text-xs font-bold text-creme-900 block">Mondial Relay (Lockers & Points Relais®)</span>
-                                    <span class="text-[11px] text-creme-800">Livraison sous 3 à 5 jours ouvrés</span>
+                                    <span class="text-xs font-bold text-creme-900 block">Chronopost Point Relais (Shop2Shop)</span>
+                                    <span class="text-[11px] text-creme-800">Livraison sous 2 à 4 jours en point relais</span>
                                 </div>
                             </div>
-                            <span class="text-xs font-bold text-sauge-700 font-serif text-sm" id="price-shipping-mondial-relay">4,15 €</span>
+                            <span class="text-xs font-bold text-sauge-700 font-serif text-sm" id="price-shipping-chronopost">3,95 €</span>
                         </label>
 
                         <!-- COLISSIMO RELAIS -->
@@ -182,27 +172,17 @@
                         </label>
                     </div>
 
-                    <!-- MODULE CARTE POINT RELAIS (WIDGET MONDIAL RELAY OFFICIEL) -->
-                    <div id="section-point-relais" class="bg-sauge-50 border border-sauge-200 p-5 rounded-3xl space-y-4">
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-sauge-200 pb-3">
-                            <div>
-                                <label class="font-bold text-sauge-900 uppercase tracking-wider flex items-center gap-2 text-xs">
-                                    <i data-lucide="map" class="w-4 h-4 text-sauge-600"></i> Carte des Points Relais
-                                </label>
-                                <p class="text-[11px] text-sauge-700">Sélectionnez le commerce de votre choix sur la carte ci-dessous.</p>
-                            </div>
-                            <button type="button" onclick="chargerWidgetMondialRelay()" class="px-3 py-1.5 bg-white border border-sauge-300 text-sauge-800 text-[11px] font-bold rounded-xl shadow-xs hover:bg-sauge-100 transition-all flex items-center gap-1.5 shrink-0">
-                                <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-sauge-600"></i> Actualiser la carte
-                            </button>
+                    <!-- MODULE DE SAISIE DU POINT RELAIS -->
+                    <div id="section-point-relais" class="bg-sauge-50 border border-sauge-200 p-5 rounded-3xl space-y-3">
+                        <div>
+                            <label class="font-bold text-sauge-900 uppercase tracking-wider flex items-center gap-2 text-xs">
+                                <i data-lucide="map-pin" class="w-4 h-4 text-sauge-600"></i> Indiquez votre Point Relais choisi <span class="text-red-500">*</span>
+                            </label>
+                            <p class="text-[11px] text-sauge-700 mt-1">
+                                Indiquez le nom et l'adresse exacte du commerce ou bureau de poste choisi.
+                            </p>
                         </div>
-
-                        <!-- CONTENEUR DU WIDGET OFFICIEL MONDIAL RELAY -->
-                        <div id="Zone_Widget" class="w-full bg-white h-[450px]"></div>
-
-                        <div class="space-y-1.5 pt-2">
-                            <label class="text-[11px] font-bold text-sauge-900 uppercase tracking-wider">Point Relais sélectionné <span class="text-red-500">*</span></label>
-                            <input type="text" id="input-point-relais" required readonly placeholder="Cliquez sur 'Choisir ce point' sur la carte..." class="w-full px-4 py-3 bg-white border border-sauge-300 rounded-xl focus:outline-none text-xs font-bold text-sauge-900 cursor-not-allowed">
-                        </div>
+                        <input type="text" id="input-point-relais" required placeholder="Ex: Bureau de Poste - 12 rue de la République 59124 Escaudain" class="w-full px-4 py-3 bg-white border border-creme-300 rounded-xl focus:outline-none focus:border-sauge-500 text-xs font-medium text-creme-900">
                     </div>
                 </section>
 
@@ -243,7 +223,7 @@
 
                     <div class="flex justify-between items-center">
                         <span class="flex items-center gap-1">Frais d'expédition (selon poids)</span>
-                        <span id="summary-shipping" class="font-bold text-creme-900">4,15 €</span>
+                        <span id="summary-shipping" class="font-bold text-creme-900">3,95 €</span>
                     </div>
 
                     <div class="flex justify-between items-center pt-3 border-t border-creme-200 text-sm">
@@ -278,22 +258,19 @@
         let utilisateurActuel = null;
         let cart = [];
         let promoApplique = null;
-        let modeLivraisonSelectionne = { type: 'mondial_relay', isRelais: true };
+        let modeLivraisonSelectionne = { type: 'chronopost', isRelais: true };
 
         window.onload = function() {
             chargerUtilisateur();
             chargerPanier();
-            chargerWidgetMondialRelay(); // Initialise le widget de base
 
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('payment') === 'success' || urlParams.get('paid') === 'true' || urlParams.get('status') === 'success') {
                 const pendingData = sessionStorage.getItem('lpf_pending_checkout');
                 if (pendingData) {
-                    const data = JSON.parse(pendingData);
-                    envoyerEmailConfirmationCommande(data);
                     sessionStorage.removeItem('lpf_pending_checkout');
                     localStorage.removeItem(getCartKey());
-                    afficherToast("Paiement validé avec succès ! Votre commande a été transmise.", "success");
+                    afficherToast("Paiement validé avec succès !", "success");
                     setTimeout(() => { window.location.href = 'index.html'; }, 3000);
                 }
             }
@@ -342,15 +319,18 @@
         }
 
         function obtenirPrixExpeditionSelonPoids(mode, poidsGrammes, sousTotal) {
+            // Livraison offerte dès 70 € d'achat
             if (sousTotal >= 70.00) return 0;
-            if (mode === 'mondial_relay') {
-                if (poidsGrammes <= 500) return 4.15;
-                if (poidsGrammes <= 1000) return 5.99;
-                if (poidsGrammes <= 3000) return 7.99;
-                if (poidsGrammes <= 4000) return 9.99;
-                if (poidsGrammes <= 10000) return 15.99;
-                return 25.99;
+
+            // CHRONOPOST (Shop2Shop standard)
+            if (mode === 'chronopost') {
+                if (poidsGrammes <= 500) return 3.95;
+                if (poidsGrammes <= 1000) return 4.95;
+                if (poidsGrammes <= 2000) return 6.50;
+                return 7.90;
             }
+
+            // COLISSIMO POINT DE RETRAIT (Grille officielle 2026)
             if (mode === 'colissimo_relais') {
                 if (poidsGrammes <= 250) return 4.79;
                 if (poidsGrammes <= 500) return 6.89;
@@ -359,6 +339,8 @@
                 if (poidsGrammes <= 2000) return 10.49;
                 return 16.69;
             }
+
+            // COLISSIMO DOMICILE (Grille officielle 2026)
             if (mode === 'colissimo_domicile') {
                 if (poidsGrammes <= 250) return 5.49;
                 if (poidsGrammes <= 500) return 7.59;
@@ -370,7 +352,8 @@
                 if (poidsGrammes <= 15000) return 31.99;
                 return 39.59;
             }
-            return 4.15;
+
+            return 3.95;
         }
 
         function changerModeExpedition() {
@@ -383,51 +366,11 @@
             const sectionRelais = document.getElementById('section-point-relais');
             if (isRelais) {
                 sectionRelais.classList.remove('hidden');
-                chargerWidgetMondialRelay(); // Recharge le widget si on repasse en relais
             } else {
                 sectionRelais.classList.add('hidden');
             }
 
             renderCheckoutSummary();
-        }
-
-        // ==========================================
-        // VRAI WIDGET CARTE MONDIAL RELAY
-        // ==========================================
-        function chargerWidgetMondialRelay() {
-            // On récupère le code postal et pays saisi (ou Valenciennes par défaut)
-            let cpSaisi = document.getElementById('input-cp').value.trim();
-            let paysSaisi = document.getElementById('input-pays').value || 'FR';
-            
-            // Si vide, on met un code postal par défaut pour que la carte s'affiche quand même (Escaudain)
-            if (cpSaisi.length < 4) {
-                cpSaisi = "59124"; 
-            }
-
-            // On vide le conteneur avant de recharger
-            $("#Zone_Widget").empty();
-
-            // Initialisation du Widget Officiel de Mondial Relay
-            $("#Zone_Widget").MR_ParcelShopPicker({
-                Target: "#input-point-relais", // Champ texte qui recevra les infos du point relais
-                Brand: "BDTEST13", // Clé API Test (Remplace par ta clé Enseigne Mondial Relay en production)
-                Country: paysSaisi,
-                PostCode: cpSaisi,
-                ColiLivMod: "24R", // Mode relais
-                Weight: calculerPoidsTotalEnGrammes(),
-                // Fonction déclenchée quand le client clique sur "Choisir ce point"
-                OnParcelShopSelected: function(data) {
-                    const texteRelais = `${data.Nom} - ${data.Adresse1}, ${data.CP} ${data.Ville}`;
-                    document.getElementById('input-point-relais').value = texteRelais;
-                    
-                    // Si l'utilisateur avait sélectionné Colissimo Relais, on précise que la carte utilisée est celle de MR
-                    if (modeLivraisonSelectionne.type === 'colissimo_relais') {
-                        afficherToast("Point de retrait validé ! (Réseau partenaire sélectionné)");
-                    } else {
-                        afficherToast("Point Mondial Relay sélectionné !");
-                    }
-                }
-            });
         }
 
         function validerCodePromo() {
@@ -497,18 +440,18 @@
                 });
             }
 
-            const priceMondialRelay = obtenirPrixExpeditionSelonPoids('mondial_relay', poidsTotal, sousTotal);
+            const priceChronopost = obtenirPrixExpeditionSelonPoids('chronopost', poidsTotal, sousTotal);
             const priceColissimoRelais = obtenirPrixExpeditionSelonPoids('colissimo_relais', poidsTotal, sousTotal);
             const priceColissimoDomicile = obtenirPrixExpeditionSelonPoids('colissimo_domicile', poidsTotal, sousTotal);
 
-            document.getElementById('price-shipping-mondial-relay').textContent = priceMondialRelay === 0 ? "OFFERT" : priceMondialRelay.toFixed(2).replace('.', ',') + " €";
+            document.getElementById('price-shipping-chronopost').textContent = priceChronopost === 0 ? "OFFERT" : priceChronopost.toFixed(2).replace('.', ',') + " €";
             document.getElementById('price-shipping-colissimo-relais').textContent = priceColissimoRelais === 0 ? "OFFERT" : priceColissimoRelais.toFixed(2).replace('.', ',') + " €";
             document.getElementById('price-shipping-colissimo-domicile').textContent = priceColissimoDomicile === 0 ? "OFFERT" : priceColissimoDomicile.toFixed(2).replace('.', ',') + " €";
 
             let fraisLivraison = obtenirPrixExpeditionSelonPoids(modeLivraisonSelectionne.type, poidsTotal, sousTotal);
 
             if (fraisLivraison === 0 && cart.length > 0) {
-                shippingEl.innerHTML = `<span class="text-sauge-700 font-bold bg-sauge-100 px-2 py-0.5 rounded-md">OFFERTS</span>`;
+                shippingEl.innerHTML = `<span class="text-sauge-700 font-bold bg-sauge-100 px-2.5 py-0.5 rounded-md">OFFERTS</span>`;
             } else {
                 shippingEl.textContent = fraisLivraison.toFixed(2).replace('.', ',') + " €";
             }
@@ -541,10 +484,10 @@
             if (window.lucide) window.lucide.createIcons();
         }
 
+        // TRAITEMENT ET ENVOI DE L'EMAIL AVANT REDIRECTION PAIEMENT
         async function traiterPaiementSumUp() {
             if (!utilisateurActuel) {
                 afficherToast("Tu dois être connecté à ton compte pour commander.", "warning");
-                window.location.href = 'index.html';
                 return;
             }
 
@@ -558,10 +501,11 @@
             const adresse = document.getElementById('input-adresse').value.trim();
             const cp = document.getElementById('input-cp').value.trim();
             const ville = document.getElementById('input-ville').value.trim();
-            const tel = document.getElementById('input-telephone').value.trim();
+            const pays = document.getElementById('input-pays').value.trim();
+            const telephone = document.getElementById('input-telephone').value.trim();
 
-            if (!prenom || !nom || !adresse || !cp || !ville || !tel) {
-                afficherToast("Merci de remplir tous les champs d'adresse obligatoires.", "warning");
+            if (!prenom || !nom || !adresse || !cp || !ville || !telephone) {
+                afficherToast("Merci de remplir tous les champs obligatoires (adresse et téléphone).", "warning");
                 return;
             }
 
@@ -569,20 +513,23 @@
             if (modeLivraisonSelectionne.isRelais) {
                 pointRelaisVal = document.getElementById('input-point-relais').value.trim();
                 if (!pointRelaisVal) {
-                    afficherToast("Merci de cliquer sur un point relais sur la carte !", "warning");
+                    afficherToast("Merci d'indiquer le nom et l'adresse de votre Point Relais.", "warning");
+                    document.getElementById('input-point-relais').focus();
                     return;
                 }
             }
 
             const btnPayer = document.getElementById('btn-payer-sumup');
             btnPayer.disabled = true;
-            btnPayer.textContent = "Redirection SumUp...";
+            btnPayer.textContent = "Transmission de la commande...";
+
+            const adresseComplete = `${adresse}, ${cp} ${ville} (${pays})`;
 
             const checkoutPayload = {
                 clientEmail: utilisateurActuel.email,
                 nomClient: `${prenom} ${nom}`,
-                adresseLivraison: `${adresse}, ${cp} ${ville} (${document.getElementById('input-pays').value})`,
-                telephone: tel,
+                adresseLivraison: adresseComplete,
+                telephone: telephone,
                 pointRelais: pointRelaisVal,
                 poidsTotalGrammes: calculerPoidsTotalEnGrammes(),
                 articles: cart,
@@ -591,8 +538,33 @@
                 date: new Date().toLocaleDateString('fr-FR')
             };
 
+            // 1. ENVOI DE L'EMAIL VIA EMAILJS AVANT PAIEMENT
+            let listeArticlesText = checkoutPayload.articles.map(i => `• ${i.quantity}x ${i.title} (${i.subtitle || i.weight + 'g' || ''})`).join('\n');
+
+            const paramsMail = {
+                to_email: "debstyle-coiffure@hotmail.com",
+                reply_to: checkoutPayload.clientEmail,
+                client_email: checkoutPayload.clientEmail,
+                client_name: checkoutPayload.nomClient,
+                client_phone: checkoutPayload.telephone,          // Téléphone inclus
+                delivery_address: checkoutPayload.adresseLivraison, // Adresse complète incluse
+                point_relais: checkoutPayload.pointRelais,
+                articles_list: listeArticlesText,
+                date: checkoutPayload.date
+            };
+
+            try {
+                if (typeof emailjs !== 'undefined') {
+                    await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateOrderID, paramsMail, EMAILJS_CONFIG.publicKey);
+                    console.log("E-mail de commande envoyé avec succès à debstyle-coiffure@hotmail.com");
+                }
+            } catch (err) {
+                console.error("Erreur lors de l'envoi de l'e-mail EmailJS :", err);
+            }
+
             sessionStorage.setItem('lpf_pending_checkout', JSON.stringify(checkoutPayload));
 
+            // 2. REDIRECTION SUMUP OU FINALISATION
             try {
                 const resSumup = await fetch('/api/checkout', {
                     method: 'POST',
@@ -604,42 +576,14 @@
                 if (resSumup.ok && data.url) {
                     window.location.href = data.url;
                 } else {
-                    envoyerEmailConfirmationCommande(checkoutPayload);
-                    sessionStorage.removeItem('lpf_pending_checkout');
                     localStorage.removeItem(getCartKey());
-                    afficherToast("Commande transmise et e-mail envoyé avec succès !", "success");
-                    btnPayer.textContent = "Payer avec SumUp";
-                    btnPayer.disabled = false;
+                    afficherToast("Commande enregistrée et e-mail envoyé !", "success");
+                    setTimeout(() => { window.location.href = 'index.html'; }, 2500);
                 }
             } catch (err) {
-                envoyerEmailConfirmationCommande(checkoutPayload);
-                sessionStorage.removeItem('lpf_pending_checkout');
                 localStorage.removeItem(getCartKey());
-                afficherToast("Commande enregistrée !", "success");
-                btnPayer.textContent = "Payer avec SumUp";
-                btnPayer.disabled = false;
-            }
-        }
-
-        function envoyerEmailConfirmationCommande(data) {
-            let listeArticlesText = data.articles.map(i => `• ${i.quantity}x ${i.title} (${i.subtitle || ''})`).join('\n');
-
-            const paramsMail = {
-                to_email: "debstyle-coiffure@hotmail.com",
-                reply_to: data.clientEmail,
-                client_email: data.clientEmail,
-                client_name: data.nomClient,
-                client_phone: data.telephone,
-                delivery_address: data.adresseLivraison,
-                point_relais: data.pointRelais,
-                articles_list: listeArticlesText,
-                date: data.date
-            };
-
-            if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey) {
-                emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateOrderID, paramsMail, EMAILJS_CONFIG.publicKey)
-                    .then(() => console.log("E-mail transmis à debstyle-coiffure@hotmail.com"))
-                    .catch(err => console.error("Erreur EmailJS :", err));
+                afficherToast("Commande enregistrée avec succès !", "success");
+                setTimeout(() => { window.location.href = 'index.html'; }, 2500);
             }
         }
 
