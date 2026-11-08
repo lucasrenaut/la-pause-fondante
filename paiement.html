@@ -41,6 +41,7 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-12">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             
+            <!-- FORMULAIRE ADRESSE & EXPÉDITION -->
             <div class="lg:col-span-7 space-y-8">
                 <div id="auth-alert" class="hidden bg-amber-50 border border-amber-200 p-4 rounded-2xl flex items-center justify-between gap-4">
                     <div class="flex items-center gap-3 text-xs text-amber-900">
@@ -164,6 +165,7 @@
                 </button>
             </div>
 
+            <!-- RÉCAPITULATIF DE LA COMMANDE -->
             <div class="lg:col-span-5 bg-white p-6 sm:p-8 rounded-3xl border border-creme-200 shadow-sm space-y-6">
                 <h2 class="font-serif text-xl font-bold text-creme-900 pb-2 border-b border-creme-200">Récapitulatif de la commande</h2>
                 <div id="order-items-list" class="space-y-4 max-h-80 overflow-y-auto pr-1"></div>
@@ -213,8 +215,8 @@
         let promoApplique = null;
 
         window.onload = function() {
+            // Attendre la résolution de la session Supabase pour charger le bon panier
             chargerUtilisateur();
-            chargerPanier();
             if (window.lucide) window.lucide.createIcons();
         };
 
@@ -223,7 +225,10 @@
         }
 
         function chargerUtilisateur() {
-            if (!supabaseClient) return;
+            if (!supabaseClient) {
+                chargerPanier();
+                return;
+            }
             supabaseClient.auth.getSession().then(({ data: { session } }) => {
                 utilisateurActuel = session ? session.user : null;
                 const badge = document.getElementById('checkout-auth-badge');
@@ -236,6 +241,9 @@
                     badge.innerHTML = `<a href="index.html" class="text-sauge-700 underline font-bold">Connexion requise</a>`;
                     authAlert.classList.remove('hidden');
                 }
+
+                // Charger le panier spécifique après identification
+                chargerPanier();
             });
         }
 
@@ -317,27 +325,70 @@
             const amountDiscount = document.getElementById('amount-discount');
             const appliedPromoContainer = document.getElementById('applied-promo-container');
             const badgePoids = document.getElementById('badge-poids-total');
+            const sectionRelais = document.getElementById('section-point-relais');
 
             let sousTotal = 0;
             const poidsTotal = calculerPoidsTotalEnGrammes();
             if (badgePoids) badgePoids.innerHTML = `<i data-lucide="scale" class="w-3.5 h-3.5 text-sauge-600"></i> Poids : <strong>${poidsTotal} g</strong>`;
 
-            container.innerHTML = '';
+            // Calcul du sous-total des articles
+            let nombreTablettes = 0;
             cart.forEach(item => {
-                sousTotal += item.price * item.quantity;
-                container.innerHTML += `
-                    <div class="flex items-center justify-between text-xs">
-                        <div><strong>${item.quantity}x ${item.title}</strong><br/><span class="text-[11px] text-creme-800">${item.subtitle || ''}</span></div>
-                        <span class="font-bold">${(item.price * item.quantity).toFixed(2).replace('.', ',')} €</span>
-                    </div>`;
+                if (item.type === 'tablette') nombreTablettes += item.quantity;
             });
+            const lotsDeTrois = Math.floor(nombreTablettes / 3);
+            const tablettesRestantes = nombreTablettes % 3;
+            const prixTotalTablettes = (lotsDeTrois * 12.00) + (tablettesRestantes * 4.50);
 
+            cart.forEach(item => {
+                if (item.type !== 'tablette') {
+                    sousTotal += item.price * item.quantity;
+                }
+            });
+            sousTotal += prixTotalTablettes;
+
+            // Rendu de la liste d'articles
+            container.innerHTML = '';
+            if (cart.length === 0) {
+                container.innerHTML = `<p class="text-xs text-creme-800 italic text-center py-4">Votre panier est vide.</p>`;
+            } else {
+                cart.forEach(item => {
+                    let prixLigne = item.price * item.quantity;
+                    if (item.type === 'tablette') prixLigne = item.quantity * 4.50;
+                    container.innerHTML += `
+                        <div class="flex items-center justify-between text-xs">
+                            <div><strong>${item.quantity}x ${item.title}</strong><br/><span class="text-[11px] text-creme-800">${item.subtitle || ''}</span></div>
+                            <span class="font-bold">${prixLigne.toFixed(2).replace('.', ',')} €</span>
+                        </div>`;
+                });
+            }
+
+            // Mode d'expédition & affichage dynamique du Point Relais
             const modeInput = document.querySelector('input[name="shipping_mode"]:checked');
             const mode = modeInput ? modeInput.value : 'chronopost';
-            const fraisPort = obtenirFraisPort(mode, poidsTotal, sousTotal);
+            const isRelais = modeInput ? modeInput.dataset.relais === "true" : true;
 
+            if (sectionRelais) {
+                if (isRelais) {
+                    sectionRelais.classList.remove('hidden');
+                } else {
+                    sectionRelais.classList.add('hidden');
+                }
+            }
+
+            // Mise à jour des tarifs affichés à côté des boutons radio
+            const priceChronopostEl = document.getElementById('price-shipping-chronopost');
+            const priceColissimoRelaisEl = document.getElementById('price-shipping-colissimo-relais');
+            const priceColissimoDomicileEl = document.getElementById('price-shipping-colissimo-domicile');
+
+            if (priceChronopostEl) priceChronopostEl.textContent = (sousTotal >= 70 ? "0,00 €" : obtenirFraisPort('chronopost', poidsTotal, sousTotal).toFixed(2).replace('.', ',') + ' €');
+            if (priceColissimoRelaisEl) priceColissimoRelaisEl.textContent = (sousTotal >= 70 ? "0,00 €" : obtenirFraisPort('colissimo_relais', poidsTotal, sousTotal).toFixed(2).replace('.', ',') + ' €');
+            if (priceColissimoDomicileEl) priceColissimoDomicileEl.textContent = (sousTotal >= 70 ? "0,00 €" : obtenirFraisPort('colissimo_domicile', poidsTotal, sousTotal).toFixed(2).replace('.', ',') + ' €');
+
+            const fraisPort = obtenirFraisPort(mode, poidsTotal, sousTotal);
             shippingEl.textContent = fraisPort === 0 ? "OFFERTS" : fraisPort.toFixed(2).replace('.', ',') + " €";
 
+            // Réduction promo
             let reduction = 0;
             if (promoApplique) {
                 if (promoApplique.type === 'percent') reduction = (sousTotal * promoApplique.val) / 100;
@@ -400,7 +451,19 @@
             btnPayer.textContent = "Génération du paiement & Envoi de l'e-mail...";
 
             let sousTotal = 0;
-            cart.forEach(i => sousTotal += i.price * i.quantity);
+            let nombreTablettes = 0;
+            cart.forEach(item => {
+                if (item.type === 'tablette') nombreTablettes += item.quantity;
+            });
+            const lotsDeTrois = Math.floor(nombreTablettes / 3);
+            const tablettesRestantes = nombreTablettes % 3;
+            const prixTotalTablettes = (lotsDeTrois * 12.00) + (tablettesRestantes * 4.50);
+
+            cart.forEach(i => {
+                if (i.type !== 'tablette') sousTotal += i.price * i.quantity;
+            });
+            sousTotal += prixTotalTablettes;
+
             const poidsTotal = calculerPoidsTotalEnGrammes();
             const fraisDePort = obtenirFraisPort(modeLivraison, poidsTotal, sousTotal);
             let reduction = 0;
@@ -410,7 +473,6 @@
             }
             const totalFinal = Math.max(1.00, (sousTotal - reduction) + fraisDePort);
 
-            // Payload enrichi pour que l'API /api/checkout puisse remplir ton template EmailJS template_g1uhwae
             const payload = {
                 amount: totalFinal,
                 sousTotal: sousTotal,
@@ -435,7 +497,7 @@
 
                 if (response.ok && data.url) {
                     localStorage.removeItem(getCartKey());
-                    window.location.href = data.url; // Redirige vers SumUp au montant exact ET déclenche l'e-mail via le serveur
+                    window.location.href = data.url;
                 } else {
                     afficherToast(data.error || "Erreur lors de la communication avec le serveur.", "warning");
                     btnPayer.disabled = false;
