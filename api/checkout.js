@@ -3,7 +3,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Méthode non autorisée' });
   }
 
-  const { amount, sousTotal, fraisDePort, estLivraisonOfferte, pointRelais, clientEmail, cart } = req.body || {};
+  const { amount, sousTotal, fraisDePort, estLivraisonOfferte, pointRelais, clientEmail, cart, clientName, clientPhone, deliveryAddress, discount } = req.body || {};
+  
   if (!amount || amount <= 0) {
     return res.status(400).json({ error: 'Montant invalide' });
   }
@@ -49,44 +50,39 @@ export default async function handler(req, res) {
     const checkoutData = await checkoutResponse.json();
 
     if (checkoutResponse.ok && checkoutData.hosted_checkout_url) {
-      // 3. Envoi automatique de l'e-mail de récapitulatif via Resend (si configuré)
-      if (process.env.RESEND_API_KEY) {
-        const detailsArticles = (cart || []).map(item => `
-          <li style="margin-bottom: 6px;">
-            <strong>${item.quantity}x ${item.title}</strong><br/>
-            <span style="color: #666; font-size: 13px;">${item.subtitle}</span>
-          </li>
-        `).join('');
+      
+      // 3. ENVOI DE L'E-MAIL VIA EMAILJS DEPUIS LE SERVEUR
+      const EMAILJS_SERVICE_ID = "service_cbfk3mr";
+      const EMAILJS_TEMPLATE_ID = "template_g1uhwae";
+      const EMAILJS_PUBLIC_KEY = "rnYePJTMswP2wkX6O";
 
-        const emailHtml = `
-          <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-            <h2 style="color: #6b7f71;">Nouvelle commande — La pause Fondante</h2>
-            <p><strong>Client :</strong> ${clientEmail || 'Non spécifié'}</p>
-            <p><strong>Point Relais souhaité :</strong> <span style="color: #c88b4a; font-weight: bold;">${pointRelais || 'Non spécifié'}</span></p>
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;" />
-            <h3>Détails du panier :</h3>
-            <ul>${detailsArticles}</ul>
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;" />
-            <p>Sous-total articles : ${parseFloat(sousTotal || 0).toFixed(2).replace('.', ',')} €</p>
-            <p>Frais de port point relais : ${estLivraisonOfferte ? '<strong>OFFERTS</strong>' : parseFloat(fraisDePort || 0).toFixed(2).replace('.', ',') + ' €'}</p>
-            <p style="font-size: 18px; color: #c88b4a;"><strong>Total de la commande : ${parseFloat(amount).toFixed(2).replace('.', ',')} €</strong></p>
-          </div>
-        `;
+      let articlesText = (cart || []).map(i => `• ${i.quantity}x ${i.title} (${i.subtitle || i.weight + 'g' || ''})`).join('\n');
 
-        await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            from: "La pause Fondante <onboarding@resend.dev>",
-            to: ["debstyle-coiffure@hotmail.com", "renaut.lucas@outlook.fr"],
-            subject: `Nouvelle commande (${parseFloat(amount).toFixed(2).replace('.', ',')} €) - Point Relais`,
-            html: emailHtml
-          })
-        }).catch(err => console.error("Erreur d'envoi d'email :", err));
-      }
+      const emailParams = {
+        service_id: EMAILJS_SERVICE_ID,
+        template_id: EMAILJS_TEMPLATE_ID,
+        user_id: EMAILJS_PUBLIC_KEY,
+        template_params: {
+          to_email: "debstyle-coiffure@hotmail.com",
+          client_email: clientEmail || "Non spécifié",
+          client_name: clientName || "Client",
+          client_phone: clientPhone || "Non renseigné",
+          delivery_address: deliveryAddress || pointRelais,
+          point_relais: pointRelais || "Non spécifié",
+          articles_list: articlesText,
+          subtotal: parseFloat(sousTotal || 0).toFixed(2).replace('.', ',') + " €",
+          discount: discount || "0,00 €",
+          shipping: estLivraisonOfferte ? "OFFERTS" : parseFloat(fraisDePort || 0).toFixed(2).replace('.', ',') + " €",
+          total: parseFloat(amount).toFixed(2).replace('.', ',') + " €",
+          date: new Date().toLocaleDateString('fr-FR')
+        }
+      };
+
+      await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(emailParams)
+      }).catch(err => console.error("Erreur d'envoi EmailJS serveur :", err));
 
       return res.status(200).json({ url: checkoutData.hosted_checkout_url });
     } else {
