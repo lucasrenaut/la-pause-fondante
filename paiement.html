@@ -373,6 +373,7 @@
             const adresse = document.getElementById('input-adresse').value.trim();
             const cp = document.getElementById('input-cp').value.trim();
             const ville = document.getElementById('input-ville').value.trim();
+            const pays = document.getElementById('input-pays').value.trim();
             const tel = document.getElementById('input-telephone').value.trim();
 
             if (!prenom || !nom || !adresse || !cp || !ville || !tel) {
@@ -384,18 +385,19 @@
             const modeLivraison = modeInput ? modeInput.value : 'chronopost';
             const isRelais = modeInput ? modeInput.dataset.relais === "true" : true;
 
-            let pointRelaisVal = "Livraison à domicile";
+            let pointRelaisVal = "Livraison à domicile (Colissimo Domicile)";
             if (isRelais) {
                 pointRelaisVal = document.getElementById('input-point-relais').value.trim();
                 if (!pointRelaisVal) {
                     afficherToast("Indique ton Point Relais choisi.", "warning");
+                    document.getElementById('input-point-relais').focus();
                     return;
                 }
             }
 
             const btnPayer = document.getElementById('btn-payer-sumup');
             btnPayer.disabled = true;
-            btnPayer.textContent = "Génération du paiement sécurisé...";
+            btnPayer.textContent = "Génération du paiement & Envoi de l'e-mail...";
 
             let sousTotal = 0;
             cart.forEach(i => sousTotal += i.price * i.quantity);
@@ -408,13 +410,18 @@
             }
             const totalFinal = Math.max(1.00, (sousTotal - reduction) + fraisDePort);
 
+            // Payload enrichi pour que l'API /api/checkout puisse remplir ton template EmailJS template_g1uhwae
             const payload = {
                 amount: totalFinal,
                 sousTotal: sousTotal,
                 fraisDePort: fraisDePort,
                 estLivraisonOfferte: fraisDePort === 0,
-                pointRelais: `${pointRelaisVal} (${prenom} ${nom}, ${adresse}, ${cp} ${ville}, Tél: ${tel})`,
+                pointRelais: pointRelaisVal,
                 clientEmail: utilisateurActuel.email,
+                clientName: `${prenom} ${nom}`,
+                clientPhone: tel,
+                deliveryAddress: `${adresse}, ${cp} ${ville} (${pays})`,
+                discount: promoApplique ? `- ${reduction.toFixed(2).replace('.', ',')} €` : "0,00 €",
                 cart: cart
             };
 
@@ -428,15 +435,17 @@
 
                 if (response.ok && data.url) {
                     localStorage.removeItem(getCartKey());
-                    window.location.href = data.url; // Redirige vers SumUp au montant exact ET envoie l'email via Resend
+                    window.location.href = data.url; // Redirige vers SumUp au montant exact ET déclenche l'e-mail via le serveur
                 } else {
-                    // SECOURS si l'API SumUp n'est pas encore active sur Vercel : redirection vers le lien fixe avec message
-                    console.warn("API SumUp non configurée, bascule sur le lien fixe.");
-                    window.location.href = "https://pay.sumup.com/b2c/QDCB1T3C";
+                    afficherToast(data.error || "Erreur lors de la communication avec le serveur.", "warning");
+                    btnPayer.disabled = false;
+                    btnPayer.textContent = "Payer avec SumUp";
                 }
             } catch (err) {
                 console.error(err);
-                window.location.href = "https://pay.sumup.com/b2c/QDCB1T3C";
+                afficherToast("Erreur de connexion au serveur de paiement.", "warning");
+                btnPayer.disabled = false;
+                btnPayer.textContent = "Payer avec SumUp";
             }
         }
 
