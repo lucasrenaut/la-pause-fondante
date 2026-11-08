@@ -314,7 +314,7 @@
                     <span class="text-xs font-bold text-sauge-600 uppercase tracking-widest bg-sauge-50 px-3 py-1 rounded-full border border-sauge-100">Les tablettes fondantes</span>
                     <h2 class="font-serif text-3xl font-bold text-creme-900">Nos Tablettes aux 23 Parfums Artisanaux</h2>
                     <p class="text-xs sm:text-sm text-creme-800 leading-relaxed">
-                        Retrouvez l'intégralité de nos senteurs en tablettes sécables (4,50 € l'unité ou <strong>3 achetées = 12,00 €</strong> cumulable).
+                        Retrouvez l'intégralité de nos senteurs en tablettes sécables (4,50 € l'unité ou <strong>3 achetées = 12,00 €</strong> cumulable, parfums au choix).
                     </p>
                 </div>
                 <div class="w-full md:w-1/2 h-48 md:h-64 shrink-0">
@@ -330,7 +330,7 @@
                 <div class="w-full bg-creme-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-creme-200">
                     <div id="tablettes-promo-bar" class="bg-gradient-to-r from-sauge-500 to-ocre-500 h-full rounded-full transition-all duration-300 w-0"></div>
                 </div>
-                <p id="tablettes-promo-status" class="text-xs text-creme-800 italic">Ajoutez 3 tablettes pour débloquer le prix réduit à 12,00 € !</p>
+                <p id="tablettes-promo-status" class="text-xs text-creme-800 italic">Ajoutez 3 tablettes (parfums au choix) pour débloquer le prix réduit à 12,00 € !</p>
             </div>
 
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4 max-w-4xl mx-auto">
@@ -1277,7 +1277,7 @@
             }
         }
 
-        // REGROUPEMENT DES TABLETTES PAR VARIÉTÉ
+        // REGROUPEMENT DES TABLETTES PAR PARFUM DANS LE PANIER
         window.ajouterTabletteAuPanier = function(parfumId) {
             const p = CONFIG.parfums.find(item => item.id == parfumId);
             if (!p) return;
@@ -1409,27 +1409,28 @@
             afficherToast(`${cObj.nom} ajoutée au panier ! 🎄`);
         }
 
-        // CALCUL DU PRIX DE LIGNE POUR LES TABLETTES (3 pour 12 €)
-        function calculerPrixLigneTablette(quantity) {
-            const lotsDeTrois = Math.floor(quantity / 3);
-            const reste = quantity % 3;
-            return (lotsDeTrois * 12.00) + (reste * 4.50);
-        }
-
+        // CALCUL DU PRIX GLOBAL DES TABLETTES (Offre 3 pour 12 € toutes senteurs confondues)
         function calculerTotalPanier() {
             let sousTotalArticles = 0;
+            let nombreTablettes = 0;
 
             cart.forEach(item => {
                 if (item.type === 'tablette') {
-                    sousTotalArticles += calculerPrixLigneTablette(item.quantity);
+                    nombreTablettes += item.quantity;
                 } else {
                     sousTotalArticles += item.price * item.quantity;
                 }
             });
 
+            const lotsDeTrois = Math.floor(nombreTablettes / 3);
+            const tablettesRestantes = nombreTablettes % 3;
+            const prixTotalTablettes = (lotsDeTrois * 12.00) + (tablettesRestantes * 4.50);
+
+            sousTotalArticles += prixTotalTablettes;
+
             const estLivraisonOfferte = sousTotalArticles >= CONFIG.seuilFraisDePortGratuit;
 
-            return { totalHorsFrais: sousTotalArticles, sousTotalArticles, estLivraisonOfferte };
+            return { totalHorsFrais: sousTotalArticles, sousTotalArticles, estLivraisonOfferte, lotsDeTrois, nombreTablettes };
         }
 
         function updateCartUI() {
@@ -1495,12 +1496,19 @@
             } else {
                 drawerContent.innerHTML = '';
 
+                if (resPanier.nombreTablettes >= 3) {
+                    const promoBanner = document.createElement('div');
+                    promoBanner.className = "bg-sauge-50 border border-sauge-200 p-3 rounded-2xl text-xs text-sauge-800 font-medium flex items-center gap-2";
+                    promoBanner.innerHTML = `<i data-lucide="tag" class="w-4 h-4 text-sauge-600 shrink-0"></i> <span>Offre appliquée : ${resPanier.lotsDeTrois} lot(s) de 3 tablettes à 12 € !</span>`;
+                    drawerContent.appendChild(promoBanner);
+                }
+
                 cart.forEach((item, index) => {
                     const row = document.createElement('div');
                     row.className = "bg-creme-50 p-4 rounded-2xl border border-creme-200 space-y-2 relative";
                     let prixLigne = item.price * item.quantity;
                     if (item.type === 'tablette') {
-                        prixLigne = calculerPrixLigneTablette(item.quantity);
+                        prixLigne = item.quantity * 4.50;
                     }
 
                     row.innerHTML = `
@@ -1590,6 +1598,7 @@
                 return;
             }
 
+            sauvegarderPanierDansStorage();
             window.location.href = 'paiement.html';
         }
 
