@@ -149,10 +149,10 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
                     <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
                         <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-[#d4af37] text-white text-xs font-bold rounded-full uppercase tracking-widest shadow-md">
-                            ✨ Nouveauté à durée limitée ✨
+                           JEU concours !
                         </span>
                         <h1 class="font-serif text-3xl sm:text-5xl font-bold tracking-wide text-[#fcf8f2]">
-                            Grand Jeu de Noël <span class="block text-[#d4af37] text-2xl sm:text-3xl mt-1 font-normal">Calendrier de l'Avent de La Pause Fondante 🤍</span>
+                            Grand Jeu de Noël <span class="block text-[#d4af37] text-2xl sm:text-3xl mt-1 font-normal">Calendrier de l'Avent de La Pause Fondante </span>
                         </h1>
                         <p class="text-sm sm:text-base text-creme-100 opacity-90 leading-relaxed">
                             De nombreuses surprises vous attendent dans ce magnifique calendrier ! Participez dès maintenant pour tenter votre chance avant le grand tirage au sort.
@@ -169,7 +169,7 @@
                         </div>
                         <div class="pt-2 flex flex-wrap gap-4 justify-center lg:justify-start">
                             <button onclick="naviguerVers('fondants')" class="px-8 py-4 bg-[#d4af37] hover:bg-[#bfa130] text-white font-bold rounded-2xl shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 text-sm uppercase tracking-wider">
-                                Découvrir le catalogue & Participer <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                Découvrir notre boutique ! <i data-lucide="arrow-right" class="w-4 h-4"></i>
                             </button>
                         </div>
                     </div>
@@ -467,7 +467,7 @@
                 <img src="logo_pause_fondante.jpeg" alt="Logo" class="w-10 h-10 rounded-full object-cover border border-sauge-300" onerror="this.onerror=null; this.src='https://placehold.co/100x100/6b7f71/ffffff?text=LPF';">
                 <div>
                     <p class="font-serif font-bold text-creme-900 text-sm">La pause Fondante</p>
-                    <p class="text-[11px] mt-0.5">Deborah Bovrisse — SIREN 829 189 083 — Escaudain</p>
+                    <p class="text-[11px] mt-0.5">Deborah Bovrisse — SIREN 829 189 083 </p>
                 </div>
             </div>
             <div class="flex items-center gap-6 font-semibold">
@@ -543,21 +543,193 @@
         </div>
     </div>
 
-    <div id="modal-cgv" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
-        <div onclick="fermerModalCGV()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
-        <div class="relative bg-white rounded-3xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl z-10 space-y-4 max-h-[85vh] flex flex-col animate-fade-in">
-            <div class="flex items-center justify-between border-b border-creme-200 pb-4"><h3 class="font-serif text-xl font-bold text-creme-900">Conditions Générales de Vente (CGV)</h3><button onclick="fermerModalCGV()" class="p-1 rounded-full hover:bg-creme-100 text-creme-800"><i data-lucide="x"></i></button></div>
-            <div class="flex-grow overflow-y-auto space-y-4 text-xs text-creme-800 leading-relaxed custom-scrollbar pr-3"><p>Deborah Bovrisse – La Pause Fondante – EI micro-entrepreneur. SIREN : 829 189 083. 41 rue de la Marne, 59124 Escaudain.</p></div>
+<!-- MODALE MENTIONS LÉGALES -->
+<div id="modal-mentions" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div onclick="fermerModalMentions()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
+    <div class="relative bg-white rounded-3xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl z-10 space-y-4 max-h-[85vh] flex flex-col animate-fade-in">
+        <div class="flex items-center justify-between border-b border-creme-200 pb-4">
+            <h3 class="font-serif text-xl font-bold text-creme-900">Mentions Légales</h3>
+            <button onclick="fermerModalMentions()" class="p-1 rounded-full hover:bg-creme-100 text-creme-800"><i data-lucide="x"></i></button>
         </div>
-    </div>
+        <div class="flex-grow overflow-y-auto space-y-4 text-xs text-creme-800 leading-relaxed custom-scrollbar pr-3 space-y-3">
+            <p class="font-bold text-creme-900">LA PAUSE FONDANTE<br><span class="font-normal text-[11px]">Dernière mise à jour : 7 novembre 2026</span></p>
+            
+            <h4 class="font-bold text-creme-900 pt-2">1. ÉDITEUR DU SITE</h4>
+            <p>Le présent site internet est édité par :<br>
+            Nom et prénom : Deborah Bovrisse<br>
+            Nom commercial : La Pause Fondante<br>
+            Statut juridique : Entreprise individuelle – Micro-entreprise<br>
+            Numéro SIREN : 829 189 083<br>
+            Numéro SIRET : À compléter (14 chiffres)<br>
+            Adresse professionnelle : 41 rue de la Marne, 59124 Escaudain, France<br>
+            Adresse e-mail : debstyle-coiffure@hotmail.com<br>
+            Téléphone : 06 10 70 76 59<br>
+            Régime de TVA : Franchise en base de TVA – article 293 B du Code général des impôts.</p>
 
-    <div id="modal-mentions" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
-        <div onclick="fermerModalMentions()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
-        <div class="relative bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl z-10 space-y-4 max-h-[85vh] flex flex-col animate-fade-in">
-            <div class="flex items-center justify-between border-b border-creme-200 pb-4"><h3 class="font-serif text-xl font-bold text-creme-900">Mentions Légales</h3><button onclick="fermerModalMentions()" class="p-1 rounded-full hover:bg-creme-100 text-creme-800"><i data-lucide="x"></i></button></div>
-            <div class="flex-grow overflow-y-auto space-y-3 text-xs text-creme-800 leading-relaxed"><p>Éditeur : Deborah Bovrisse (La Pause Fondante), SIREN 829 189 083. Hébergement : Vercel Inc.</p></div>
+            <h4 class="font-bold text-creme-900 pt-2">2. DIRECTRICE DE LA PUBLICATION</h4>
+            <p>La directrice de la publication est Deborah Bovrisse, responsable de l’édition du site La Pause Fondante.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">3. HÉBERGEMENT DU SITE</h4>
+            <p>Le site internet est hébergé par :<br>
+            Vercel Inc.<br>
+            440 N Barranca Avenue #4133<br>
+            Covina, CA 91723, États-Unis<br>
+            Site internet : https://vercel.com</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">4. ACTIVITÉ</h4>
+            <p>La Pause Fondante est une entreprise artisanale spécialisée dans la fabrication et la vente de créations parfumées en cire végétale.<br>
+            Les produits commercialisés comprennent notamment :<br>
+            - Fondants parfumés artisanaux.<br>
+            - Tablettes fondantes.<br>
+            - Coffrets cadeaux parfumés.<br>
+            - Plateaux et compositions décoratives.<br>
+            - Créations parfumées saisonnières.<br>
+            - Éditions limitées.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">5. PROPRIÉTÉ INTELLECTUELLE</h4>
+            <p>L’ensemble des contenus présents sur le site La Pause Fondante, notamment les textes, photographies, images, logos, illustrations, visuels et créations graphiques, est protégé par les dispositions relatives à la propriété intellectuelle.<br>
+            Toute reproduction, représentation, modification ou diffusion, totale ou partielle, sans autorisation préalable de l’éditrice est interdite, sauf exceptions prévues par la loi.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">6. RESPONSABILITÉ</h4>
+            <p>La Pause Fondante s’efforce de fournir des informations fiables et actualisées sur son site.<br>
+            Malgré le soin apporté à la rédaction des contenus, des erreurs ou omissions peuvent exceptionnellement survenir.<br>
+            L’éditrice ne saurait être tenue responsable des interruptions temporaires du site liées à des opérations de maintenance ou à des difficultés techniques indépendantes de sa volonté.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">7. PAIEMENT SÉCURISÉ</h4>
+            <p>Les paiements réalisés sur le site sont traités par le prestataire de paiement SumUp.<br>
+            Les transactions sont sécurisées conformément aux dispositifs mis en place par ce prestataire.<br>
+            La Pause Fondante ne conserve pas les coordonnées bancaires de ses clients.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">8. DONNÉES PERSONNELLES</h4>
+            <p>Les données personnelles collectées sur le site sont utilisées notamment pour :<br>
+            - Le traitement des commandes.<br>
+            - La gestion des paiements.<br>
+            - L’organisation des livraisons.<br>
+            - Le suivi des demandes et réclamations clients.<br>
+            Les données sont traitées conformément au Règlement général sur la protection des données (RGPD).<br>
+            Chaque utilisateur dispose des droits d’accès, de rectification, d’effacement, de limitation et d’opposition dans les conditions prévues par la réglementation.<br>
+            Pour toute demande relative aux données personnelles : debstyle-coiffure@hotmail.com</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">9. COOKIES</h4>
+            <p>Le site peut utiliser des cookies et autres traceurs nécessaires à son fonctionnement.<br>
+            Les cookies non essentiels sont soumis au consentement préalable de l’utilisateur lorsque la réglementation l’exige.<br>
+            L’utilisateur peut gérer ses préférences depuis le dispositif de gestion des cookies mis à sa disposition sur le site.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">10. DROIT APPLICABLE</h4>
+            <p>Les présentes mentions légales sont soumises au droit français.</p>
         </div>
     </div>
+</div>
+
+<!-- MODALE CGV -->
+<div id="modal-cgv" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div onclick="fermerModalCGV()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
+    <div class="relative bg-white rounded-3xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl z-10 space-y-4 max-h-[85vh] flex flex-col animate-fade-in">
+        <div class="flex items-center justify-between border-b border-creme-200 pb-4">
+            <h3 class="font-serif text-xl font-bold text-creme-900">Conditions Générales de Vente (CGV)</h3>
+            <button onclick="fermerModalCGV()" class="p-1 rounded-full hover:bg-creme-100 text-creme-800"><i data-lucide="x"></i></button>
+        </div>
+        <div class="flex-grow overflow-y-auto space-y-4 text-xs text-creme-800 leading-relaxed custom-scrollbar pr-3 space-y-3">
+            <p class="font-bold text-creme-900">LA PAUSE FONDANTE<br><span class="font-normal text-[11px]">Dernière mise à jour : 7 novembre 2026</span></p>
+
+            <h4 class="font-bold text-creme-900 pt-2">ARTICLE 1 – IDENTIFICATION DU VENDEUR</h4>
+            <p>Les présentes Conditions Générales de Vente sont proposées par :<br>
+            Nom et prénom : Deborah Bovrisse<br>
+            Nom commercial : La Pause Fondante<br>
+            Statut : Entrepreneur individuel – régime micro-entrepreneur<br>
+            SIREN : 829189083 / SIRET : À compléter (14 chiffres)<br>
+            Adresse professionnelle : 41 rue de la Marne, 59124 Escaudain, France<br>
+            Adresse e-mail : debstyle-coiffure@hotmail.com — Téléphone : 06 10 70 76 59</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">ARTICLE 2 – OBJET</h4>
+            <p>Les présentes CGV définissent les conditions dans lesquelles La Pause Fondante commercialise ses créations artisanales sur son site internet.<br>
+            Les produits proposés comprennent notamment : fondants parfumés en cire végétale, tablettes fondantes, coffrets cadeaux et lots mystères, plateaux parfumés, et collections saisonnières.<br>
+            Toute commande passée sur le site implique l’acceptation des présentes conditions générales de vente.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">ARTICLE 3 – PRODUITS</h4>
+            <p>La Pause Fondante propose des créations réalisées artisanalement. De légères différences de couleur, de forme ou de finition peuvent apparaître d’une création à une autre. Les photographies sont présentées à titre illustratif.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">ARTICLE 4 – PRIX</h4>
+            <p>Les prix sont indiqués en euros. La Pause Fondante bénéficie de la franchise en base de TVA (TVA non applicable, article 293 B du CGI). Les frais de livraison sont indiqués avant la validation de la commande.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">ARTICLE 5 – COMMANDE</h4>
+            <p>Le client sélectionne ses produits dans son panier. La validation de la commande avec obligation de paiement vaut acceptation des CGV. Une confirmation est envoyée par e-mail.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">ARTICLE 6 – PAIEMENT</h4>
+            <p>Le paiement est effectué par carte bancaire via le prestataire sécurisé SumUp. La Pause Fondante ne conserve pas les coordonnées bancaires.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">ARTICLE 7 – DISPONIBILITÉ</h4>
+            <p>Les produits sont proposés dans la limite des stocks disponibles. En cas d'indisponibilité après commande, le client sera informé et remboursé ou orienté vers une solution de remplacement.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">ARTICLE 8 – LIVRAISON</h4>
+            <p>Livraison en France métropolitaine et en Belgique. Délai indicatif de préparation et d’expédition : 3 à 5 jours ouvrés.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">ARTICLE 9 – DROIT DE RÉTRACTATION</h4>
+            <p>Délai de rétractation de 14 jours calendaires à compter du lendemain de la réception (sauf pour les produits personnalisés ou confectionnés selon les spécifications du client conformément à l'article L221-28 du Code de la consommation).</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">ARTICLE 10 – PRODUITS ENDOMMAGÉS OU NON CONFORMES</h4>
+            <p>Contact par e-mail à debstyle-coiffure@hotmail.com avec photos à l'appui en cas de problème à la réception.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">ARTICLE 11 – GARANTIES LÉGALES</h4>
+            <p>Bénéfice de la garantie légale de conformité (articles L217-3 et suivants du Code de la consommation) et de la garantie des vices cachés (articles 1641 et suivants du Code civil).</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">ARTICLE 12 – PRÉCAUTIONS D’UTILISATION</h4>
+            <p>Utiliser dans un brûleur adapté. Ne jamais ingérer, ne jamais laisser sans surveillance et tenir hors de portée des enfants et des animaux.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">ARTICLE 13 & 14 – SERVICE CLIENT & MÉDIATION</h4>
+            <p>Contact : debstyle-coiffure@hotmail.com ou 06 10 70 76 59. Possibilité de recourir à un médiateur de la consommation en cas de litige.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">ARTICLE 15, 16 & 17 – DONNÉES, PROPRIÉTÉ & DROIT APPLICABLE</h4>
+            <p>Traitement RGPD des données personnelles, protection de la propriété intellectuelle des créations et application du droit français.</p>
+
+            <div class="bg-creme-50 p-4 rounded-xl border border-creme-200 mt-4 space-y-2">
+                <p class="font-bold text-creme-900">FORMULAIRE TYPE DE RÉTRACTATION</p>
+                <p>À l’attention de La Pause Fondante, Deborah Bovrisse, 41 rue de la Marne, 59124 Escaudain (debstyle-coiffure@hotmail.com) :<br>
+                Je vous notifie par la présente ma rétractation du contrat portant sur la vente des produits suivants :<br>
+                - Numéro de commande : ........................<br>
+                - Commandé le / Reçu le : ........................<br>
+                - Nom et prénom du client : ........................<br>
+                - Adresse du client : ........................</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODALE COOKIES (Politique rédigée dans le même esprit) -->
+<div id="modal-cookies" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div onclick="fermerModalCookies()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
+    <div class="relative bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl z-10 space-y-4 max-h-[85vh] flex flex-col animate-fade-in">
+        <div class="flex items-center justify-between border-b border-creme-200 pb-4">
+            <h3 class="font-serif text-xl font-bold text-creme-900">Politique d'utilisation des Cookies</h3>
+            <button onclick="fermerModalCookies()" class="p-1 rounded-full hover:bg-creme-100 text-creme-800"><i data-lucide="x"></i></button>
+        </div>
+        <div class="flex-grow overflow-y-auto space-y-3 text-xs text-creme-800 leading-relaxed custom-scrollbar pr-3">
+            <p class="font-bold text-creme-900">LA PAUSE FONDANTE<br><span class="font-normal text-[11px]">Dernière mise à jour : 7 novembre 2026</span></p>
+
+            <h4 class="font-bold text-creme-900 pt-2">1. QU'EST-CE QU'UN COOKIE ?</h4>
+            <p>Un cookie est un petit fichier texte déposé sur votre terminal (ordinateur, tablette ou smartphone) lors de la visite de notre site internet <strong>La Pause Fondante</strong>. Il permet de stocker des informations relatives à votre navigation afin de faciliter vos visites ultérieures et de garantir le bon fonctionnement du site.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">2. LES COOKIES UTILISÉS SUR LE SITE</h4>
+            <p>Nous utilisons exclusivement des cookies strictement nécessaires au fonctionnement technique de la boutique et à la gestion de votre session utilisateur :<br>
+            - <strong>Cookies de session et d'authentification (Supabase) :</strong> indispensables pour vous maintenir connecté(e) à votre compte client en toute sécurité.<br>
+            - <strong>Cookies de panier :</strong> indispensables pour mémoriser le contenu de votre panier d'achats (vos lots de fondants, tablettes et coffrets) au fil de votre navigation.<br>
+            - <strong>Cookies de préférences techniques :</strong> mémorisant vos choix relatifs à l'affichage ou à la fermeture de bannières d'information.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">3. COOKIES TIERS ET ANALYTIQUES</h4>
+            <p>Le site ne dépose pas de cookies publicitaires intrusifs sans votre consentement. Les solutions techniques intégrées (telles que le traitement des paiements sécurisés via <strong>SumUp</strong> ou l'hébergement sur <strong>Vercel</strong>) peuvent être amenées à utiliser des traceurs purement techniques nécessaires à la sécurisation des transactions et à la performance du serveur.</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">4. GESTION ET PARAMÉTRAGE DES COOKIES</h4>
+            <p>Conformément à la réglementation en vigueur, vous pouvez à tout moment configurer votre navigateur pour accepter ou refuser l'enregistrement de cookies sur votre terminal :<br>
+            - <strong>Google Chrome :</strong> Paramètres > Confidentialité et sécurité > Cookies.<br>
+            - <strong>Mozilla Firefox :</strong> Options > Vie privée et sécurité > Cookies.<br>
+            - <strong>Safari :</strong> Préférences > Confidentialité.<br>
+            La désactivation des cookies d'authentification ou de panier est susceptible de perturber votre expérience d'achat sur notre site (impossibilité de valider un panier ou de rester connecté).</p>
+
+            <h4 class="font-bold text-creme-900 pt-2">5. CONTACT</h4>
+            <p>Pour toute question concernant notre politique de gestion des cookies ou de protection des données personnelles, vous pouvez nous contacter à l'adresse e-mail : <a href="mailto:debstyle-coiffure@hotmail.com" class="text-sauge-700 underline font-semibold">debstyle-coiffure@hotmail.com</a>.</p>
+        </div>
+    </div>
+</div>
 
     <!-- MODALE AUTH SUPABASE -->
     <div id="modal-auth" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
@@ -966,7 +1138,7 @@
                     type: 'pot',
                     nom: "Bouquet de fondants",
                     prix: 8.00,
-                    badge: "",
+                    badge: "NOUVEAU !",
                     stock: 6,
                     style: 'classique',
                     weight: 150,
