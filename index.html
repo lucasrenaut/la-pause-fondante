@@ -530,7 +530,7 @@
         </div>
     </div>
 
-    <!-- MODALES -->
+    <!-- MODALES DE SÉCURITÉ & AUTH -->
     <div id="modal-password" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
         <div onclick="fermerModalPassword()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
         <div class="relative bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl z-10 space-y-5 animate-fade-in">
@@ -559,6 +559,7 @@
         </div>
     </div>
 
+    <!-- MODALE AUTH SUPABASE -->
     <div id="modal-auth" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
         <div onclick="fermerModalAuth()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
         <div class="relative bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl z-10 space-y-6 animate-fade-in">
@@ -576,7 +577,7 @@
     <!-- TOAST CONTAINER -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-    <!-- SCRIPTS CONFIGURATION & STYLES DISTINCTS -->
+    <!-- SCRIPTS CONFIGURATION & SYSTÈME SUPABASE -->
     <script>
         const SUPABASE_URL = "https://ewmdyjcjxwibhfjejhwe.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_esIheB1MfmllTZQWBivCWA_QFFuWkX8";
@@ -590,12 +591,116 @@
         let modeInscription = false;
 
         if (supabaseClient) {
+            supabaseClient.auth.getSession().then(({ data: { session } }) => {
+                window.utilisateurActuel = session ? session.user : null;
+                renderAuthHeader();
+                renderCartAccountSection();
+            });
+
             supabaseClient.auth.onAuthStateChange((event, session) => {
                 window.utilisateurActuel = session ? session.user : null;
                 renderAuthHeader();
                 renderCartAccountSection();
                 chargerPanierDepuisStorage();
             });
+        }
+
+        // --- GESTION AUTH SUPABASE ---
+        window.ouvrirModalAuth = function() {
+            document.getElementById('modal-auth').classList.remove('hidden');
+            document.getElementById('modal-auth').classList.add('flex');
+        }
+
+        window.fermerModalAuth = function() {
+            document.getElementById('modal-auth').classList.add('hidden');
+            document.getElementById('modal-auth').classList.remove('flex');
+        }
+
+        window.basculerModeAuth = function() {
+            modeInscription = !modeInscription;
+            document.getElementById('auth-modal-title').textContent = modeInscription ? "Créer un compte" : "Connexion Compte";
+            document.getElementById('auth-submit-btn').textContent = modeInscription ? "S'inscrire" : "Se connecter";
+            document.getElementById('auth-switch-btn').textContent = modeInscription ? "Déjà un compte ? Se connecter" : "Créer un compte";
+        }
+
+        window.soumettreAuthSupabase = async function(event) {
+            event.preventDefault();
+            if (!supabaseClient) { afficherToast("Supabase non initialisé", "warning"); return; }
+            const email = document.getElementById('auth-email').value.trim();
+            const password = document.getElementById('auth-password').value.trim();
+
+            if (modeInscription) {
+                const { data, error } = await supabaseClient.auth.signUp({ email, password });
+                if (error) { afficherToast(error.message, "warning"); }
+                else {
+                    afficherToast("Compte créé avec succès ! Vérifiez vos e-mails si confirmation requise.");
+                    fermerModalAuth();
+                }
+            } else {
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                if (error) { afficherToast(error.message, "warning"); }
+                else {
+                    afficherToast("Connexion réussie !");
+                    fermerModalAuth();
+                }
+            }
+        }
+
+        window.deconnexionSupabase = async function() {
+            if (!supabaseClient) return;
+            await supabaseClient.auth.signOut();
+            afficherToast("Déconnecté avec succès.");
+        }
+
+        function renderAuthHeader() {
+            const container = document.getElementById('auth-header-container');
+            if (!container) return;
+            if (window.utilisateurActuel) {
+                container.innerHTML = `<button onclick="ouvrirPanier()" class="px-3 py-2 bg-sauge-50 hover:bg-sauge-100 border border-sauge-200 text-sauge-800 font-semibold rounded-xl text-xs flex items-center gap-1.5"><i data-lucide="user-check" class="w-4 h-4 text-sauge-600"></i><span class="hidden sm:inline">Mon Compte</span></button>`;
+            } else {
+                container.innerHTML = `<button onclick="ouvrirModalAuth()" class="px-3 py-2 bg-sauge-600 hover:bg-sauge-700 text-white font-semibold rounded-xl text-xs flex items-center gap-1.5 shadow-sm"><i data-lucide="user" class="w-4 h-4"></i><span class="hidden sm:inline">Connexion</span></button>`;
+            }
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        function renderCartAccountSection() {
+            const statusBadge = document.getElementById('cart-account-status-badge');
+            const content = document.getElementById('cart-account-content');
+            if (!statusBadge || !content) return;
+
+            if (window.utilisateurActuel) {
+                statusBadge.textContent = "Connecté";
+                statusBadge.className = "text-[10px] bg-sauge-100 text-sauge-800 px-2 py-0.5 rounded-md font-bold";
+                content.innerHTML = `
+                    <p class="text-creme-800 truncate">Connecté en tant que : <strong>${window.utilisateurActuel.email}</strong></p>
+                    <div class="flex items-center gap-2 pt-1">
+                        <button onclick="ouvrirModalPassword()" class="px-3 py-1.5 bg-white border border-creme-200 rounded-lg text-creme-800 hover:bg-creme-100 font-semibold">Changer mot de passe</button>
+                        <button onclick="deconnexionSupabase()" class="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 font-semibold">Se déconnecter</button>
+                    </div>
+                `;
+            } else {
+                statusBadge.textContent = "Non connecté";
+                statusBadge.className = "text-[10px] bg-ocre-100 text-ocre-800 px-2 py-0.5 rounded-md font-bold";
+                content.innerHTML = `
+                    <p class="text-creme-800">Connectez-vous pour finaliser votre commande et cumuler vos avantages fidélité.</p>
+                    <button onclick="ouvrirModalAuth()" class="mt-1 px-4 py-2 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-xl w-full text-center">Se connecter / S'inscrire</button>
+                `;
+            }
+        }
+
+        window.ouvrirModalPassword = function() { document.getElementById('modal-password').classList.remove('hidden'); document.getElementById('modal-password').classList.add('flex'); }
+        window.fermerModalPassword = function() { document.getElementById('modal-password').classList.add('hidden'); document.getElementById('modal-password').classList.remove('flex'); }
+
+        window.soumettreChangementPassword = async function(event) {
+            event.preventDefault();
+            const newPassword = document.getElementById('new-password-input').value.trim();
+            if (!supabaseClient || !newPassword) return;
+            const { error } = await supabaseClient.auth.updateUser({ password: newPassword });
+            if (error) { afficherToast(error.message, "warning"); }
+            else {
+                afficherToast("Mot de passe mis à jour avec succès !");
+                fermerModalPassword();
+            }
         }
 
         // 1. STYLE DÉDIÉ AUX FONDANTS UNITAIRES
@@ -817,9 +922,9 @@
                 { id: 23, nom: "Cire et Miel", categorie: "Épicés & Cocooning", description: "Nectar de miel brut", icone: "sparkles", couleur: "#fef3c7", style: "classique", etiquette: "Miel Brut", image: "" }
             ],
             plateaux: [
-                { id: 'plat-zen', nom: "Plateau Zen", prix: 19.00, weight: 1200, badge: "Sérénité", stock: 5, style: 'classique', image: "plateau_zen_lpf.jpeg", description: "Retrouvez vous avec ce kit de plateau complet", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration zen", "1 plateau"] },
-                { id: 'plat-noel', nom: "Plateau Noël", prix: 18.00, weight: 1200, badge: "Édition Limitée", stock: 3, style: 'noel', image: "plateau_noel_lpf.jpeg", description: "Faite vivre les fête de fin d'année", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration hivernale", "1 plateau"] },
-                { id: 'plat-naturel', nom: "Plateau Naturel", prix: 17.00, weight: 1200, badge: "", stock: 8, style: 'classique', image: "plateau_nature_lpf.jpeg", description: "Faite parler la nature en vous !", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration naturel", "1 plateau"] }
+                { id: 'plat-zen', nom: "Plateau Zen", prix: 18.00, weight: 1200, badge: "Sérénité", stock: 5, style: 'classique', image: "plateau_zen_lpf.jpeg", description: "Retrouvez vous avec ce kit de plateau complet", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration zen", "1 plateau"] },
+                { id: 'plat-noel', nom: "Plateau Noël", prix: 17.00, weight: 1200, badge: "Édition Limitée", stock: 3, style: 'noel', image: "plateau_noel_lpf.jpeg", description: "Faite vivre les fête de fin d'année", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration hivernale", "1 plateau"] },
+                { id: 'plat-naturel', nom: "Plateau Naturel", prix: 15.00, weight: 1200, badge: "", stock: 8, style: 'classique', image: "plateau_nature_lpf.jpeg", description: "Faite parler la nature en vous !", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration naturel", "1 plateau"] }
             ],
             creations: [
                 { 
