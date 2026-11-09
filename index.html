@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-[#fbf9f5]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Pause Fondante | Fondants Artisanaux, Tablettes & Créations</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <!-- Supabase JS Client SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Palette de couleurs & Typographie -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sauge: {
+                            50: '#f4f6f4',
+                            100: '#e4ebe4',
+                            200: '#c8d6c9',
+                            500: '#849987',
+                            600: '#6b7f71',
+                            700: '#55665a',
+                            800: '#3e4b42',
+                        },
+                        ocre: {
+                            50: '#fdf9f3',
+                            100: '#f8eedc',
+                            200: '#efd9b7',
+                            500: '#d4a373',
+                            600: '#c88b4a',
+                            700: '#a66e35',
+                        },
+                        creme: {
+                            50: '#fbf9f5',
+                            100: '#f5f0e6',
+                            200: '#eadfcf',
+                            800: '#434743',
+                            900: '#2d312e',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f5f0e6; border-radius: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #c8d6c9; border-radius: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #6b7f71; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+    </style>
+</head>
+<body class="h-full font-sans text-creme-900 antialiased flex flex-col selection:bg-ocre-100 selection:text-ocre-700">
+
+    <!-- EN-TÊTE ET NAVIGATION DYNAMIQUE -->
+    <header class="sticky top-0 z-40 bg-[#fbf9f5]/95 backdrop-blur-md border-b border-creme-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+            <button onclick="naviguerVers('home')" class="flex items-center gap-3 group text-left focus:outline-none">
+                <img src="logo_pause_fondante.jpeg" alt="Logo La Pause Fondante" class="w-12 h-12 rounded-full object-cover border-2 border-sauge-200 shadow-sm group-hover:scale-105 transition-transform" onerror="this.onerror=null; this.src='https://placehold.co/100x100/6b7f71/ffffff?text=LPF';">
+                <div>
+                    <span class="font-serif text-xl sm:text-2xl font-bold text-creme-900 block leading-tight tracking-wide">La pause Fondante</span>
+                    <span class="text-[11px] text-sauge-600 font-medium tracking-widest uppercase block">Livraison offerte dès 70 €</span>
+                </div>
+            </button>
+
+            <!-- BOUTONS DE NAVIGATION -->
+            <nav class="hidden md:flex items-center space-x-2 text-sm">
+                <button id="nav-home" onclick="naviguerVers('home')" class="py-2 px-3.5 rounded-xl font-bold flex items-center gap-1.5 transition-all">
+                    <i data-lucide="home" class="w-4 h-4"></i> Accueil
+                </button>
+                <button id="nav-fondants" onclick="naviguerVers('fondants')" class="py-2 px-3.5 rounded-xl font-medium flex items-center gap-1.5 transition-all">
+                    <i data-lucide="box" class="w-4 h-4"></i> Bar à Fondants
+                </button>
+                <button id="nav-tablettes" onclick="naviguerVers('tablettes')" class="py-2 px-3.5 rounded-xl font-medium flex items-center gap-1.5 transition-all">
+                    <i data-lucide="tablet" class="w-4 h-4"></i> Les tablettes
+                </button>
+                <button id="nav-plateaux" onclick="naviguerVers('plateaux')" class="py-2 px-3.5 rounded-xl font-medium flex items-center gap-1.5 transition-all">
+                    <i data-lucide="utensils" class="w-4 h-4"></i> Plateaux
+                </button>
+                <button id="nav-creations" onclick="naviguerVers('creations')" class="py-2 px-3.5 rounded-xl font-medium flex items-center gap-1.5 transition-all">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i> Créations
+                </button>
+                <button id="nav-contact" onclick="defilerVersContact()" class="py-2 px-3.5 text-creme-800 hover:text-sauge-600 font-medium flex items-center gap-1.5 transition-all rounded-xl hover:bg-creme-100">
+                    <i data-lucide="mail" class="w-4 h-4"></i> Contact
+                </button>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <div id="auth-header-container"></div>
+                <button onclick="ouvrirPanier()" class="relative p-2.5 bg-sauge-50 hover:bg-sauge-100 border border-sauge-200 text-sauge-700 rounded-2xl transition-all flex items-center gap-2 group shadow-sm">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <span class="text-xs font-bold px-2 py-0.5 bg-ocre-600 text-white rounded-full min-w-[20px] text-center" id="header-cart-count">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- NAVIGATION MOBILE -->
+        <div class="md:hidden flex items-center justify-around border-t border-creme-200 bg-white/90 py-2 px-2 text-xs overflow-x-auto gap-1">
+            <button id="nav-mob-home" onclick="naviguerVers('home')" class="px-2.5 py-1.5 flex flex-col items-center gap-0.5 shrink-0 transition-all">
+                <i data-lucide="home" class="w-4 h-4"></i> Accueil
+            </button>
+            <button id="nav-mob-fondants" onclick="naviguerVers('fondants')" class="px-2.5 py-1.5 flex flex-col items-center gap-0.5 shrink-0 transition-all">
+                <i data-lucide="box" class="w-4 h-4"></i> Fondants
+            </button>
+            <button id="nav-mob-tablettes" onclick="naviguerVers('tablettes')" class="px-2.5 py-1.5 flex flex-col items-center gap-0.5 shrink-0 transition-all">
+                <i data-lucide="tablet" class="w-4 h-4"></i> Tablettes
+            </button>
+            <button id="nav-mob-plateaux" onclick="naviguerVers('plateaux')" class="px-2.5 py-1.5 flex flex-col items-center gap-0.5 shrink-0 transition-all">
+                <i data-lucide="utensils" class="w-4 h-4"></i> Plateaux
+            </button>
+            <button id="nav-mob-creations" onclick="naviguerVers('creations')" class="px-2.5 py-1.5 flex flex-col items-center gap-0.5 shrink-0 transition-all">
+                <i data-lucide="sparkles" class="w-4 h-4"></i> Créations
+            </button>
+            <button onclick="defilerVersContact()" class="px-2.5 py-1.5 flex flex-col items-center gap-0.5 shrink-0 text-creme-800 font-medium">
+                <i data-lucide="mail" class="w-4 h-4"></i> Contact
+            </button>
+        </div>
+    </header>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 md:py-10 space-y-12">
+
+        <!-- ACCUEIL -->
+        <section id="view-home" class="space-y-12 animate-fade-in">
+            <div class="relative bg-gradient-to-br from-[#2c1810] via-[#4a2518] to-[#2c1810] text-white rounded-3xl p-6 sm:p-10 md:p-12 border-2 border-[#d4af37] shadow-2xl overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-96 h-96 bg-[#d4af37]/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-[#d4af37] text-white text-xs font-bold rounded-full uppercase tracking-widest shadow-md">
+                            ✨ Nouveauté à durée limitée ✨
+                        </span>
+                        <h1 class="font-serif text-3xl sm:text-5xl font-bold tracking-wide text-[#fcf8f2]">
+                            Grand Jeu de Noël <span class="block text-[#d4af37] text-2xl sm:text-3xl mt-1 font-normal">Calendrier de l'Avent de La Pause Fondante 🤍</span>
+                        </h1>
+                        <p class="text-sm sm:text-base text-creme-100 opacity-90 leading-relaxed">
+                            De nombreuses surprises vous attendent dans ce magnifique calendrier ! Participez dès maintenant pour tenter votre chance avant le grand tirage au sort.
+                        </p>
+                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20 max-w-lg mx-auto lg:mx-0 space-y-3 text-left">
+                            <div class="flex items-start gap-3">
+                                <span class="text-xl">🎁</span>
+                                <span class="text-xs sm:text-sm text-white">Passez une commande d'un minimum de <strong>15 €</strong> pendant tout le mois de novembre et tentez votre chance !</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="text-xl">📅</span>
+                                <span class="text-xs sm:text-sm text-white">Tirage au sort : <strong>Lundi 30 Novembre</strong> !</span>
+                            </div>
+                        </div>
+                        <div class="pt-2 flex flex-wrap gap-4 justify-center lg:justify-start">
+                            <button onclick="naviguerVers('fondants')" class="px-8 py-4 bg-[#d4af37] hover:bg-[#bfa130] text-white font-bold rounded-2xl shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 text-sm uppercase tracking-wider">
+                                Découvrir le catalogue & Participer <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="relative group">
+                            <div class="absolute -inset-1 bg-gradient-to-r from-[#d4af37] to-amber-600 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-300"></div>
+                            <img src="jeu_noel-lpf.png" alt="Grand Jeu de Noël" class="relative w-full max-w-sm rounded-2xl object-cover border-2 border-[#d4af37]/60 shadow-2xl" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=500';">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-sauge-100 via-creme-100 to-ocre-50 rounded-3xl p-8 sm:p-12 border border-sauge-200 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-8">
+                <div class="max-w-2xl space-y-6">
+                    <span class="inline-flex items-center gap-2 px-3.5 py-1 bg-white/95 border border-sauge-200 rounded-full text-xs font-bold text-sauge-700 uppercase tracking-widest shadow-sm">
+                        <i data-lucide="truck" class="w-3.5 h-3.5 text-sauge-600"></i> Confection artisanale & Port offert dès 70 €
+                    </span>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-creme-900 leading-tight">
+                        La pause Fondante : Confection artisanale.
+                    </h2>
+                    <p class="text-creme-800 text-sm sm:text-base leading-relaxed">
+                        Créez votre lot sur-mesure parmi nos fragrances, découvrez nos tablettes fondantes, nos coffrets plateaux ou nos créations exclusives.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-4">
+                        <button onclick="naviguerVers('fondants')" class="px-6 py-3.5 bg-sauge-600 hover:bg-sauge-700 text-white font-semibold rounded-2xl shadow-lg transition-all flex items-center gap-2 text-sm">
+                            Bar à Fondants <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="naviguerVers('tablettes')" class="px-6 py-3.5 bg-white hover:bg-creme-50 text-creme-900 border border-creme-200 font-semibold rounded-2xl transition-all flex items-center gap-2 text-sm shadow-sm">
+                            Les tablettes fondantes <i data-lucide="tablet" class="w-4 h-4 text-sauge-600"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="shrink-0 relative">
+                    <img src="logo_pause_fondante.jpeg" alt="La Pause Fondante" class="w-48 sm:w-60 h-48 sm:h-60 rounded-full object-cover border-4 border-white shadow-xl" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300';">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div onclick="naviguerVers('fondants')" class="group cursor-pointer bg-white p-6 rounded-3xl border border-creme-200 hover:border-sauge-500 hover:shadow-xl transition-all flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-sauge-50 text-sauge-600 flex items-center justify-center"><i data-lucide="box" class="w-6 h-6"></i></div>
+                        <h3 class="font-serif text-lg font-bold text-creme-900 group-hover:text-sauge-600">Bar à Fondants</h3>
+                        <p class="text-xs text-creme-800">Découvrez nos fragrances ! Composez vos lots ou faites vous surprendre par nos lots mystère.</p>
+                    </div>
+                    <div class="pt-4 flex items-center text-xs font-bold text-sauge-600 gap-1.5">Composer dès maintenant <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></div>
+                </div>
+                <div onclick="naviguerVers('tablettes')" class="group cursor-pointer bg-white p-6 rounded-3xl border border-creme-200 hover:border-sauge-500 hover:shadow-xl transition-all flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-sauge-50 text-sauge-600 flex items-center justify-center"><i data-lucide="tablet" class="w-6 h-6"></i></div>
+                        <h3 class="font-serif text-lg font-bold text-creme-900 group-hover:text-sauge-600">Les tablettes fondantes</h3>
+                        <p class="text-xs text-creme-800">Nos formats de fondants XXL à petit prix, offre du moment 3 tablettes pour 12 euros.</p>
+                    </div>
+                    <div class="pt-4 flex items-center text-xs font-bold text-sauge-600 gap-1.5">Découvrir <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></div>
+                </div>
+                <div onclick="naviguerVers('plateaux')" class="group cursor-pointer bg-white p-6 rounded-3xl border border-creme-200 hover:border-ocre-500 hover:shadow-xl transition-all flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-ocre-50 text-ocre-600 flex items-center justify-center"><i data-lucide="utensils" class="w-6 h-6"></i></div>
+                        <h3 class="font-serif text-lg font-bold text-creme-900 group-hover:text-ocre-600">Coffrets Plateaux</h3>
+                        <p class="text-xs text-creme-800">Découvrez nos plateaux pour une décoration chic et parfumant toute votre maison.</p>
+                    </div>
+                    <div class="pt-4 flex items-center text-xs font-bold text-ocre-600 gap-1.5">Explorer <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></div>
+                </div>
+                <div onclick="naviguerVers('creations')" class="group cursor-pointer bg-white p-6 rounded-3xl border border-creme-200 hover:border-sauge-500 hover:shadow-xl transition-all flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-sauge-50 text-sauge-600 flex items-center justify-center"><i data-lucide="sparkles" class="w-6 h-6"></i></div>
+                        <h3 class="font-serif text-lg font-bold text-creme-900 group-hover:text-sauge-600">Créations Fondantes</h3>
+                        <p class="text-xs text-creme-800">Toutes nos créations originales, laissez vous tenter.</p>
+                    </div>
+                    <div class="pt-4 flex items-center text-xs font-bold text-sauge-600 gap-1.5">Voir nos créations <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BAR À FONDANTS -->
+        <section id="view-fondants" class="hidden space-y-10 animate-fade-in">
+            <div class="space-y-2 text-center max-w-2xl mx-auto">
+                <span class="text-xs font-bold text-sauge-600 uppercase tracking-widest bg-sauge-50 px-3 py-1 rounded-full border border-sauge-100">Bar à Fondants & Surprises</span>
+                <h2 class="font-serif text-3xl font-bold text-creme-900">Composez Votre Lot ou Tentez le Mystère</h2>
+            </div>
+
+            <!-- BANNIÈRE LOT MYSTÈRE -->
+            <div class="bg-gradient-to-r from-sauge-600 to-sauge-800 text-white rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl overflow-hidden relative">
+                <div class="space-y-3 text-center md:text-left z-10">
+                    <span class="bg-ocre-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Édition Surprise</span>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold">Lot de 20 Fondants Mystère</h3>
+                    <p class="text-xs sm:text-sm text-sauge-100 max-w-xl leading-relaxed">
+                        Un assortiment exclusif de 20 fondants choisis parmi nos senteurs. Le contenu reste entièrement secret jusqu'à l'ouverture de votre colis !
+                    </p>
+                    <div class="pt-2">
+                        <span class="font-serif text-3xl font-bold text-ocre-100 mr-4">8,00 €</span>
+                        <button onclick="ajouterLotMystereAuPanier()" class="mt-2 sm:mt-0 px-6 py-3 bg-white text-sauge-800 font-bold rounded-2xl text-xs uppercase tracking-wider hover:bg-creme-50 transition-all shadow-md inline-flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-ocre-600"></i> Ajouter le Lot Mystère
+                        </button>
+                    </div>
+                </div>
+                <div class="shrink-0 z-10">
+                    <img src="box_mystere_lpf.jpeg" alt="Lot Mystère" class="w-48 sm:w-60 h-48 sm:h-60 rounded-2xl object-cover border-4 border-white/20 shadow-2xl" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=300';">
+                </div>
+            </div>
+
+            <!-- CATALOGUE DES FRAGRANCES -->
+            <div class="bg-white p-6 rounded-3xl border border-creme-200 shadow-sm space-y-4">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="palette" class="w-5 h-5 text-sauge-600"></i>
+                    <h3 class="font-serif text-xl font-bold text-creme-900">Catalogue visuel de nos Fragrances</h3>
+                </div>
+                <div class="overflow-hidden rounded-2xl border border-creme-100">
+                    <img src="parfums_pause_fondante.jpeg" alt="Catalogue" class="w-full h-auto max-h-[500px] object-contain mx-auto bg-[#fdfaf5]" onerror="this.onerror=null; this.style.display='none';">
+                </div>
+            </div>
+
+            <div class="space-y-4 bg-white p-6 rounded-3xl border border-creme-200 shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-sauge-600 text-white flex items-center justify-center font-bold text-sm">1</div>
+                    <h3 class="font-serif text-xl font-bold text-creme-900">Ou choisissez votre format de lot sur-mesure</h3>
+                </div>
+                <div id="formats-container" class="grid grid-cols-2 sm:grid-cols-4 gap-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="flex items-center justify-between flex-wrap gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-sauge-600 text-white flex items-center justify-center font-bold text-sm">2</div>
+                            <h3 class="font-serif text-xl font-bold text-creme-900">Sélectionnez vos fragrances</h3>
+                        </div>
+                        <div class="relative min-w-[220px]">
+                            <input type="text" id="search-parfum" oninput="filtrerParfums()" placeholder="Rechercher une senteur..." class="w-full pl-9 pr-4 py-2 bg-white border border-creme-200 rounded-xl text-xs focus:outline-none focus:border-sauge-500 shadow-sm">
+                            <i data-lucide="search" class="w-4 h-4 text-creme-800 absolute left-3 top-2.5"></i>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 pb-2 border-b border-creme-200" id="categories-fondants-container"></div>
+                    <div id="parfums-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+                </div>
+
+                <div class="lg:col-span-4 sticky top-28 space-y-4">
+                    <div class="bg-white rounded-3xl p-6 border border-creme-200 shadow-lg space-y-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-creme-100">
+                            <h3 class="font-serif text-lg font-bold text-creme-900 flex items-center gap-2">
+                                <i data-lucide="box" class="w-5 h-5 text-sauge-600"></i> Suivi de votre Lot
+                            </h3>
+                            <button onclick="viderParfums()" class="text-xs text-creme-800 hover:text-red-500 underline">Vider</button>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="font-medium text-creme-800" id="fondants-format-label">Format non choisi</span>
+                                <span id="fondants-count-label" class="font-bold text-sauge-600">0 choisi(s)</span>
+                            </div>
+                            <div id="fondants-progress-bg" class="w-full bg-creme-100 h-3 rounded-full overflow-hidden hidden">
+                                <div id="fondants-progress-bar" class="bg-sauge-600 h-full rounded-full transition-all duration-300 w-0"></div>
+                            </div>
+                        </div>
+                        <div id="fondants-summary-list" class="max-h-52 overflow-y-auto space-y-2 py-2 border-t border-b border-creme-100 text-xs custom-scrollbar">
+                            <p class="text-xs text-creme-800 italic text-center py-4">Veuillez d'abord choisir un format.</p>
+                        </div>
+                        <div class="flex justify-between items-center pt-1">
+                            <span class="text-xs font-semibold text-creme-800">Prix du lot</span>
+                            <span id="fondants-subtotal-price" class="font-serif text-xl font-bold text-ocre-600">0,00 €</span>
+                        </div>
+                        <button id="btn-add-lot-to-cart" onclick="ajouterLotAuPanier()" disabled class="w-full py-3.5 bg-creme-200 text-creme-800 font-bold rounded-2xl transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider cursor-not-allowed">
+                            Ajouter le lot au panier <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TABLETTES FONDANTES -->
+        <section id="view-tablettes" class="hidden space-y-8 animate-fade-in">
+            <div class="relative bg-white rounded-3xl border border-creme-200 overflow-hidden shadow-md flex flex-col md:flex-row items-center">
+                <div class="p-6 sm:p-8 space-y-3 max-w-xl">
+                    <span class="text-xs font-bold text-sauge-600 uppercase tracking-widest bg-sauge-50 px-3 py-1 rounded-full border border-sauge-100">Les tablettes fondantes</span>
+                    <h2 class="font-serif text-3xl font-bold text-creme-900">Nos Tablettes aux Parfums Artisanaux</h2>
+                    <p class="text-xs sm:text-sm text-creme-800 leading-relaxed">
+                        Retrouvez l'intégralité de nos senteurs en tablettes sécables (4,50 € l'unité ou <strong>3 achetées = 12,00 €</strong> cumulable, parfums au choix).
+                    </p>
+                </div>
+                <div class="w-full md:w-1/2 h-48 md:h-64 shrink-0">
+                    <img src="tabllette_lpf.jpeg" alt="Tablettes" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500';">
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-3xl border border-creme-200 shadow-sm max-w-xl mx-auto space-y-3 text-center">
+                <div class="flex items-center justify-between text-xs font-bold">
+                    <span class="text-creme-900 flex items-center gap-1.5"><i data-lucide="tag" class="w-4 h-4 text-ocre-600"></i> Offre 3 Tablettes = 12 €</span>
+                    <span id="tablettes-promo-badge" class="text-sauge-700 font-bold">0 / 3 sélectionnée(s)</span>
+                </div>
+                <div class="w-full bg-creme-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-creme-200">
+                    <div id="tablettes-promo-bar" class="bg-gradient-to-r from-sauge-500 to-ocre-500 h-full rounded-full transition-all duration-300 w-0"></div>
+                </div>
+                <p id="tablettes-promo-status" class="text-xs text-creme-800 italic">Ajoutez 3 tablettes (parfums au choix) pour débloquer le prix réduit à 12,00 € !</p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 max-w-4xl mx-auto">
+                <div class="flex flex-wrap gap-2 justify-center" id="categories-tablettes-container"></div>
+                <div class="relative min-w-[240px] w-full sm:w-auto">
+                    <input type="text" id="search-tablette" oninput="filtrerTablettes()" placeholder="Rechercher une tablette..." class="w-full pl-9 pr-4 py-2 bg-white border border-creme-200 rounded-xl text-xs focus:outline-none focus:border-sauge-500 shadow-sm">
+                    <i data-lucide="search" class="w-4 h-4 text-creme-800 absolute left-3 top-2.5"></i>
+                </div>
+            </div>
+
+            <div id="tablettes-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- COFFRETS PLATEAUX -->
+        <section id="view-plateaux" class="hidden space-y-8 animate-fade-in">
+            <div class="space-y-3 text-center max-w-2xl mx-auto">
+                <span class="text-xs font-bold text-ocre-600 uppercase tracking-widest bg-ocre-50 px-3 py-1 rounded-full border border-ocre-100">Centres de Table Rituels</span>
+                <h2 class="font-serif text-3xl font-bold text-creme-900">Coffrets Plateaux Parfumés</h2>
+            </div>
+            <div id="plateaux-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- CRÉATIONS FONDANTES -->
+        <section id="view-creations" class="hidden space-y-8 animate-fade-in">
+            <div class="space-y-3 text-center max-w-2xl mx-auto">
+                <span class="text-xs font-bold text-sauge-700 uppercase tracking-widest bg-sauge-50 px-3 py-1 rounded-full border border-sauge-200">Atelier Exclusif</span>
+                <h2 class="font-serif text-3xl font-bold text-creme-900">Les Créations Fondantes</h2>
+                <p class="text-xs sm:text-sm text-creme-800 leading-relaxed">Découvrez nos pièces originales et créations artisanales uniques.</p>
+            </div>
+            <div id="creations-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto"></div>
+        </section>
+
+    </main>
+
+    <!-- SECTION CONTACT -->
+    <section id="section-contact" class="max-w-7xl w-full mx-auto px-4 sm:px-6 my-12 bg-white rounded-3xl border border-creme-200 p-8 sm:p-12 shadow-sm space-y-8">
+        <div class="max-w-3xl mx-auto text-center space-y-3">
+            <span class="inline-flex items-center gap-2 px-3 py-1 bg-sauge-50 border border-sauge-200 text-sauge-700 text-xs font-bold rounded-full uppercase tracking-widest">
+                <i data-lucide="mail" class="w-3.5 h-3.5 text-sauge-600"></i> Une Question ou une Commande Particulière ?
+            </span>
+            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-creme-900">Contactez La Pause Fondante</h2>
+            <p class="text-xs sm:text-sm text-creme-800 leading-relaxed">
+                Nous sommes à votre écoute pour vous conseiller sur nos senteurs artisanales, vous guider dans le choix de vos coffrets ou répondre à toutes vos demandes.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div class="lg:col-span-5 space-y-4 bg-creme-50 p-6 sm:p-8 rounded-2xl border border-creme-200">
+                <h3 class="font-serif text-xl font-bold text-creme-900 border-b border-creme-200 pb-3">Nos Coordonnées</h3>
+                <div class="space-y-4 text-xs text-creme-800">
+                    <div class="flex items-start gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-sauge-100 text-sauge-700 flex items-center justify-center shrink-0"><i data-lucide="user" class="w-4 h-4"></i></div>
+                        <div><span class="font-bold text-creme-900 block">Vendeur</span><span>Deborah Bovrisse (La Pause Fondante)</span></div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-sauge-100 text-sauge-700 flex items-center justify-center shrink-0"><i data-lucide="map-pin" class="w-4 h-4"></i></div>
+                        <div><span class="font-bold text-creme-900 block">Adresse Professionnelle</span><span>41 rue de la Marne, 59124 Escaudain</span></div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-sauge-100 text-sauge-700 flex items-center justify-center shrink-0"><i data-lucide="mail" class="w-4 h-4"></i></div>
+                        <div><span class="font-bold text-creme-900 block">Adresse E-mail</span><a href="mailto:debstyle-coiffure@hotmail.com" class="text-sauge-700 hover:underline font-semibold">debstyle-coiffure@hotmail.com</a></div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-sauge-100 text-sauge-700 flex items-center justify-center shrink-0"><i data-lucide="phone" class="w-4 h-4"></i></div>
+                        <div><span class="font-bold text-creme-900 block">Téléphone</span><a href="tel:0610707659" class="text-sauge-700 hover:underline">06 10 70 76 59</a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-2xl border border-creme-200 shadow-2xs space-y-4">
+                <h3 class="font-serif text-xl font-bold text-creme-900 border-b border-creme-100 pb-3">Envoyez-nous un Message</h3>
+                <form onsubmit="envoyerMailContactDirect(event)" class="space-y-4 text-xs">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="font-bold text-creme-800 uppercase tracking-wider">Votre Nom</label>
+                            <input type="text" id="contact-nom" required placeholder="Ex: Marie Dupont" class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="font-bold text-creme-800 uppercase tracking-wider">Votre E-mail</label>
+                            <input type="email" id="contact-email" required placeholder="votre.email@exemple.com" class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500">
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="font-bold text-creme-800 uppercase tracking-wider">Sujet du Message</label>
+                        <input type="text" id="contact-sujet" required placeholder="Ex: Question sur la livraison ou les senteurs" class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="font-bold text-creme-800 uppercase tracking-wider">Votre Message</label>
+                        <textarea id="contact-message" rows="4" required placeholder="Écrivez votre message ici..." class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500 custom-scrollbar"></textarea>
+                    </div>
+                    <button type="submit" id="btn-envoyer-contact" class="w-full py-3.5 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 uppercase tracking-wider">
+                        <i data-lucide="send" class="w-4 h-4"></i> Envoyer le Message (Ouvrir l'e-mail)
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-creme-100 border-t border-creme-200 py-8 text-xs text-creme-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+            <div class="flex items-center gap-3">
+                <img src="logo_pause_fondante.jpeg" alt="Logo" class="w-10 h-10 rounded-full object-cover border border-sauge-300" onerror="this.onerror=null; this.src='https://placehold.co/100x100/6b7f71/ffffff?text=LPF';">
+                <div>
+                    <p class="font-serif font-bold text-creme-900 text-sm">La pause Fondante</p>
+                    <p class="text-[11px] mt-0.5">Deborah Bovrisse — SIREN 829 189 083 — Escaudain</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-6 font-semibold">
+                <button onclick="defilerVersContact()" class="hover:text-sauge-700 transition-colors">Contact</button>
+                <button onclick="ouvrirModalCGV()" class="hover:text-sauge-700 transition-colors">Conditions Générales de Vente (CGV)</button>
+                <button onclick="ouvrirModalMentions()" class="hover:text-sauge-700 transition-colors">Mentions Légales</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- DRAWER PANIER -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 hidden transition-opacity duration-300">
+        <div onclick="fermerPanier()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
+        <div class="absolute right-0 top-0 bottom-0 max-w-md w-full bg-white shadow-2xl flex flex-col justify-between z-10">
+            <div class="p-6 border-b border-creme-200 flex items-center justify-between bg-creme-50">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="shopping-bag" class="w-5 h-5 text-sauge-600"></i>
+                    <h3 class="font-serif text-xl font-bold text-creme-900">Votre Panier</h3>
+                </div>
+                <button onclick="fermerPanier()" class="p-1.5 rounded-full hover:bg-creme-200 text-creme-800 transition-colors"><i data-lucide="x"></i></button>
+            </div>
+
+            <div class="flex-grow overflow-y-auto p-6 space-y-4 custom-scrollbar">
+                <div id="cart-account-section" class="bg-sauge-50 border border-sauge-200 p-4 rounded-2xl space-y-3 text-xs">
+                    <div class="flex items-center justify-between font-bold text-sauge-900 border-b border-sauge-200 pb-2">
+                        <span class="flex items-center gap-1.5"><i data-lucide="user" class="w-4 h-4 text-sauge-600"></i> Espace Compte & Sécurité</span>
+                        <span id="cart-account-status-badge" class="text-[10px] bg-ocre-100 text-ocre-800 px-2 py-0.5 rounded-md">Non connecté</span>
+                    </div>
+                    <div id="cart-account-content" class="space-y-2"></div>
+                </div>
+                <div id="free-shipping-progress-container"></div>
+                <div id="cart-drawer-content" class="space-y-3"></div>
+            </div>
+
+            <div class="p-6 border-t border-creme-200 bg-creme-50 space-y-3">
+                <div class="space-y-1.5 text-xs text-creme-800 border-b border-creme-200 pb-3">
+                    <div class="flex justify-between">
+                        <span>Sous-total articles</span>
+                        <span id="cart-subtotal-articles" class="font-semibold">0,00 €</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="flex items-center gap-1">Frais de livraison <i data-lucide="help-circle" class="w-3.5 h-3.5 text-creme-800"></i></span>
+                        <span id="cart-shipping-fee" class="font-semibold text-sauge-700 italic">À calculer après</span>
+                    </div>
+                </div>
+                <div class="flex justify-between items-end">
+                    <div>
+                        <span class="text-[11px] text-creme-800 uppercase tracking-wider block font-semibold">Total Hors Livraison</span>
+                        <span id="cart-drawer-total" class="font-serif text-3xl font-bold text-ocre-600">0,00 €</span>
+                    </div>
+                    <button onclick="viderToutLePanier()" class="text-xs text-creme-800 hover:text-red-500 underline">Vider le panier</button>
+                </div>
+                <button onclick="ouvrirModalPaiement()" class="w-full py-4 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wider">
+                    Valider la commande <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+                <button onclick="fermerPanier()" class="w-full py-3 bg-white hover:bg-creme-100 text-creme-800 font-bold rounded-2xl transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider border border-creme-200 shadow-sm">
+                    <i data-lucide="arrow-left" class="w-4 h-4 text-sauge-600"></i> Poursuivre vos achats
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALES -->
+    <div id="modal-password" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+        <div onclick="fermerModalPassword()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
+        <div class="relative bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl z-10 space-y-5 animate-fade-in">
+            <button onclick="fermerModalPassword()" class="absolute top-4 right-4 text-creme-800 hover:text-creme-900"><i data-lucide="x"></i></button>
+            <div class="text-center space-y-1"><h3 class="font-serif text-2xl font-bold text-creme-900">Modifier votre mot de passe</h3></div>
+            <form onsubmit="soumettreChangementPassword(event)" class="space-y-4 text-xs">
+                <div class="space-y-1"><label class="font-bold text-creme-800 uppercase tracking-wider">Nouveau mot de passe</label><input type="password" id="new-password-input" required minlength="6" placeholder="••••••••" class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500"></div>
+                <button type="submit" class="w-full py-3.5 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-2xl shadow-md transition-all uppercase tracking-wider">Mettre à jour</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-cgv" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+        <div onclick="fermerModalCGV()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
+        <div class="relative bg-white rounded-3xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl z-10 space-y-4 max-h-[85vh] flex flex-col animate-fade-in">
+            <div class="flex items-center justify-between border-b border-creme-200 pb-4"><h3 class="font-serif text-xl font-bold text-creme-900">Conditions Générales de Vente (CGV)</h3><button onclick="fermerModalCGV()" class="p-1 rounded-full hover:bg-creme-100 text-creme-800"><i data-lucide="x"></i></button></div>
+            <div class="flex-grow overflow-y-auto space-y-4 text-xs text-creme-800 leading-relaxed custom-scrollbar pr-3"><p>Deborah Bovrisse – La Pause Fondante – EI micro-entrepreneur. SIREN : 829 189 083. 41 rue de la Marne, 59124 Escaudain.</p></div>
+        </div>
+    </div>
+
+    <div id="modal-mentions" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+        <div onclick="fermerModalMentions()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
+        <div class="relative bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl z-10 space-y-4 max-h-[85vh] flex flex-col animate-fade-in">
+            <div class="flex items-center justify-between border-b border-creme-200 pb-4"><h3 class="font-serif text-xl font-bold text-creme-900">Mentions Légales</h3><button onclick="fermerModalMentions()" class="p-1 rounded-full hover:bg-creme-100 text-creme-800"><i data-lucide="x"></i></button></div>
+            <div class="flex-grow overflow-y-auto space-y-3 text-xs text-creme-800 leading-relaxed"><p>Éditeur : Deborah Bovrisse (La Pause Fondante), SIREN 829 189 083. Hébergement : Vercel Inc.</p></div>
+        </div>
+    </div>
+
+    <div id="modal-auth" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+        <div onclick="fermerModalAuth()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
+        <div class="relative bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl z-10 space-y-6 animate-fade-in">
+            <button onclick="fermerModalAuth()" class="absolute top-4 right-4 text-creme-800 hover:text-creme-900"><i data-lucide="x"></i></button>
+            <div class="text-center space-y-2"><h3 id="auth-modal-title" class="font-serif text-2xl font-bold text-creme-900">Connexion Compte</h3></div>
+            <form id="auth-form" onsubmit="soumettreAuthSupabase(event)" class="space-y-4">
+                <div class="space-y-1"><label class="text-xs font-bold text-creme-800 uppercase tracking-wider">Adresse Email</label><input type="email" id="auth-email" required placeholder="votre.email@exemple.com" class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl text-xs focus:outline-none focus:border-sauge-500"></div>
+                <div class="space-y-1"><label class="text-xs font-bold text-creme-800 uppercase tracking-wider">Mot de passe</label><input type="password" id="auth-password" required placeholder="••••••••" class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl text-xs focus:outline-none focus:border-sauge-500"></div>
+                <button type="submit" id="auth-submit-btn" class="w-full py-3.5 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-2xl shadow-md transition-all text-xs uppercase tracking-wider">Se connecter</button>
+            </form>
+            <div class="text-center pt-2 border-t border-creme-100"><button type="button" onclick="basculerModeAuth()" id="auth-switch-btn" class="text-xs text-sauge-700 hover:underline font-semibold">Créer un compte</button></div>
+        </div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- SCRIPTS CONFIGURATION & STYLES DISTINCTS -->
+    <script>
+        const SUPABASE_URL = "https://ewmdyjcjxwibhfjejhwe.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_esIheB1MfmllTZQWBivCWA_QFFuWkX8";
+
+        let supabaseClient = null;
+        if (window.supabase && typeof window.supabase.createClient === 'function') {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+
+        window.utilisateurActuel = null;
+        let modeInscription = false;
+
+        if (supabaseClient) {
+            supabaseClient.auth.onAuthStateChange((event, session) => {
+                window.utilisateurActuel = session ? session.user : null;
+                renderAuthHeader();
+                renderCartAccountSection();
+                chargerPanierDepuisStorage();
+            });
+        }
+
+        // 1. STYLE DÉDIÉ AUX FONDANTS UNITAIRES
+        function obtenirStyleFondant(styleNom) {
+            switch(styleNom) {
+                case 'noel':
+                    return {
+                        card: "bg-gradient-to-br from-[#2c1810] via-[#4a2518] to-[#2c1810] text-white rounded-3xl border-2 border-[#d4af37] shadow-xl overflow-hidden p-5 transition-all relative",
+                        title: "text-[#fcf8f2]",
+                        desc: "text-creme-100 opacity-90",
+                        etiquette: "bg-[#d4af37] text-white",
+                        border: "border-white/10",
+                        counterBg: "bg-white/10 border-white/20 text-white",
+                        btnMinus: "bg-white/20 text-white hover:bg-white/30",
+                        btnPlus: "bg-[#d4af37] text-white hover:bg-[#bfa130]"
+                    };
+                case 'halloween':
+                    return {
+                        card: "bg-gradient-to-br from-[#1c1410] via-[#3d1c02] to-[#1c1410] text-white rounded-3xl border-2 border-orange-500 shadow-xl overflow-hidden p-5 transition-all relative",
+                        title: "text-orange-100",
+                        desc: "text-orange-200/80",
+                        etiquette: "bg-orange-600 text-white",
+                        border: "border-orange-900/40",
+                        counterBg: "bg-orange-950/50 border-orange-500/30 text-orange-100",
+                        btnMinus: "bg-orange-900/50 text-orange-200 hover:bg-orange-900",
+                        btnPlus: "bg-orange-600 text-white hover:bg-orange-700"
+                    };
+                case 'paques':
+                    return {
+                        card: "bg-gradient-to-br from-yellow-50 via-green-50 to-emerald-50 text-creme-900 rounded-3xl border-2 border-emerald-300 shadow-xl overflow-hidden p-5 transition-all relative",
+                        title: "text-emerald-900",
+                        desc: "text-emerald-800/80",
+                        etiquette: "bg-emerald-600 text-white",
+                        border: "border-emerald-200",
+                        counterBg: "bg-white/80 border-emerald-200 text-emerald-900",
+                        btnMinus: "bg-emerald-100 text-emerald-800 hover:bg-emerald-200",
+                        btnPlus: "bg-emerald-600 text-white hover:bg-emerald-700"
+                    };
+                case 'st-valentin':
+                    return {
+                        card: "bg-gradient-to-br from-rose-50 via-red-50 to-pink-100 text-creme-900 rounded-3xl border-2 border-rose-300 shadow-xl overflow-hidden p-5 transition-all relative",
+                        title: "text-rose-950",
+                        desc: "text-rose-900/80",
+                        etiquette: "bg-rose-600 text-white",
+                        border: "border-rose-200",
+                        counterBg: "bg-white/80 border-rose-200 text-rose-950",
+                        btnMinus: "bg-rose-100 text-rose-800 hover:bg-rose-200",
+                        btnPlus: "bg-rose-600 text-white hover:bg-rose-700"
+                    };
+                case 'rose-bleu':
+                    return {
+                        card: "bg-gradient-to-br from-pink-50 via-sky-50 to-indigo-50 text-creme-900 rounded-3xl border-2 border-sky-300 shadow-xl overflow-hidden p-5 transition-all relative",
+                        title: "text-indigo-950",
+                        desc: "text-slate-700",
+                        etiquette: "bg-indigo-500 text-white",
+                        border: "border-sky-200",
+                        counterBg: "bg-white/80 border-sky-200 text-indigo-950",
+                        btnMinus: "bg-sky-100 text-sky-800 hover:bg-sky-200",
+                        btnPlus: "bg-indigo-500 text-white hover:bg-indigo-600"
+                    };
+                case 'ete':
+                    return {
+                        card: "bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-100 text-creme-900 rounded-3xl border-2 border-amber-300 shadow-xl overflow-hidden p-5 transition-all relative",
+                        title: "text-amber-950",
+                        desc: "text-amber-900/80",
+                        etiquette: "bg-amber-600 text-white",
+                        border: "border-amber-200",
+                        counterBg: "bg-white/80 border-amber-200 text-amber-950",
+                        btnMinus: "bg-amber-100 text-amber-800 hover:bg-amber-200",
+                        btnPlus: "bg-amber-600 text-white hover:bg-amber-700"
+                    };
+                case 'poudreux':
+                    return {
+                        card: "bg-gradient-to-br from-[#f7f4f2] via-[#efeae6] to-[#e8dfdb] text-creme-900 rounded-3xl border-2 border-[#d9cecb] shadow-lg overflow-hidden p-5 transition-all relative",
+                        title: "text-[#4a3f3c]",
+                        desc: "text-[#6e615e]",
+                        etiquette: "bg-[#8c7a75] text-white",
+                        border: "border-[#d9cecb]",
+                        counterBg: "bg-white/70 border-[#d9cecb] text-[#4a3f3c]",
+                        btnMinus: "bg-[#e8dfdb] text-[#4a3f3c] hover:bg-[#d9cecb]",
+                        btnPlus: "bg-[#8c7a75] text-white hover:bg-[#73625d]"
+                    };
+                default: // classique
+                    return {
+                        card: "bg-white rounded-3xl border border-creme-200 hover:border-sauge-300 shadow-sm overflow-hidden p-5 transition-all relative",
+                        title: "text-creme-900",
+                        desc: "text-creme-800",
+                        etiquette: "bg-sauge-50 text-sauge-700 border border-sauge-100",
+                        border: "border-creme-100",
+                        counterBg: "bg-creme-50 border-creme-200 text-creme-900",
+                        btnMinus: "bg-white text-creme-900 hover:bg-creme-100 border border-creme-200",
+                        btnPlus: "bg-sauge-600 text-white hover:bg-sauge-700"
+                    };
+            }
+        }
+
+        // 2. STYLE DÉDIÉ AUX TABLETTES (Skin distinct des fondants)
+        function obtenirStyleTablette(styleNom) {
+            switch(styleNom) {
+                case 'noel':
+                    return {
+                        card: "bg-[#1a0f0a] text-white rounded-3xl border-2 border-[#d4af37] shadow-2xl overflow-hidden p-6 transition-all relative flex flex-col justify-between",
+                        badge: "bg-[#d4af37] text-white",
+                        title: "text-[#fcf8f2]",
+                        desc: "text-creme-100",
+                        etiquette: "bg-[#d4af37]/20 text-[#d4af37] border border-[#d4af37]/40",
+                        border: "border-white/10",
+                        btn: "bg-[#d4af37] hover:bg-[#bfa130] text-white shadow-xl"
+                    };
+                case 'halloween':
+                    return {
+                        card: "bg-[#120b08] text-white rounded-3xl border-2 border-orange-600 shadow-2xl overflow-hidden p-6 transition-all relative flex flex-col justify-between",
+                        badge: "bg-orange-600 text-white",
+                        title: "text-orange-100",
+                        desc: "text-orange-200/80",
+                        etiquette: "bg-orange-950 text-orange-400 border border-orange-500/30",
+                        border: "border-orange-900/40",
+                        btn: "bg-orange-600 hover:bg-orange-700 text-white shadow-xl"
+                    };
+                case 'paques':
+                    return {
+                        card: "bg-[#fefce8] text-creme-900 rounded-3xl border-2 border-emerald-400 shadow-xl overflow-hidden p-6 transition-all relative flex flex-col justify-between",
+                        badge: "bg-emerald-600 text-white",
+                        title: "text-emerald-950",
+                        desc: "text-emerald-900/80",
+                        etiquette: "bg-emerald-100 text-emerald-800 border border-emerald-200",
+                        border: "border-emerald-200",
+                        btn: "bg-emerald-600 hover:bg-emerald-700 text-white shadow-md"
+                    };
+                case 'st-valentin':
+                    return {
+                        card: "bg-[#fff1f2] text-creme-900 rounded-3xl border-2 border-rose-400 shadow-xl overflow-hidden p-6 transition-all relative flex flex-col justify-between",
+                        badge: "bg-rose-600 text-white",
+                        title: "text-rose-950",
+                        desc: "text-rose-900/80",
+                        etiquette: "bg-rose-100 text-rose-800 border border-rose-200",
+                        border: "border-rose-200",
+                        btn: "bg-rose-600 hover:bg-rose-700 text-white shadow-md"
+                    };
+                case 'rose-bleu':
+                    return {
+                        card: "bg-gradient-to-r from-pink-50 to-sky-50 text-creme-900 rounded-3xl border-2 border-sky-400 shadow-xl overflow-hidden p-6 transition-all relative flex flex-col justify-between",
+                        badge: "bg-indigo-500 text-white",
+                        title: "text-indigo-950",
+                        desc: "text-slate-700",
+                        etiquette: "bg-sky-100 text-sky-800 border border-sky-200",
+                        border: "border-sky-200",
+                        btn: "bg-indigo-500 hover:bg-indigo-600 text-white shadow-md"
+                    };
+                case 'ete':
+                    return {
+                        card: "bg-gradient-to-br from-amber-50 to-orange-100 text-creme-900 rounded-3xl border-2 border-amber-400 shadow-xl overflow-hidden p-6 transition-all relative flex flex-col justify-between",
+                        badge: "bg-amber-600 text-white",
+                        title: "text-amber-950",
+                        desc: "text-amber-900/80",
+                        etiquette: "bg-amber-100 text-amber-800 border border-amber-200",
+                        border: "border-amber-200",
+                        btn: "bg-amber-600 hover:bg-amber-700 text-white shadow-md"
+                    };
+                case 'poudreux':
+                    return {
+                        card: "bg-[#f2ece9] text-creme-900 rounded-3xl border-2 border-[#c9b8b3] shadow-lg overflow-hidden p-6 transition-all relative flex flex-col justify-between",
+                        badge: "bg-[#8c7a75] text-white",
+                        title: "text-[#4a3f3c]",
+                        desc: "text-[#6e615e]",
+                        etiquette: "bg-[#e2d8d5] text-[#5c4e4a] border border-[#c9b8b3]",
+                        border: "border-[#c9b8b3]",
+                        btn: "bg-[#8c7a75] hover:bg-[#73625d] text-white shadow-md"
+                    };
+                default: // classique
+                    return {
+                        card: "bg-white rounded-3xl border border-creme-200 hover:border-sauge-500 hover:shadow-xl transition-all flex flex-col justify-between p-6 relative shadow-sm",
+                        badge: "bg-sauge-700 text-white",
+                        title: "text-creme-900",
+                        desc: "text-creme-800",
+                        etiquette: "bg-sauge-50 text-sauge-700 border border-sauge-100",
+                        border: "border-creme-100",
+                        btn: "bg-sauge-600 hover:bg-sauge-700 text-white shadow-md"
+                    };
+            }
+        }
+
+        const CONFIG = {
+            nomBoutique: "La pause Fondante",
+            seuilFraisDePortGratuit: 70.00,
+            lots: [
+                { id: 'unite', nom: "À l'unité", description: "0,50 € / pièce", capacity: null, prix: null },
+                { id: 'lot12', nom: "Lot de 12", description: "Format Découverte", capacity: 12, prix: 5.00 },
+                { id: 'lot25', nom: "Lot de 25", description: "Le choix populaire", capacity: 25, prix: 10.00, badge: "Populaire" },
+                { id: 'lot40', nom: "Lot de 40", description: "Grand assortiment", capacity: 40, prix: 15.00, badge: "Meilleur Prix" }
+            ],
+            prixUnitaire: 0.50,
+            categoriesParfums: ["Toutes", "Gourmands", "Fleuris", "Frais & Propres", "Épicés & Cocooning", "Fruités"],
+            
+            // CONFIGURATION DES PARFUMS (Tu peux changer le 'style', l' 'etiquette' ou l' 'image' unitairement)
+            parfums: [
+                { id: 1, nom: "Citrouille vanillée", categorie: "Gourmands", description: "Douceur de citrouille et vanille", icone: "sparkles", couleur: "#fef3c7", style: "classique", etiquette: "", image: "" },
+                { id: 2, nom: "Orangette", categorie: "Gourmands", description: "Orange confite et cacao", icone: "cookie", couleur: "#fed7aa", style: "classique", etiquette: "Gourmand", image: "" },
+                { id: 3, nom: "Fleur de coton", categorie: "Frais & Propres", description: "Musc blanc et lin pur", icone: "cloud", couleur: "#e8ece9", style: "classique", etiquette: "Doux & Pur", image: "" },
+                { id: 4, nom: "Litchi épicé", categorie: "Fruités", description: "Litchi et épices douces", icone: "sun", couleur: "#ffe4e6", style: "classique", etiquette: "Exotique", image: "" },
+                { id: 5, nom: "Caramel", categorie: "Gourmands", description: "Caramel au beurre fondu", icone: "coffee", couleur: "#fde68a", style: "classique", etiquette: "Gourmand", image: "" },
+                { id: 6, nom: "Pomme Cannelle", categorie: "Épicés & Cocooning", description: "Pomme cuite et cannelle", icone: "apple", couleur: "#fee2e2", style: "classique", etiquette: "Senteur Hiver", image: "" },
+                { id: 7, nom: "Coco et Vanille", categorie: "Gourmands", description: "Noix de coco et vanille", icone: "sun", couleur: "#fef3c7", style: "classique", etiquette: "Solaire", image: "" },
+                { id: 8, nom: "Lavande", categorie: "Fleuris", description: "Champs de lavande de Provence", icone: "flower", bestSeller: true, couleur: "#f3e8ff", style: "classique", etiquette: "Relaxant", image: "" },
+                { id: 9, nom: "Cerise Noire Explosive", categorie: "Fruités", description: "Nectar de cerises mûres", icone: "heart", bestSeller: true, couleur: "#ffe4e6", style: "classique", etiquette: "Romantique", image: "" },
+                { id: 10, nom: "Adoucissant", categorie: "Frais & Propres", description: "Linge propre et frais", icone: "wind", bestSeller: true, couleur: "#e0f2fe", style: "classique", etiquette: "Fraîcheur", image: "" },
+                { id: 11, nom: "Bonbon Démoniaque", categorie: "Fruités", description: "Friandises acidulées", icone: "zap", bestSeller: true, couleur: "#fce7f3", style: "classique", etiquette: "Populaire", image: "" },
+                { id: 12, nom: "Menthe Poivrée", categorie: "Frais & Propres", description: "Brise rafraîchissante", icone: "leaf", couleur: "#dcfce7", style: "classique", etiquette: "Frais", image: "" },
+                { id: 13, nom: "Chocolat", categorie: "Gourmands", description: "Chocolat chaud artisanal", icone: "cookie", couleur: "#fed7aa", style: "classique", etiquette: "Gourmand", image: "" },
+                { id: 14, nom: "Épices de Noël", categorie: "Épicés & Cocooning", description: "Cannelle, girofle et anis", icone: "sparkles", couleur: "#ffedd5", style: "classique", etiquette: "Édition Noël", image: "" },
+                { id: 15, nom: "Cannelle", categorie: "Épicés & Cocooning", description: "Chaleur boisée de cannelle", icone: "flame", couleur: "#ffedd5", style: "classique", etiquette: "Chaleureux", image: "" },
+                { id: 16, nom: "Balade Provençale", categorie: "Fleuris", description: "Thym et romarin du Sud", icone: "sun", bestSeller: true, couleur: "#dcfce7", style: "classique", etiquette: "Provence", image: "" },
+                { id: 17, nom: "Abricot Romarin", categorie: "Fruités", description: "Abricot et romarin sauvage", icone: "leaf", couleur: "#ffedd5", style: "classique", etiquette: "Original", image: "" },
+                { id: 18, nom: "Vanille", categorie: "Gourmands", description: "Gousse de vanille pure", icone: "heart", couleur: "#fef3c7", style: "classique", etiquette: "Intemporel", image: "" },
+                { id: 19, nom: "Pudding", categorie: "Gourmands", description: "Dessert moelleux", icone: "coffee", couleur: "#fde68a", style: "classique", etiquette: "Gourmand", image: "" },
+                { id: 20, nom: "Agrumes", categorie: "Frais & Propres", description: "Citron et orange douce", icone: "zap", couleur: "#fef9c3", style: "classique", etiquette: "Vitaminé", image: "" },
+                { id: 21, nom: "Champagne", categorie: "Fleuris", description: "Notes effervescentes", icone: "sparkles", couleur: "#fef9c3", style: "classique", etiquette: "Fête", image: "" },
+                { id: 22, nom: "Sirop d'érable", categorie: "Gourmands", description: "Sirop doré canadien", icone: "coffee", couleur: "#fde68a", style: "classique", etiquette: "Gourmand", image: "" },
+                { id: 23, nom: "Cire et Miel", categorie: "Épicés & Cocooning", description: "Nectar de miel brut", icone: "sparkles", couleur: "#fef3c7", style: "classique", etiquette: "Miel Brut", image: "" }
+            ],
+            plateaux: [
+                { id: 'plat-zen', nom: "Plateau Zen", prix: 19.00, weight: 1200, badge: "Sérénité", stock: 5, style: 'classique', image: "plateau_zen_lpf.jpeg", description: "Retrouvez vous avec ce kit de plateau complet", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration zen", "1 plateau"] },
+                { id: 'plat-noel', nom: "Plateau Noël", prix: 18.00, weight: 1200, badge: "Édition Limitée", stock: 3, style: 'noel', image: "plateau_noel_lpf.jpeg", description: "Faite vivre les fête de fin d'année", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration hivernale", "1 plateau"] },
+                { id: 'plat-naturel', nom: "Plateau Naturel", prix: 17.00, weight: 1200, badge: "", stock: 8, style: 'classique', image: "plateau_nature_lpf.jpeg", description: "Faite parler la nature en vous !", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration naturel", "1 plateau"] }
+            ],
+            creations: [
+                { 
+                    id: 'bm-noel', 
+                    type: 'boite_musicale', 
+                    nom: "BOÎTE MUSICALE DE NOËL 🎄✨", 
+                    prix: 7.00, 
+                    weight: 350, 
+                    badge: "Édition Limitée", 
+                    stock: 4,
+                    style: 'noel',
+                    image: "boite_musique_noel.png",
+                    fallbackImage: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=500",
+                    description: "Une petite boîte pleine de magie qui renferme 5 fondants parfumés + une boîte musicale !",
+                    elements: ["5 fondants parfumés", "Boîte musicale mécanique de Noël"] 
+                },
+                {   
+                    id: 'pot',
+                    type: 'pot',
+                    nom: "Bouquet de fondants",
+                    prix: 10.00,
+                    badge: "",
+                    stock: 6,
+                    style: 'classique',
+                    weight: 150,
+                    image: "pot_lpf.png",
+                    fallbackImage: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=500",
+                    description: "Joli petit bouquet de fondants parfumés pour votre intérieur.",
+                    elements: ["4 fondants + 1 gros fondant", "Fragrance : épice de noël"] 
+                }
+            ]
+        };
+
+        let activeView = 'home';
+        let selectedFormat = null;
+        let selectedParfums = {};
+        let selectedCategoryFilter = "Toutes";
+        let selectedTablettesCategoryFilter = "Toutes";
+        let cart = [];
+
+        function getCartStorageKey() { return 'lpf_cart'; }
+        function sauvegarderPanierDansStorage() { try { localStorage.setItem(getCartStorageKey(), JSON.stringify(cart)); } catch (e) {} }
+        function chargerPanierDepuisStorage() {
+            try {
+                const stored = localStorage.getItem(getCartStorageKey());
+                cart = stored ? JSON.parse(stored) : [];
+            } catch (e) { cart = []; }
+            updateCartUI();
+        }
+
+        window.onload = function() {
+            choisirFormat('unite');
+            if(window.renderAuthHeader) window.renderAuthHeader();
+            if(window.renderCartAccountSection) window.renderCartAccountSection();
+            renderParfumCategoriesFilter();
+            renderParfumsGrid();
+            renderTablettesCategoriesFilter();
+            renderTablettesGrid();
+            renderPlateauxGrid();
+            renderCreationsGrid();
+            naviguerVers('home');
+            chargerPanierDepuisStorage();
+            if (window.lucide) window.lucide.createIcons();
+        };
+
+        window.defilerVersContact = function() {
+            const sec = document.getElementById('section-contact');
+            if (sec) sec.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.naviguerVers = function(viewId) {
+            activeView = viewId;
+            const views = ['home', 'fondants', 'tablettes', 'plateaux', 'creations'];
+            views.forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                const navDesk = document.getElementById(`nav-${v}`);
+                const navMob = document.getElementById(`nav-mob-${v}`);
+                if (v === viewId) {
+                    if (el) el.classList.remove('hidden');
+                    if (navDesk) navDesk.className = "py-2 px-3.5 bg-sauge-100 text-sauge-800 font-bold rounded-xl flex items-center gap-1.5 transition-all border border-sauge-300 shadow-sm";
+                    if (navMob) navMob.className = "px-3 py-1.5 bg-sauge-100 text-sauge-800 font-bold rounded-xl flex flex-col items-center gap-0.5 shrink-0 transition-all border border-sauge-300";
+                } else {
+                    if (el) el.classList.add('hidden');
+                    if (navDesk) navDesk.className = "py-2 px-3.5 text-creme-800 hover:text-sauge-600 font-medium flex items-center gap-1.5 transition-all rounded-xl hover:bg-creme-100";
+                    if (navMob) navMob.className = "px-2.5 py-1.5 text-creme-800 font-medium flex flex-col items-center gap-0.5 shrink-0 transition-all";
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        function renderFormats() {
+            const container = document.getElementById('formats-container');
+            if(!container) return;
+            container.innerHTML = '';
+            CONFIG.lots.forEach(lot => {
+                const isSelected = selectedFormat && selectedFormat.id === lot.id;
+                let priceText = lot.capacity ? `${lot.prix.toFixed(2).replace('.', ',')} €` : `${CONFIG.prixUnitaire.toFixed(2).replace('.', ',')} € / u`;
+                const card = document.createElement('div');
+                card.onclick = () => choisirFormat(lot.id);
+                card.className = `cursor-pointer p-4 rounded-2xl border-2 transition-all relative flex flex-col justify-between ${isSelected ? 'border-sauge-600 bg-sauge-50/50 shadow-md scale-[1.02]' : 'border-creme-200 bg-white hover:border-sauge-300'}`;
+                card.innerHTML = `
+                    ${lot.badge ? `<span class="absolute -top-2.5 right-3 bg-ocre-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">${lot.badge}</span>` : ''}
+                    <div>
+                        <h4 class="font-serif font-bold text-sm text-creme-900">${lot.nom}</h4>
+                        <p class="text-[11px] text-creme-800 mt-0.5">${lot.description}</p>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-creme-100 flex items-center justify-between">
+                        <span class="text-xs font-bold text-ocre-600">${priceText}</span>
+                        <div class="w-4 h-4 rounded-full border border-sauge-600 flex items-center justify-center ${isSelected ? 'bg-sauge-600' : ''}">
+                            ${isSelected ? '<i data-lucide="check" class="w-3 h-3 text-white"></i>' : ''}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        function choisirFormat(formatId) {
+            selectedFormat = CONFIG.lots.find(l => l.id === formatId);
+            selectedParfums = {};
+            renderFormats();
+            updateFondantsSummary();
+            renderParfumsGrid();
+        }
+
+        function renderParfumCategoriesFilter() {
+            const container = document.getElementById('categories-fondants-container');
+            if(!container) return;
+            container.innerHTML = '';
+            CONFIG.categoriesParfums.forEach(cat => {
+                const isSelected = selectedCategoryFilter === cat;
+                const btn = document.createElement('button');
+                btn.onclick = () => { selectedCategoryFilter = cat; renderParfumCategoriesFilter(); renderParfumsGrid(); };
+                btn.className = `px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${isSelected ? 'bg-sauge-600 text-white shadow-sm' : 'bg-white text-creme-800 border border-creme-200 hover:bg-creme-150'}`;
+                btn.textContent = cat;
+                container.appendChild(btn);
+            });
+        }
+
+        window.filtrerParfums = function() { renderParfumsGrid(); }
+
+        // AFFICHAGE DES FONDANTS AVEC LEUR ÉTIQUETTE ET LEUR IMAGE EN HAUT À DROITE
+        function renderParfumsGrid() {
+            const container = document.getElementById('parfums-grid');
+            if(!container) return;
+            container.innerHTML = '';
+            const searchValue = (document.getElementById('search-parfum')?.value || '').toLowerCase();
+
+            const parfumsFiltres = CONFIG.parfums.filter(p => {
+                return (selectedCategoryFilter === "Toutes" || p.categorie === selectedCategoryFilter) &&
+                       (p.nom.toLowerCase().includes(searchValue) || p.description.toLowerCase().includes(searchValue));
+            });
+
+            parfumsFiltres.forEach(p => {
+                const count = selectedParfums[p.id] || 0;
+                const styleNom = p.style || 'classique';
+                const s = obtenirStyleFondant(styleNom);
+
+                const card = document.createElement('div');
+                card.className = s.card;
+                
+                // Image optionnelle en haut à droite
+                const imageHTML = (p.image && p.image.trim() !== "") 
+                    ? `<div class="absolute top-4 right-4 w-12 h-12 rounded-xl overflow-hidden shadow-sm border border-white/40"><img src="${p.image}" alt="${p.nom}" class="w-full h-full object-cover"></div>`
+                    : '';
+
+                // Étiquette personnalisable
+                const etiquetteHTML = (p.etiquette && p.etiquette.trim() !== "")
+                    ? `<span class="text-[10px] font-bold px-2.5 py-1 rounded-md ${s.etiquette}">${p.etiquette}</span>`
+                    : `<span class="text-[10px] font-semibold px-2.5 py-1 rounded-md ${s.etiquette}">${p.categorie}</span>`;
+
+                card.innerHTML = `
+                    ${imageHTML}
+                    <div class="space-y-1.5 pr-12">
+                        <div class="flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0" style="background-color: ${p.couleur || '#f4f6f4'}">
+                                <i data-lucide="${p.icone || 'sparkles'}" class="w-4 h-4 text-creme-900"></i>
+                            </span>
+                            <h4 class="font-serif font-bold text-sm ${s.title}">${p.nom}</h4>
+                        </div>
+                        <p class="text-[11px] ${s.desc} leading-relaxed">${p.description}</p>
+                    </div>
+
+                    <div class="pt-3 mt-3 border-t ${s.border} flex items-center justify-between">
+                        ${etiquetteHTML}
+                        <div class="flex items-center gap-2 p-1 rounded-xl border ${s.counterBg}">
+                            <button onclick="modifierParfumCount(${p.id}, -1)" class="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs ${s.btnMinus}" ${count === 0 ? 'disabled' : ''}>-</button>
+                            <span class="w-5 text-center font-bold text-xs">${count}</span>
+                            <button onclick="modifierParfumCount(${p.id}, 1)" class="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs ${s.btnPlus}">+</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        window.modifierParfumCount = function(parfumId, delta) {
+            if (!selectedFormat) {
+                afficherToast("Veuillez sélectionner un format de lot d'abord.", "warning");
+                return;
+            }
+            const totalCurrent = Object.values(selectedParfums).reduce((a, b) => a + b, 0);
+            if (delta > 0 && selectedFormat.capacity && totalCurrent >= selectedFormat.capacity) {
+                afficherToast(`Le format ${selectedFormat.nom} est limité à ${selectedFormat.capacity} fondants.`, "warning");
+                return;
+            }
+            const current = selectedParfums[parfumId] || 0;
+            const newCount = current + delta;
+            if (newCount <= 0) delete selectedParfums[parfumId];
+            else selectedParfums[parfumId] = newCount;
+
+            renderParfumsGrid();
+            updateFondantsSummary();
+        }
+
+        window.viderParfums = function() {
+            selectedParfums = {};
+            renderParfumsGrid();
+            updateFondantsSummary();
+        }
+
+        function updateFondantsSummary() {
+            const formatLabel = document.getElementById('fondants-format-label');
+            const countLabel = document.getElementById('fondants-count-label');
+            const progressBg = document.getElementById('fondants-progress-bg');
+            const progressBar = document.getElementById('fondants-progress-bar');
+            const summaryList = document.getElementById('fondants-summary-list');
+            const subtotalPrice = document.getElementById('fondants-subtotal-price');
+            const btnAdd = document.getElementById('btn-add-lot-to-cart');
+            if(!formatLabel) return;
+
+            const totalSelected = Object.values(selectedParfums).reduce((a, b) => a + b, 0);
+
+            if (!selectedFormat) {
+                formatLabel.textContent = "Format non choisi";
+                countLabel.textContent = "0 choisi(s)";
+                progressBg.classList.add('hidden');
+                summaryList.innerHTML = `<p class="text-xs text-creme-800 italic text-center py-4">Veuillez d'abord choisir un format.</p>`;
+                subtotalPrice.textContent = "0,00 €";
+                btnAdd.disabled = true;
+                btnAdd.className = "w-full py-3.5 bg-creme-200 text-creme-800 font-bold rounded-2xl transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider cursor-not-allowed";
+                return;
+            }
+
+            formatLabel.textContent = selectedFormat.nom;
+            let price = selectedFormat.capacity ? selectedFormat.prix : totalSelected * CONFIG.prixUnitaire;
+            subtotalPrice.textContent = price.toFixed(2).replace('.', ',') + " €";
+
+            if (selectedFormat.capacity) {
+                progressBg.classList.remove('hidden');
+                countLabel.textContent = `${totalSelected} / ${selectedFormat.capacity}`;
+                progressBar.style.width = `${Math.min(100, (totalSelected / selectedFormat.capacity) * 100)}%`;
+                if (totalSelected === selectedFormat.capacity) {
+                    btnAdd.disabled = false;
+                    btnAdd.className = "w-full py-3.5 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider cursor-pointer";
+                } else {
+                    btnAdd.disabled = true;
+                    btnAdd.className = "w-full py-3.5 bg-creme-200 text-creme-800 font-bold rounded-2xl transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider cursor-not-allowed";
+                }
+            } else {
+                progressBg.classList.add('hidden');
+                countLabel.textContent = `${totalSelected} choisi(s)`;
+                if (totalSelected > 0) {
+                    btnAdd.disabled = false;
+                    btnAdd.className = "w-full py-3.5 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider cursor-pointer";
+                } else {
+                    btnAdd.disabled = true;
+                    btnAdd.className = "w-full py-3.5 bg-creme-200 text-creme-800 font-bold rounded-2xl transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider cursor-not-allowed";
+                }
+            }
+
+            const parfumIds = Object.keys(selectedParfums);
+            if (parfumIds.length === 0) {
+                summaryList.innerHTML = `<p class="text-xs text-creme-800 italic text-center py-4">Aucune fragrance sélectionnée.</p>`;
+            } else {
+                summaryList.innerHTML = '';
+                parfumIds.forEach(id => {
+                    const p = CONFIG.parfums.find(item => item.id == id);
+                    const qty = selectedParfums[id];
+                    const row = document.createElement('div');
+                    row.className = "flex justify-between items-center bg-creme-50 p-2 rounded-xl text-xs";
+                    row.innerHTML = `<span class="font-medium text-creme-900">${p.nom}</span><span class="font-bold text-sauge-700 bg-white px-2 py-0.5 rounded-md border border-creme-200">x${qty}</span>`;
+                    summaryList.appendChild(row);
+                });
+            }
+        }
+
+        window.ajouterLotAuPanier = function() {
+            if (!selectedFormat) return;
+            const totalSelected = Object.values(selectedParfums).reduce((a, b) => a + b, 0);
+            if (selectedFormat.capacity && totalSelected !== selectedFormat.capacity) return;
+
+            let detailsArr = [];
+            Object.keys(selectedParfums).forEach(id => {
+                const p = CONFIG.parfums.find(item => item.id == id);
+                detailsArr.push(`${selectedParfums[id]}x ${p.nom}`);
+            });
+
+            const lotPrice = selectedFormat.capacity ? selectedFormat.prix : totalSelected * CONFIG.prixUnitaire;
+            cart.push({ id: 'lot-' + Date.now(), type: 'lot', title: `${selectedFormat.nom} (${totalSelected} fondants)`, subtitle: detailsArr.join(', '), price: lotPrice, weight: totalSelected * 10, quantity: 1 });
+            sauvegarderPanierDansStorage();
+            updateCartUI();
+            afficherToast("Lot de fondants ajouté au panier !");
+            viderParfums();
+        }
+
+        window.ajouterLotMystereAuPanier = function() {
+            const existing = cart.find(item => item.type === 'mystere');
+            if (existing) { existing.quantity += 1; }
+            else { cart.push({ id: 'lot-mystere', type: 'mystere', title: "Lot de 20 Fondants Mystère 🎁", subtitle: "Assortiment surprise", price: 8.00, weight: 200, quantity: 1 }); }
+            sauvegarderPanierDansStorage();
+            updateCartUI();
+            afficherToast("Lot Mystère ajouté !");
+        }
+
+        function renderTablettesCategoriesFilter() {
+            const container = document.getElementById('categories-tablettes-container');
+            if(!container) return;
+            container.innerHTML = '';
+            CONFIG.categoriesParfums.forEach(cat => {
+                const isSelected = selectedTablettesCategoryFilter === cat;
+                const btn = document.createElement('button');
+                btn.onclick = () => { selectedTablettesCategoryFilter = cat; renderTablettesCategoriesFilter(); renderTablettesGrid(); };
+                btn.className = `px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${isSelected ? 'bg-sauge-600 text-white shadow-sm' : 'bg-white text-creme-800 border border-creme-200 hover:bg-creme-150'}`;
+                btn.textContent = cat;
+                container.appendChild(btn);
+            });
+        }
+
+        window.filtrerTablettes = function() { renderTablettesGrid(); }
+
+        // AFFICHAGE DES TABLETTES AVEC LEUR PROPRE SKIN ET LEUR ÉTIQUETTE
+        function renderTablettesGrid() {
+            const container = document.getElementById('tablettes-grid');
+            if(!container) return;
+            container.innerHTML = '';
+            const searchValue = (document.getElementById('search-tablette')?.value || '').toLowerCase();
+
+            const tablettesFiltrees = CONFIG.parfums.filter(p => {
+                return (selectedTablettesCategoryFilter === "Toutes" || p.categorie === selectedTablettesCategoryFilter) &&
+                       (p.nom.toLowerCase().includes(searchValue) || p.description.toLowerCase().includes(searchValue));
+            });
+
+            tablettesFiltrees.forEach(p => {
+                const styleNom = p.style || 'classique';
+                const s = obtenirStyleTablette(styleNom);
+
+                const badgeHTML = (p.badge && p.badge.trim() !== "") 
+                    ? `<span class="absolute top-3 left-3 ${s.badge} text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${p.badge}</span>` 
+                    : '';
+
+                // Étiquette spécifique pour les tablettes
+                const etiquetteTabletteHTML = (p.etiquette && p.etiquette.trim() !== "")
+                    ? `<span class="text-[10px] font-bold uppercase tracking-wider ${s.etiquette} px-2.5 py-1 rounded-md">${p.etiquette}</span>`
+                    : `<span class="text-[10px] font-bold uppercase tracking-wider ${s.etiquette} px-2.5 py-1 rounded-md">Tablette Sécable</span>`;
+
+                const card = document.createElement('div');
+                card.className = s.card;
+                card.innerHTML = `
+                    <div>
+                        <div class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm">
+                            <div class="w-full h-full flex items-center justify-center" style="background-color: ${p.couleur || '#f4f6f4'}">
+                                <i data-lucide="${p.icone || 'tablet'}" class="w-16 h-16 opacity-40"></i>
+                            </div>
+                            ${badgeHTML}
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between gap-2">
+                                ${etiquetteTabletteHTML}
+                                <span class="text-xs font-bold ${s.title}">4,50 € / u</span>
+                            </div>
+                            <h3 class="font-serif text-xl font-bold ${s.title}">${p.nom}</h3>
+                            <p class="text-xs ${s.desc} leading-relaxed">${p.description}</p>
+                        </div>
+                    </div>
+                    <div class="pt-4 mt-4 flex items-center justify-between border-t ${s.border}">
+                        <div>
+                            <span class="font-serif text-xl font-bold ${s.title}">4,50 €</span>
+                            <span class="text-[10px] ${s.desc} block opacity-80">Offre 3 = 12 €</span>
+                        </div>
+                        <button onclick="ajouterTabletteAuPanier(${p.id})" class="px-5 py-2.5 ${s.btn} text-xs font-bold rounded-2xl transition-all shadow-md flex items-center gap-1.5 uppercase tracking-wider">
+                            <i data-lucide="shopping-bag" class="w-4 h-4"></i> Ajouter
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            if (window.lucide) window.lucide.createIcons();
+            updateTablettesProgressBar();
+        }
+
+        function updateTablettesProgressBar() {
+            const badge = document.getElementById('tablettes-promo-badge');
+            const bar = document.getElementById('tablettes-promo-bar');
+            const status = document.getElementById('tablettes-promo-status');
+            if (!badge || !bar) return;
+
+            let totalTablettesPanier = 0;
+            cart.forEach(item => { if (item.type === 'tablette') totalTablettesPanier += item.quantity; });
+
+            const etapeActuelle = totalTablettesPanier % 3;
+            if (totalTablettesPanier === 0) {
+                badge.textContent = "0 / 3 sélectionnée(s)";
+                bar.style.width = "0%";
+                status.textContent = "Ajoutez 3 tablettes pour débloquer le prix réduit à 12,00 € !";
+            } else if (etapeActuelle === 0) {
+                badge.textContent = `${totalTablettesPanier} sélectionnée(s) — Offre Débloquée ! 🎉`;
+                bar.style.width = "100%";
+                status.textContent = `Super ! Offre appliquée sur vos tablettes (12,00 € par lot de 3).`;
+            } else {
+                badge.textContent = `${totalTablettesPanier} sélectionnée(s) (${etapeActuelle}/3)`;
+                bar.style.width = `${(etapeActuelle / 3) * 100}%`;
+                status.textContent = `Encore ${3 - etapeActuelle} tablette(s) pour débloquer le tarif de 12,00 € pour 3 !`;
+            }
+        }
+
+        window.ajouterTabletteAuPanier = function(parfumId) {
+            const p = CONFIG.parfums.find(item => item.id == parfumId);
+            if (!p) return;
+            const existingIndex = cart.findIndex(item => item.type === 'tablette' && item.parfumId == parfumId);
+            if (existingIndex !== -1) { cart[existingIndex].quantity += 1; }
+            else { cart.push({ id: 'tablette-' + parfumId, parfumId: parfumId, type: 'tablette', title: `Tablette ${p.nom}`, subtitle: "Tablette fondante sécable", price: 4.50, weight: 80, quantity: 1 }); }
+            sauvegarderPanierDansStorage();
+            updateCartUI();
+            afficherToast(`Tablette ${p.nom} ajoutée !`);
+        }
+
+        // RENDU PLATEAUX
+        function renderPlateauxGrid() {
+            const container = document.getElementById('plateaux-grid');
+            if(!container) return;
+            container.innerHTML = '';
+            CONFIG.plateaux.forEach(p => {
+                const styleNom = p.style || 'classique';
+                const s = obtenirStyleTablette(styleNom);
+                const badgeHTML = (p.badge && p.badge.trim() !== "") ? `<span class="absolute top-3 left-3 ${s.badge} text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${p.badge}</span>` : '';
+
+                const card = document.createElement('div');
+                card.className = s.card;
+                card.innerHTML = `
+                    <div>
+                        <div class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm">
+                            <img src="${p.image}" alt="${p.nom}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400';">
+                            ${badgeHTML}
+                        </div>
+                        <div class="space-y-3">
+                            <h3 class="font-serif text-xl font-bold ${s.title}">${p.nom}</h3>
+                            <p class="text-xs ${s.desc} leading-relaxed">${p.description}</p>
+                            <div class="bg-black/5 p-3 rounded-xl border ${s.border} space-y-1">
+                                <span class="text-[10px] font-bold uppercase tracking-wider block opacity-80">Ce coffret inclut :</span>
+                                <ul class="text-xs space-y-1">
+                                    ${p.elements.map(el => `<li>• ${el}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-4 mt-4 flex items-center justify-between border-t ${s.border}">
+                        <div>
+                            <span class="font-serif text-2xl font-bold ${s.title}">${p.prix.toFixed(2).replace('.', ',')} €</span>
+                            ${p.stock !== undefined ? `<span class="text-[10px] block opacity-80">Stock : ${p.stock} dispo</span>` : ''}
+                        </div>
+                        <button onclick="ajouterPlateauAuPanier('${p.id}')" class="px-5 py-2.5 bg-sauge-600 hover:bg-sauge-700 text-white text-xs font-bold rounded-2xl transition-all shadow-md uppercase tracking-wider">Ajouter</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        window.ajouterPlateauAuPanier = function(id) {
+            const pObj = CONFIG.plateaux.find(p => p.id === id);
+            if (!pObj) return;
+            const existing = cart.find(item => item.type === 'plateau' && item.plateauId === id);
+            if (existing) { existing.quantity += 1; }
+            else { cart.push({ id: 'plateau-' + id, plateauId: id, type: 'plateau', title: pObj.nom, subtitle: "Coffret complet", price: pObj.prix, weight: pObj.weight || 1200, quantity: 1 }); }
+            sauvegarderPanierDansStorage();
+            updateCartUI();
+            afficherToast(`${pObj.nom} ajouté !`);
+        }
+
+        // RENDU CRÉATIONS
+        function renderCreationsGrid() {
+            const container = document.getElementById('creations-grid');
+            if(!container) return;
+            container.innerHTML = '';
+            CONFIG.creations.forEach(c => {
+                const styleNom = c.style || 'classique';
+                const s = obtenirStyleTablette(styleNom);
+                const badgeHTML = (c.badge && c.badge.trim() !== "") ? `<span class="absolute top-3 left-3 ${s.badge} text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${c.badge}</span>` : '';
+
+                const card = document.createElement('div');
+                card.className = s.card;
+                card.innerHTML = `
+                    <div>
+                        <div class="h-60 overflow-hidden relative rounded-2xl mb-4 shadow-sm">
+                            <img src="${c.image}" alt="${c.nom}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='${c.fallbackImage}';">
+                            ${badgeHTML}
+                        </div>
+                        <div class="space-y-3">
+                            <h3 class="font-serif text-xl font-bold ${s.title}">${c.nom}</h3>
+                            <p class="text-xs ${s.desc} leading-relaxed">${c.description}</p>
+                        </div>
+                    </div>
+                    <div class="pt-4 mt-4 flex items-center justify-between border-t ${s.border}">
+                        <div>
+                            <span class="font-serif text-2xl font-bold ${s.title}">${c.prix.toFixed(2).replace('.', ',')} €</span>
+                            ${c.stock !== undefined ? `<span class="text-[10px] block opacity-80">Stock : ${c.stock} dispo</span>` : ''}
+                        </div>
+                        <button onclick="ajouterCreationAuPanier('${c.id}')" class="px-5 py-2.5 bg-sauge-600 hover:bg-sauge-700 text-white text-xs font-bold rounded-2xl transition-all shadow-md uppercase tracking-wider">Ajouter</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        window.ajouterCreationAuPanier = function(id) {
+            const cObj = CONFIG.creations.find(c => c.id === id);
+            if (!cObj) return;
+            const existing = cart.find(item => item.type === 'creation' && item.creationId === id);
+            if (existing) { existing.quantity += 1; }
+            else { cart.push({ id: 'creation-' + id, creationId: id, type: 'creation', title: cObj.nom, subtitle: "Création artisanale", price: cObj.prix, weight: cObj.weight || 350, quantity: 1 }); }
+            sauvegarderPanierDansStorage();
+            updateCartUI();
+            afficherToast(`${cObj.nom} ajouté !`);
+        }
+
+        function calculerTotalPanier() {
+            let sousTotalArticles = 0;
+            let nombreTablettes = 0;
+            cart.forEach(item => {
+                if (item.type === 'tablette') { nombreTablettes += item.quantity; }
+                else { sousTotalArticles += item.price * item.quantity; }
+            });
+            const lotsDeTrois = Math.floor(nombreTablettes / 3);
+            const tablettesRestantes = nombreTablettes % 3;
+            sousTotalArticles += (lotsDeTrois * 12.00) + (tablettesRestantes * 4.50);
+            return { totalHorsFrais: sousTotalArticles, sousTotalArticles, estLivraisonOfferte: sousTotalArticles >= CONFIG.seuilFraisDePortGratuit, lotsDeTrois, nombreTablettes };
+        }
+
+        function updateCartUI() {
+            const countHeader = document.getElementById('header-cart-count');
+            const drawerContent = document.getElementById('cart-drawer-content');
+            const freeShippingContainer = document.getElementById('free-shipping-progress-container');
+            const drawerSubtotal = document.getElementById('cart-subtotal-articles');
+            const drawerShipping = document.getElementById('cart-shipping-fee');
+            const drawerTotal = document.getElementById('cart-drawer-total');
+
+            if(!countHeader) return;
+            countHeader.textContent = cart.reduce((acc, item) => acc + item.quantity, 0);
+            const resPanier = calculerTotalPanier();
+            drawerSubtotal.textContent = resPanier.sousTotalArticles.toFixed(2).replace('.', ',') + " €";
+            drawerShipping.innerHTML = resPanier.estLivraisonOfferte && cart.length > 0 ? `<span class="text-sauge-700 font-bold bg-sauge-100 px-2 py-0.5 rounded">OFFERTS</span>` : `<span>À calculer</span>`;
+            drawerTotal.textContent = resPanier.totalHorsFrais.toFixed(2).replace('.', ',') + " €";
+
+            if (cart.length > 0) {
+                const reste = CONFIG.seuilFraisDePortGratuit - resPanier.sousTotalArticles;
+                freeShippingContainer.innerHTML = reste > 0 
+                    ? `<div class="bg-sauge-50 p-3 rounded-xl text-xs font-bold text-sauge-800">Plus que ${reste.toFixed(2).replace('.', ',')} € pour la livraison offerte !</div>`
+                    : `<div class="bg-ocre-50 p-3 rounded-xl text-xs font-bold text-ocre-700">Livraison OFFERTE 🎉</div>`;
+            } else {
+                freeShippingContainer.innerHTML = '';
+            }
+
+            drawerContent.innerHTML = cart.length === 0 ? `<p class="text-center text-xs text-creme-800 py-8">Votre panier est vide</p>` : '';
+            cart.forEach((item, index) => {
+                drawerContent.innerHTML += `
+                    <div class="bg-creme-50 p-3 rounded-xl border border-creme-200 flex justify-between items-center text-xs">
+                        <div><strong>${item.title}</strong><br><span class="text-creme-800">Qté: ${item.quantity}</span></div>
+                        <button onclick="supprimerDuPanier(${index})" class="text-red-500 font-bold">✕</button>
+                    </div>
+                `;
+            });
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        window.supprimerDuPanier = function(index) { cart.splice(index, 1); sauvegarderPanierDansStorage(); updateCartUI(); }
+        window.viderToutLePanier = function() { cart = []; sauvegarderPanierDansStorage(); updateCartUI(); }
+        window.ouvrirPanier = function() { document.getElementById('cart-drawer').classList.remove('hidden'); document.body.style.overflow = 'hidden'; updateCartUI(); }
+        window.fermerPanier = function() { document.getElementById('cart-drawer').classList.add('hidden'); document.body.style.overflow = 'auto'; }
+
+        window.ouvrirModalCGV = function() { document.getElementById('modal-cgv').classList.remove('hidden'); document.getElementById('modal-cgv').classList.add('flex'); }
+        window.fermerModalCGV = function() { document.getElementById('modal-cgv').classList.add('hidden'); document.getElementById('modal-cgv').classList.remove('flex'); }
+        window.ouvrirModalMentions = function() { document.getElementById('modal-mentions').classList.remove('hidden'); document.getElementById('modal-mentions').classList.add('flex'); }
+        window.fermerModalMentions = function() { document.getElementById('modal-mentions').classList.add('hidden'); document.getElementById('modal-mentions').classList.remove('flex'); }
+
+        window.ouvrirModalPaiement = function() {
+            if (cart.length === 0) { afficherToast("Panier vide", "warning"); return; }
+            if (!window.utilisateurActuel) { ouvrirModalAuth(); return; }
+            sauvegarderPanierDansStorage();
+            window.location.href = 'paiement.html';
+        }
+
+        window.envoyerMailContactDirect = function(event) {
+            event.preventDefault();
+            const nom = document.getElementById('contact-nom').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const sujet = document.getElementById('contact-sujet').value.trim();
+            const msg = document.getElementById('contact-message').value.trim();
+            window.location.href = `mailto:debstyle-coiffure@hotmail.com?subject=${encodeURIComponent(sujet)}&body=${encodeURIComponent(`De: ${nom} (${email})\n\n${msg}`)}`;
+        }
+
+        window.afficherToast = function(message, type = "success") {
+            const container = document.getElementById('toast-container');
+            if(!container) return;
+            const toast = document.createElement('div');
+            toast.className = `px-4 py-3 rounded-xl text-xs font-bold text-white ${type === 'warning' ? 'bg-amber-600' : 'bg-sauge-800'} shadow-lg`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+    </script>
+</body>
+</html>
