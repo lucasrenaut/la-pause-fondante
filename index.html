@@ -479,6 +479,80 @@
         </div>
     </footer>
 
+    <!-- MODALE FICHE PRODUIT DÉTAILLÉE -->
+    <div id="modal-produit" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+        <div onclick="fermerModalProduit()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
+        <div class="relative bg-white rounded-3xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl z-10 space-y-6 max-h-[90vh] flex flex-col animate-fade-in">
+            <button onclick="fermerModalProduit()" class="absolute top-4 right-4 p-2 rounded-full hover:bg-creme-100 text-creme-800 transition-colors z-20">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="flex-grow overflow-y-auto space-y-6 pr-2 custom-scrollbar">
+                <!-- EN-TÊTE PRODUIT (Image + Infos principales) -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+                    <div class="md:col-span-5 h-56 sm:h-64 rounded-2xl overflow-hidden relative border border-creme-200 shadow-sm bg-creme-50 flex items-center justify-center">
+                        <img id="modal-prod-img" src="" alt="" class="w-full h-full object-cover">
+                        <span id="modal-prod-badge" class="absolute top-3 left-3 bg-sauge-700 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md hidden"></span>
+                    </div>
+                    <div class="md:col-span-7 space-y-4 flex flex-col justify-between h-full">
+                        <div class="space-y-2">
+                            <span id="modal-prod-cat" class="text-xs font-bold text-sauge-600 uppercase tracking-widest bg-sauge-50 px-3 py-1 rounded-full border border-sauge-100 inline-block"></span>
+                            <h2 id="modal-prod-title" class="font-serif text-2xl sm:text-3xl font-bold text-creme-900 leading-tight"></h2>
+                            <div id="modal-prod-price" class="font-serif text-2xl font-bold text-ocre-600"></div>
+                        </div>
+
+                        <div id="modal-prod-action-container" class="pt-2"></div>
+                    </div>
+                </div>
+
+                <!-- SECTIONS DÉTAILLÉES -->
+                <div class="space-y-5 border-t border-creme-200 pt-6">
+                    <!-- DESCRIPTION & PYRAMIDE OLFACTIVE -->
+                    <div class="space-y-2 bg-creme-50 p-4 rounded-2xl border border-creme-200">
+                        <h3 class="font-serif text-base font-bold text-creme-900 flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-sauge-600"></i> Description & Pyramide Olfactive
+                        </h3>
+                        <div id="modal-prod-desc" class="text-xs text-creme-800 leading-relaxed whitespace-pre-line"></div>
+                    </div>
+
+                    <!-- COMPOSITION -->
+                    <div class="space-y-2 bg-creme-50 p-4 rounded-2xl border border-creme-200">
+                        <h3 class="font-serif text-base font-bold text-creme-900 flex items-center gap-2">
+                            <i data-lucide="leaf" class="w-4 h-4 text-sauge-600"></i> Composition
+                        </h3>
+                        <div id="modal-prod-comp" class="text-xs text-creme-800 leading-relaxed whitespace-pre-line"></div>
+                    </div>
+
+                    <!-- TEMPS DE BRÛLAGE -->
+                    <div class="space-y-2 bg-creme-50 p-4 rounded-2xl border border-creme-200">
+                        <h3 class="font-serif text-base font-bold text-creme-900 flex items-center gap-2">
+                            <i data-lucide="clock" class="w-4 h-4 text-sauge-600"></i> Temps de brûlage
+                        </h3>
+                        <div id="modal-prod-burn" class="text-xs text-creme-800 leading-relaxed whitespace-pre-line"></div>
+                    </div>
+
+                    <!-- ÉTIQUETTE CLP -->
+                    <div class="space-y-2 bg-amber-50/60 p-4 rounded-2xl border border-amber-200">
+                        <h3 class="font-serif text-base font-bold text-amber-900 flex items-center gap-2">
+                            <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600"></i> Étiquette CLP & Consignes de sécurité
+                        </h3>
+                        <div id="modal-prod-clp" class="text-xs text-amber-950 leading-relaxed whitespace-pre-line"></div>
+                    </div>
+
+                    <!-- FICHE TECHNIQUE EN IMAGE -->
+                    <div id="modal-prod-ft-box" class="space-y-3 bg-creme-50 p-4 rounded-2xl border border-creme-200">
+                        <h3 class="font-serif text-base font-bold text-creme-900 flex items-center gap-2">
+                            <i data-lucide="file-text" class="w-4 h-4 text-sauge-600"></i> Fiche technique en image
+                        </h3>
+                        <div id="modal-prod-ft-container" class="rounded-xl overflow-hidden border border-creme-200 bg-white p-2">
+                            <img id="modal-prod-ft-img" src="" alt="Fiche technique" class="w-full max-h-96 object-contain mx-auto rounded-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- DRAWER PANIER -->
     <div id="cart-drawer" class="fixed inset-0 z-50 hidden transition-opacity duration-300">
         <div onclick="fermerPanier()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
@@ -992,6 +1066,18 @@
             }
         }
 
+        /* 
+           CONSEIL MODIFICATION :
+           Pour modifier les descriptions, compositions, etc. et PASSER DES LIGNES :
+           Utilisez des guillemets obliques ` au lieu de " ou ' !
+           Exemple :
+           description: `Première ligne...
+
+Pyramide olfactive :
+- Note de tête : Citron
+- Note de cœur : Vanille`,
+        */
+
         const CONFIG = {
             nomBoutique: "La pause Fondante",
             seuilFraisDePortGratuit: 70.00,
@@ -1005,34 +1091,116 @@
             categoriesParfums: ["Toutes", "Gourmands", "Fleuris", "Frais & Propres", "Épicés & Cocooning", "Fruités"],
             
             parfums: [
-                { id: 1, nom: "Citrouille vanillée", categorie: "Gourmands", description: "Douceur de citrouille et vanille", icone: "sparkles", couleur: "#fef3c7", style: "classique", etiquette: "Gourmands", image: "citrouille_vanillé_lpf.jpeg" },
-                { id: 2, nom: "Orangette", categorie: "Gourmands", description: "Orange confite et cacao", icone: "cookie", couleur: "#fed7aa", style: "classique", etiquette: "Gourmand", image: "orangette_lpf.jpeg" },
-                { id: 3, nom: "Fleur de coton", categorie: "Frais & Propres", description: "Musc blanc et lin pur", icone: "cloud", couleur: "#e8ece9", style: "classique", etiquette: "Doux & Pur", image: "fleur_coton_lpf.jpeg" },
-                { id: 4, nom: "Litchi épicé", categorie: "Fruités", description: "Litchi et épices douces", icone: "sun", couleur: "#ffe4e6", style: "classique", etiquette: "Fruités", image: "litchi_lpf.jpeg" },
-                { id: 5, nom: "Caramel", categorie: "Gourmands", description: "Caramel au beurre fondu", icone: "coffee", couleur: "#fde68a", style: "classique", etiquette: "Gourmands", image: "caramel_lpf.jpeg" },
-                { id: 6, nom: "Pomme Cannelle", categorie: "Épicés & Cocooning", description: "Pomme cuite et cannelle", icone: "apple", couleur: "#fee2e2", style: "classique", etiquette: "Épicés & Cocooning", image: "pomme_cannelle_lpf.jpeg" },
-                { id: 7, nom: "Coco et Vanille", categorie: "Gourmands", description: "Noix de coco et vanille", icone: "sun", couleur: "#fef3c7", style: "classique", etiquette: "Gourmands", image: "coco_vanille_lpf.jpeg" },
-                { id: 8, nom: "Lavande", categorie: "Fleuris", description: "Champs de lavande de Provence", icone: "flower", bestSeller: true, couleur: "#f3e8ff", style: "classique", etiquette: "Fleuris", image: "lavande_lpf.jpeg" },
-                { id: 9, nom: "Cerise Noire Explosive", categorie: "Fruités", description: "Nectar de cerises mûres", icone: "heart", bestSeller: true, couleur: "#ffe4e6", style: "classique", etiquette: "Fruités", image: "cerise_lpf.jpeg" },
-                { id: 10, nom: "Adoucissant", categorie: "Frais & Propres", description: "Linge propre et frais", icone: "wind", bestSeller: true, couleur: "#e0f2fe", style: "classique", etiquette: "Frais & Propres", image: "adoucissant_lpf.jpeg" },
-                { id: 11, nom: "Bonbon Démoniaque", categorie: "Fruités", description: "Friandises acidulées", icone: "zap", bestSeller: true, couleur: "#fce7f3", style: "classique", etiquette: "Fruités", image: "bonbon_lpf.jpeg" },
-                { id: 12, nom: "Menthe Poivrée", categorie: "Frais & Propres", description: "Brise rafraîchissante", icone: "leaf", couleur: "#dcfce7", style: "classique", etiquette: "Frais", image: "menthe_lpf.jpeg" },
-                { id: 13, nom: "Chocolat", categorie: "Gourmands", description: "Chocolat chaud artisanal", icone: "cookie", couleur: "#fed7aa", style: "classique", etiquette: "Gourmands", image: "chocolat_lpf.jpeg" },
-                { id: 14, nom: "Épices de Noël", categorie: "Épicés & Cocooning", description: "Cannelle, girofle et anis", icone: "sparkles", couleur: "#ffedd5", style: "classique", etiquette: "Épicés & Cocooning", image: "epice_noel_lpf.jpeg" },
-                { id: 15, nom: "Cannelle", categorie: "Épicés & Cocooning", description: "Chaleur boisée de cannelle", icone: "flame", couleur: "#ffedd5", style: "classique", etiquette: "Épicés & Cocooning", image: "cannelle_lpf.jpeg" },
-                { id: 16, nom: "Balade Provençale", categorie: "Fleuris", description: "Thym et romarin du Sud", icone: "sun", couleur: "#dcfce7", style: "classique", etiquette: "Fleuris", image: "province_lpf.jpeg" },
-                { id: 17, nom: "Abricot Romarin", categorie: "Fruités", description: "Abricot et romarin sauvage", icone: "leaf", couleur: "#ffedd5", style: "classique", etiquette: "Fruités", image: "abricot_lpf.jpeg" },
-                { id: 18, nom: "Vanille", categorie: "Gourmands", description: "Gousse de vanille pure", icone: "heart", couleur: "#fef3c7", style: "classique", etiquette: "Gourmands", image: "vanille_lpf.jpeg" },
-                { id: 19, nom: "Agrumes", categorie: "Frais & Propres", description: "Citron et orange douce", icone: "zap", couleur: "#fef9c3", style: "classique", etiquette: "Frais & Propres", image: "agrumes_lpf.jpeg" },
-                { id: 20, nom: "Champagne", categorie: "Fleuris", description: "Notes effervescentes", icone: "sparkles", couleur: "#fef9c3", style: "classique", etiquette: "Fleuris", image: "champagne_lpf.jpeg" },
-                { id: 21, nom: "Sirop d'érable", categorie: "Gourmands", description: "Sirop doré canadien", icone: "coffee", couleur: "#fde68a", style: "classique", etiquette: "Gourmands", image: "erable_lpf.jpeg" },
-                { id: 22, nom: "Cire et Miel", categorie: "Épicés & Cocooning", description: "Nectar de miel brut", icone: "sparkles", couleur: "#fef3c7", style: "classique", etiquette: "Épicés & Cocooning", image: "cire_miel_lpf.jpeg" }
+                { 
+                    id: 1, 
+                    nom: "Citrouille vanillée", 
+                    categorie: "Gourmands", 
+                    description: `Pyramide olfactive :
+• Famille Olfactive : Gourmand, épicé
+• Notes de tête : Guimauve, accords épicés
+• Notes de cœur : Citrouille, vanille
+• Notes de fond : Sucre roux, cannelle, accords lactés
+
+POIDS NET (1 fondant) : 7g
+POIDS NET (1 tablette) : 90g`,
+                    composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
+• sans CMR 
+• sans phtalates.
+• cruelty free
+• vegan friendly`,
+                    tempsBrulage: `• Environ 7 heures de diffusion parfumée par fondant.
+• Une tablette complète offre plus de 70 heures de diffusion.`,
+                    etiquetteCLP: `Mention d’avertissement (CLP) :
+• -
+Mentions de danger (CLP) :
+• H412 - Nocif pour les organismes aquatiques, entraîne des effets néfastes à long terme.
+Conseils de prudence (CLP) : 
+• P102 - Tenir hors de portée des enfants.
+• P273 - Éviter le rejet dans l’environnement.
+• P501 - Éliminer le contenu/récipient dans un centre de collecte de déchets dangereux ou spéciaux, conformément à la réglementation locale, régionale, nationale et/ou internationale.
+Phrases EUH : 
+• EUH208 - Contient ALDEHYDE CINNAMIQUE(104-55-2), ALDEHYDE ALPHA METHYL CINNAMIQUE(101-39-3). Peut produire une réaction allergique.
+`,
+                    ficheTechniqueImage: "fiche_citrouille_lpf.png",
+                    icone: "sparkles", couleur: "#fef3c7", style: "classique", etiquette: "Gourmands", image: "fiche_citrouille_lpf.png" 
+                },
+                { 
+                    id: 2, 
+                    nom: "Orangette", 
+                    categorie: "Gourmands", 
+                    description: `Orange confite et cacao intense.
+
+Pyramide olfactive :
+• Notes de tête : Écorce d'orange, zeste d'agrumes
+• Notes de cœur : Cacao amer, chocolat fondu
+• Notes de fond : Fève tonka, vanille`,
+                    composition: `Cire 100% végétale de soja sans OGM.
+Parfum de Grasse certifié sans CMR.`,
+                    tempsBrulage: `8 à 10h par fondant.`,
+                    etiquetteCLP: `Attention. Contient d-Limonene. Peut produire une réaction allergique.`,
+                    ficheTechniqueImage: "orangette_lpf.jpeg",
+                    icone: "cookie", couleur: "#fed7aa", style: "classique", etiquette: "Gourmand", image: "orangette_lpf.jpeg" 
+                },
+                { 
+                    id: 3, 
+                    nom: "Fleur de coton", 
+                    categorie: "Frais & Propres", 
+                    description: `Musc blanc et lin pur.
+
+Pyramide olfactive :
+• Notes de tête : Accord propre, bergamote
+• Notes de cœur : Fleur de coton, rose blanche
+• Notes de fond : Musc doux, bois de santal`,
+                    composition: `Cire végétale de soja eco-friendly.
+Fragrance pure de Grasse.`,
+                    tempsBrulage: `Environ 10h de diffusion enveloppante.`,
+                    etiquetteCLP: `Prudence. Tenir hors de portée des enfants et des animaux.`,
+                    ficheTechniqueImage: "fleur_coton_lpf.jpeg",
+                    icone: "cloud", couleur: "#e8ece9", style: "classique", etiquette: "Doux & Pur", image: "fleur_coton_lpf.jpeg" 
+                },
+                { id: 4, nom: "Litchi épicé", categorie: "Fruités", description: "Litchi et épices douces.\n\nPyramide olfactive :\n• Tête : Litchi, rose\n• Cœur : Cardamome, gingembre\n• Fond : Musc", composition: "Cire de soja & parfum de Grasse.", tempsBrulage: "8-10 heures.", etiquetteCLP: "Attention. Éviter le rejet dans l'environnement.", ficheTechniqueImage: "litchi_lpf.jpeg", icone: "sun", couleur: "#ffe4e6", style: "classique", etiquette: "Fruités", image: "litchi_lpf.jpeg" },
+                { id: 5, nom: "Caramel", categorie: "Gourmands", description: "Caramel au beurre fondu.\n\nPyramide olfactive :\n• Tête : Beurre salé\n• Cœur : Caramel fondant\n• Fond : Vanille", composition: "Cire végétale de soja et parfum artisanal.", tempsBrulage: "8 à 10h.", etiquetteCLP: "Conserver hors de portée des enfants.", ficheTechniqueImage: "caramel_lpf.jpeg", icone: "coffee", couleur: "#fde68a", style: "classique", etiquette: "Gourmands", image: "caramel_lpf.jpeg" },
+                { id: 6, nom: "Pomme Cannelle", categorie: "Épicés & Cocooning", description: "Pomme cuite et cannelle gourmande.\n\nPyramide olfactive :\n• Tête : Pomme rouge, zeste\n• Cœur : Cannelle, clou de girofle\n• Fond : Sucre roux", composition: "Cire de soja 100% naturelle.", tempsBrulage: "10h.", etiquetteCLP: "Contient Cinnamal. Peut déclencher une allergie.", ficheTechniqueImage: "pomme_cannelle_lpf.jpeg", icone: "apple", couleur: "#fee2e2", style: "classique", etiquette: "Épicés & Cocooning", image: "pomme_cannelle_lpf.jpeg" },
+                { id: 7, nom: "Coco et Vanille", categorie: "Gourmands", description: "Noix de coco et vanille des îles.", composition: "Cire de soja et fragrances de Grasse.", tempsBrulage: "8 à 10h.", etiquetteCLP: "Ne pas consommer.", ficheTechniqueImage: "coco_vanille_lpf.jpeg", icone: "sun", couleur: "#fef3c7", style: "classique", etiquette: "Gourmands", image: "coco_vanille_lpf.jpeg" },
+                { id: 8, nom: "Lavande", categorie: "Fleuris", description: "Champs de lavande de Provence.\n\nPyramide olfactive :\n• Tête : Lavandin\n• Cœur : Fleur de lavande\n• Fond : Bois eucalyptus", composition: "Cire de soja & huile parfumée de Grasse.", bestSeller: true, couleur: "#f3e8ff", style: "classique", etiquette: "Fleuris", image: "lavande_lpf.jpeg" },
+                { id: 9, nom: "Cerise Noire Explosive", categorie: "Fruités", description: "Nectar de cerises mûres et sucrées.", composition: "Cire 100% végétale.", bestSeller: true, couleur: "#ffe4e6", style: "classique", etiquette: "Fruités", image: "cerise_lpf.jpeg" },
+                { id: 10, nom: "Adoucissant", categorie: "Frais & Propres", description: "Senteur de linge propre tout juste lavé.", composition: "Cire de soja végétale.", bestSeller: true, couleur: "#e0f2fe", style: "classique", etiquette: "Frais & Propres", image: "adoucissant_lpf.jpeg" },
+                { id: 11, nom: "Bonbon Démoniaque", categorie: "Fruités", description: "Friandises acidulées et fruitées.", composition: "Cire végétale de soja.", bestSeller: true, couleur: "#fce7f3", style: "classique", etiquette: "Fruités", image: "bonbon_lpf.jpeg" },
+                { id: 12, nom: "Menthe Poivrée", categorie: "Frais & Propres", description: "Brise rafraîchissante de menthe.", composition: "Cire de soja.", couleur: "#dcfce7", style: "classique", etiquette: "Frais", image: "menthe_lpf.jpeg" },
+                { id: 13, nom: "Chocolat", categorie: "Gourmands", description: "Chocolat chaud artisanal et onctueux.", composition: "Cire de soja.", couleur: "#fed7aa", style: "classique", etiquette: "Gourmands", image: "chocolat_lpf.jpeg" },
+                { id: 14, nom: "Épices de Noël", categorie: "Épicés & Cocooning", description: "Cannelle, girofle et anis étoilé.", composition: "Cire végétale de soja.", couleur: "#ffedd5", style: "classique", etiquette: "Épicés & Cocooning", image: "epice_noel_lpf.jpeg" },
+                { id: 15, nom: "Cannelle", categorie: "Épicés & Cocooning", description: "Chaleur boisée de la cannelle.", composition: "Cire de soja.", couleur: "#ffedd5", style: "classique", etiquette: "Épicés & Cocooning", image: "cannelle_lpf.jpeg" },
+                { id: 16, nom: "Balade Provençale", categorie: "Fleuris", description: "Thym, romarin et herbes du Sud.", composition: "Cire végétale.", couleur: "#dcfce7", style: "classique", etiquette: "Fleuris", image: "province_lpf.jpeg" },
+                { id: 17, nom: "Abricot Romarin", categorie: "Fruités", description: "Abricot juteux et romarin sauvage.", composition: "Cire de soja.", couleur: "#ffedd5", style: "classique", etiquette: "Fruités", image: "abricot_lpf.jpeg" },
+                { id: 18, nom: "Vanille", categorie: "Gourmands", description: "Gousse de vanille pure et sucrée.", composition: "Cire de soja.", couleur: "#fef3c7", style: "classique", etiquette: "Gourmands", image: "vanille_lpf.jpeg" },
+                { id: 19, nom: "Agrumes", categorie: "Frais & Propres", description: "Citron et orange douce acidulée.", composition: "Cire de soja.", couleur: "#fef9c3", style: "classique", etiquette: "Frais & Propres", image: "agrumes_lpf.jpeg" },
+                { id: 20, nom: "Champagne", categorie: "Fleuris", description: "Notes pétillantes et effervescentes.", composition: "Cire de soja.", couleur: "#fef9c3", style: "classique", etiquette: "Fleuris", image: "champagne_lpf.jpeg" },
+                { id: 21, nom: "Sirop d'érable", categorie: "Gourmands", description: "Sirop doré canadien gourmand.", composition: "Cire de soja.", couleur: "#fde68a", style: "classique", etiquette: "Gourmands", image: "erable_lpf.jpeg" },
+                { id: 22, nom: "Cire et Miel", categorie: "Épicés & Cocooning", description: "Nectar de miel brut et cire douce.", composition: "Cire de soja.", couleur: "#fef3c7", style: "classique", etiquette: "Épicés & Cocooning", image: "cire_miel_lpf.jpeg" }
             ],
             plateaux: [
-                { id: 'plat-naturel', nom: "Plateau Classique", prix: 15.00, weight: 1200, badge: "", stock: 8, style: 'classique', image: "plateau_nature_lpf.jpeg", description: "Faite parler la nature en vous !", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration Naturel", "1 plateau"] },
-                { id: 'plat-zen', nom: "Plateau Zen", prix: 18.00, weight: 1200, badge: "Sérénité", stock: 5, style: 'classique', image: "plateau_zen_lpf.jpeg", description: "Retrouvez vous avec ce kit de plateau complet", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration zen","une petite bougie", "1 plateau"] },
-                { id: 'plat-noel', nom: "Plateau Noël", prix: 17.00, weight: 1200, badge: "Édition Limitée !", stock: 3, style: 'noel', image: "plateau_noel_lpf.jpeg", description: "Faite vivre les fête de fin d'année", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration hivernale", "1 plateau"] },
-                { id: 'plat-grinch', nom: "Plateau Grinch", prix: 16.00, weight: 1200, badge: " !Édition Limitée !", stock : 1, style: 'noel', image: "plateau_grinch.jpg", description: "Ajouter une touche grincheuse à votre table avec kit de plateau complet", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration Hivernale","une figurine du Grinch", "1 plateau"] }
+                { 
+                    id: 'plat-naturel', 
+                    nom: "Plateau Classique", 
+                    prix: 15.00, 
+                    weight: 1200, 
+                    badge: "", 
+                    stock: 8, 
+                    style: 'classique', 
+                    image: "plateau_nature_lpf.jpeg", 
+                    description: `Faites parler la nature en vous !
+Ce plateau complet apporte une ambiance douce et apaisante à votre intérieur.`,
+                    composition: `Plateau artisanal en plâtre minéral / résine éco-responsable.
+Fondants en cire 100% végétale de soja et parfums de Grasse sans CMR.
+Bougies chauffe-plat en cire végétale.`,
+                    tempsBrulage: `Plus de 80 heures de diffusion au total avec les 10 fondants inclus.`,
+                    etiquetteCLP: `Conserver hors de portée des enfants. Ne pas laisser brûler sans surveillance.`,
+                    ficheTechniqueImage: "plateau_nature_lpf.jpeg",
+                    elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration Naturel", "1 plateau"] 
+                },
+                { id: 'plat-zen', nom: "Plateau Zen", prix: 18.00, weight: 1200, badge: "Sérénité", stock: 5, style: 'classique', image: "plateau_zen_lpf.jpeg", description: "Retrouvez-vous avec ce kit de plateau complet et relaxant.", composition: "Cire de soja, plâtre minéral éco-conçu.", tempsBrulage: "Plus de 80h de diffusion.", etiquetteCLP: "Ne jamais laisser une bougie sans surveillance.", ficheTechniqueImage: "plateau_zen_lpf.jpeg", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration zen","une petite bougie", "1 plateau"] },
+                { id: 'plat-noel', nom: "Plateau Noël", prix: 17.00, weight: 1200, badge: "Édition Limitée !", stock: 3, style: 'noel', image: "plateau_noel_lpf.jpeg", description: "Faites vivre les fêtes de fin d'année dans votre salon !", composition: "Cire végétale et décorations hivernales.", tempsBrulage: "Plus de 80h au total.", etiquetteCLP: "Tenir éloigné des matières inflammables.", ficheTechniqueImage: "plateau_noel_lpf.jpeg", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration hivernale", "1 plateau"] },
+                { id: 'plat-grinch', nom: "Plateau Grinch", prix: 16.00, weight: 1200, badge: "Édition Limitée !", stock : 1, style: 'noel', image: "plateau_grinch.jpg", description: "Ajoutez une touche grincheuse et rigolote à votre table avec ce kit complet.", composition: "Composants artisanaux et figurine Grinch.", tempsBrulage: "Plus de 80h.", etiquetteCLP: "Attention, présence de petits éléments décoratifs.", ficheTechniqueImage: "plateau_grinch.jpg", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration Hivernale","une figurine du Grinch", "1 plateau"] }
             ],
             creations: [
                 { 
@@ -1046,7 +1214,12 @@
                     style: 'noel',
                     image: "boite_musique_noel.png",
                     fallbackImage: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=500",
-                    description: "Une petite boîte pleine de magie qui renferme 5 fondants parfumés + une boîte musicale !",
+                    description: `Une petite boîte pleine de magie qui renferme 5 fondants parfumés + une boîte musicale mécanique intégrée !`,
+                    composition: `Fondants en cire 100% végétale de soja et fragrances gourmandes de Grasse.
+Mécanisme musical en métal mécanique.`,
+                    tempsBrulage: `Environ 40 à 50 heures de diffusion au total.`,
+                    etiquetteCLP: `Conserver hors de portée des enfants. Ne pas mouiller le mécanisme musical.`,
+                    ficheTechniqueImage: "boite_musique_noel.png",
                     elements: ["5 fondants parfumés", "Boîte musicale mécanique de Noël"] 
                 },
                 {   
@@ -1060,7 +1233,11 @@
                     weight: 150,
                     image: "pot_lpf.png",
                     fallbackImage: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=500",
-                    description: "Joli petit bouquet de fondants parfumés pour votre intérieur.",
+                    description: "Joli petit bouquet de fondants parfumés pour décorer et parfumer votre intérieur.",
+                    composition: "Cire de soja et senteur Épices de Noël.",
+                    tempsBrulage: "Environ 40 heures.",
+                    etiquetteCLP: "Ne pas consommer. Tenir hors de portée des enfants.",
+                    ficheTechniqueImage: "pot_lpf.png",
                     elements: ["4 fondants + 1 gros fondant", "Fragrance : épice de noël"] 
                 }
             ]
@@ -1124,6 +1301,143 @@
             if (window.lucide) window.lucide.createIcons();
         }
 
+        /* --- SYSTÈME DE MODALE / FICHE PRODUIT --- */
+        window.ouvrirFicheProduit = function(type, id) {
+            let item = null;
+            let categoryText = "";
+            
+            if (type === 'parfum') {
+                item = CONFIG.parfums.find(p => p.id == id);
+                categoryText = item?.categorie || "Fondant / Tablette";
+            } else if (type === 'plateau') {
+                item = CONFIG.plateaux.find(p => p.id == id);
+                categoryText = "Coffret Plateau";
+            } else if (type === 'creation') {
+                item = CONFIG.creations.find(c => c.id == id);
+                categoryText = "Création Artisanal";
+            }
+
+            if (!item) return;
+
+            const imgEl = document.getElementById('modal-prod-img');
+            const badgeEl = document.getElementById('modal-prod-badge');
+            const catEl = document.getElementById('modal-prod-cat');
+            const titleEl = document.getElementById('modal-prod-title');
+            const priceEl = document.getElementById('modal-prod-price');
+            
+            const descEl = document.getElementById('modal-prod-desc');
+            const compEl = document.getElementById('modal-prod-comp');
+            const burnEl = document.getElementById('modal-prod-burn');
+            const clpEl = document.getElementById('modal-prod-clp');
+            const ftImgEl = document.getElementById('modal-prod-ft-img');
+            const ftBoxEl = document.getElementById('modal-prod-ft-box');
+            const actionContainer = document.getElementById('modal-prod-action-container');
+
+            // Image Principale
+            if (imgEl) {
+                if (item.image && item.image.trim() !== '') {
+                    imgEl.src = item.image;
+                    imgEl.style.display = 'block';
+                } else {
+                    imgEl.src = item.fallbackImage || 'https://placehold.co/400x300/6b7f71/ffffff?text=LPF';
+                }
+            }
+
+            // Badge
+            if (badgeEl) {
+                if (item.badge || item.etiquette) {
+                    badgeEl.textContent = item.badge || item.etiquette;
+                    badgeEl.classList.remove('hidden');
+                } else {
+                    badgeEl.classList.add('hidden');
+                }
+            }
+
+            if (catEl) catEl.textContent = categoryText;
+            if (titleEl) titleEl.textContent = item.nom;
+            
+            // Prix
+            if (priceEl) {
+                if (type === 'parfum') {
+                    priceEl.textContent = "0,50 € l'unité (Fondant) / 4,50 € (Tablette)";
+                } else if (item.prix) {
+                    priceEl.textContent = `${item.prix.toFixed(2).replace('.', ',')} €`;
+                } else {
+                    priceEl.textContent = "";
+                }
+            }
+
+            // Description
+            const defaultDesc = item.description || "Aucune description renseignée.";
+            if (descEl) descEl.textContent = defaultDesc;
+
+            // Composition
+            const defaultComp = item.composition || "Cire 100% végétale de soja (sans OGM ni pesticides).\nParfum de Grasse garanti sans CMR ni phtalates.\nMica minéral naturel et paillettes biodégradables.";
+            if (compEl) compEl.textContent = defaultComp;
+
+            // Temps de brûlage
+            const defaultBurn = item.tempsBrulage || (type === 'parfum' ? "Environ 8 à 10 heures d'ambiance parfumée par fondant (jusqu'à 40h pour une tablette complète)." : "Variable selon l'utilisation et la taille de la création.");
+            if (burnEl) burnEl.textContent = defaultBurn;
+
+            // Étiquette CLP
+            const defaultCLP = item.etiquetteCLP || "Attention. Peut provoquer une réaction allergique cutanée. Nocif pour les organismes aquatiques, entraîne des effets néfastes à long terme.\nConserver hors de portée des enfants et des animaux. Ne pas ingérer.";
+            if (clpEl) clpEl.textContent = defaultCLP;
+
+            // Fiche Technique Image
+            if (ftImgEl && ftBoxEl) {
+                const ftSrc = item.ficheTechniqueImage || item.image;
+                if (ftSrc && ftSrc.trim() !== '') {
+                    ftImgEl.src = ftSrc;
+                    ftBoxEl.classList.remove('hidden');
+                } else {
+                    ftBoxEl.classList.add('hidden');
+                }
+            }
+
+            // Boutons d'action dans la modale
+            if (actionContainer) {
+                if (type === 'parfum') {
+                    actionContainer.innerHTML = `
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <button onclick="ajouterTabletteAuPanier(${item.id}); fermerModalProduit();" class="px-4 py-2.5 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md">
+                                <i data-lucide="tablet" class="w-4 h-4"></i> Ajouter en Tablette (4,50 €)
+                            </button>
+                            <button onclick="naviguerVers('fondants'); fermerModalProduit();" class="px-4 py-2.5 bg-ocre-600 hover:bg-ocre-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md">
+                                <i data-lucide="box" class="w-4 h-4"></i> Composer dans mon lot
+                            </button>
+                        </div>
+                    `;
+                } else if (type === 'plateau') {
+                    actionContainer.innerHTML = `
+                        <button onclick="ajouterPlateauAuPanier('${item.id}'); fermerModalProduit();" class="w-full sm:w-auto px-6 py-3 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md">
+                            <i data-lucide="shopping-bag" class="w-4 h-4"></i> Ajouter le Coffret au panier (${item.prix.toFixed(2).replace('.', ',')} €)
+                        </button>
+                    `;
+                } else if (type === 'creation') {
+                    actionContainer.innerHTML = `
+                        <button onclick="ajouterCreationAuPanier('${item.id}'); fermerModalProduit();" class="w-full sm:w-auto px-6 py-3 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i> Ajouter la Création au panier (${item.prix.toFixed(2).replace('.', ',')} €)
+                        </button>
+                    `;
+                }
+            }
+
+            const modal = document.getElementById('modal-produit');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        window.fermerModalProduit = function() {
+            const modal = document.getElementById('modal-produit');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
         function renderFormats() {
             const container = document.getElementById('formats-container');
             if(!container) return;
@@ -1176,7 +1490,7 @@
 
         window.filtrerParfums = function() { renderParfumsGrid(); }
 
-        // AFFICHAGE DES FONDANTS AVEC LE FORMAT GRANDE IMAGE (STYLE TABLETTES)
+        // AFFICHAGE DES FONDANTS UNITAIRES AVEC CLIC POUR VOIR LA FICHE
         function renderParfumsGrid() {
             const container = document.getElementById('parfums-grid');
             if(!container) return;
@@ -1198,25 +1512,31 @@
                     : `<span class="absolute top-3 left-3 bg-sauge-700 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${p.categorie}</span>`;
 
                 const imageContent = (p.image && p.image.trim() !== "")
-                    ? `<img src="${p.image}" alt="${p.nom}" class="w-full h-full object-cover">`
+                    ? `<img src="${p.image}" alt="${p.nom}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">`
                     : `<div class="w-full h-full flex items-center justify-center" style="background-color: ${p.couleur || '#f4f6f4'}"><i data-lucide="${p.icone || 'sparkles'}" class="w-16 h-16 opacity-40 text-creme-900"></i></div>`;
 
                 const card = document.createElement('div');
                 card.className = s.card;
                 card.innerHTML = `
                     <div>
-                        <div class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm">
+                        <div onclick="ouvrirFicheProduit('parfum', ${p.id})" class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm cursor-pointer group">
                             ${imageContent}
                             ${badgeHTML}
+                            <div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 opacity-90 group-hover:bg-sauge-600 transition-colors">
+                                <i data-lucide="eye" class="w-3.5 h-3.5"></i> Fiche produit
+                            </div>
                         </div>
                         <div class="space-y-2">
-                            <h3 class="font-serif text-xl font-bold ${s.title}">${p.nom}</h3>
-                            <p class="text-xs ${s.desc} leading-relaxed">${p.description}</p>
+                            <h3 onclick="ouvrirFicheProduit('parfum', ${p.id})" class="font-serif text-xl font-bold ${s.title} cursor-pointer hover:text-sauge-600 transition-colors">${p.nom}</h3>
+                            <p class="text-xs ${s.desc} leading-relaxed line-clamp-2">${p.description}</p>
+                            <button onclick="ouvrirFicheProduit('parfum', ${p.id})" class="text-[11px] text-sauge-600 font-bold hover:underline flex items-center gap-1 pt-0.5">
+                                Voir détails, pyramide & CLP <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                            </button>
                         </div>
                     </div>
                     <div class="pt-4 mt-4 flex items-center justify-between border-t ${s.border}">
                         <div>
-                            <span class="text-xs font-bold ${s.title}">Quantité dans le lot :</span>
+                            <span class="text-xs font-bold ${s.title}">Quantité :</span>
                         </div>
                         <div class="flex items-center gap-2 p-1 rounded-xl border ${s.counterBg}">
                             <button onclick="modifierParfumCount(${p.id}, -1)" class="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs ${s.btnMinus}" ${count === 0 ? 'disabled' : ''}>-</button>
@@ -1365,7 +1685,7 @@
 
         window.filtrerTablettes = function() { renderTablettesGrid(); }
 
-        // AFFICHAGE DES TABLETTES AVEC LEUR PROPRE SKIN ET LEUR ÉTIQUETTE
+        // AFFICHAGE DES TABLETTES AVEC CLIC POUR VOIR LA FICHE
         function renderTablettesGrid() {
             const container = document.getElementById('tablettes-grid');
             if(!container) return;
@@ -1393,19 +1713,25 @@
                 card.className = s.card;
                 card.innerHTML = `
                     <div>
-                        <div class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm">
-                            <div class="w-full h-full flex items-center justify-center" style="background-color: ${p.couleur || '#f4f6f4'}">
+                        <div onclick="ouvrirFicheProduit('parfum', ${p.id})" class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm cursor-pointer group">
+                            <div class="w-full h-full flex items-center justify-center group-hover:scale-105 transition-transform duration-300" style="background-color: ${p.couleur || '#f4f6f4'}">
                                 <i data-lucide="${p.icone || 'tablet'}" class="w-16 h-16 opacity-40"></i>
                             </div>
                             ${badgeHTML}
+                            <div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 opacity-90 group-hover:bg-sauge-600 transition-colors">
+                                <i data-lucide="eye" class="w-3.5 h-3.5"></i> Fiche produit
+                            </div>
                         </div>
                         <div class="space-y-2">
                             <div class="flex items-center justify-between gap-2">
                                 ${etiquetteTabletteHTML}
                                 <span class="text-xs font-bold ${s.title}">4,50 € / u</span>
                             </div>
-                            <h3 class="font-serif text-xl font-bold ${s.title}">${p.nom}</h3>
-                            <p class="text-xs ${s.desc} leading-relaxed">${p.description}</p>
+                            <h3 onclick="ouvrirFicheProduit('parfum', ${p.id})" class="font-serif text-xl font-bold ${s.title} cursor-pointer hover:text-sauge-600 transition-colors">${p.nom}</h3>
+                            <p class="text-xs ${s.desc} leading-relaxed line-clamp-2">${p.description}</p>
+                            <button onclick="ouvrirFicheProduit('parfum', ${p.id})" class="text-[11px] text-sauge-600 font-bold hover:underline flex items-center gap-1 pt-0.5">
+                                Voir détails & composition <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                            </button>
                         </div>
                     </div>
                     <div class="pt-4 mt-4 flex items-center justify-between border-t ${s.border}">
@@ -1413,7 +1739,7 @@
                             <span class="font-serif text-xl font-bold ${s.title}">4,50 €</span>
                             <span class="text-[10px] ${s.desc} block opacity-80">Offre 3 = 12 €</span>
                         </div>
-                        <button onclick="ajouterTabletteAuPanier(${p.id})" class="px-5 py-2.5 ${s.btn} text-xs font-bold rounded-2xl transition-all shadow-md flex items-center gap-1.5 uppercase tracking-wider">
+                        <button onclick="ajouterTabletteAuPanier(${p.id})" class="px-4 py-2.5 ${s.btn} text-xs font-bold rounded-2xl transition-all shadow-md flex items-center gap-1.5 uppercase tracking-wider">
                             <i data-lucide="shopping-bag" class="w-4 h-4"></i> Ajouter
                         </button>
                     </div>
@@ -1460,7 +1786,7 @@
             afficherToast(`Tablette ${p.nom} ajoutée !`);
         }
 
-        // RENDU PLATEAUX
+        // RENDU PLATEAUX AVEC CLIC POUR FICHE PRODUIT
         function renderPlateauxGrid() {
             const container = document.getElementById('plateaux-grid');
             if(!container) return;
@@ -1474,19 +1800,25 @@
                 card.className = s.card;
                 card.innerHTML = `
                     <div>
-                        <div class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm">
-                            <img src="${p.image}" alt="${p.nom}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400';">
+                        <div onclick="ouvrirFicheProduit('plateau', '${p.id}')" class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm cursor-pointer group">
+                            <img src="${p.image}" alt="${p.nom}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400';">
                             ${badgeHTML}
+                            <div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 opacity-90 group-hover:bg-sauge-600 transition-colors">
+                                <i data-lucide="eye" class="w-3.5 h-3.5"></i> Fiche produit
+                            </div>
                         </div>
                         <div class="space-y-3">
-                            <h3 class="font-serif text-xl font-bold ${s.title}">${p.nom}</h3>
-                            <p class="text-xs ${s.desc} leading-relaxed">${p.description}</p>
+                            <h3 onclick="ouvrirFicheProduit('plateau', '${p.id}')" class="font-serif text-xl font-bold ${s.title} cursor-pointer hover:text-sauge-600 transition-colors">${p.nom}</h3>
+                            <p class="text-xs ${s.desc} leading-relaxed line-clamp-2">${p.description}</p>
                             <div class="bg-black/5 p-3 rounded-xl border ${s.border} space-y-1">
                                 <span class="text-[10px] font-bold uppercase tracking-wider block opacity-80">Ce coffret inclut :</span>
                                 <ul class="text-xs space-y-1">
                                     ${p.elements.map(el => `<li>• ${el}</li>`).join('')}
                                 </ul>
                             </div>
+                            <button onclick="ouvrirFicheProduit('plateau', '${p.id}')" class="text-[11px] text-sauge-600 font-bold hover:underline flex items-center gap-1">
+                                Voir détails & fiche technique <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                            </button>
                         </div>
                     </div>
                     <div class="pt-4 mt-4 flex items-center justify-between border-t ${s.border}">
@@ -1513,7 +1845,7 @@
             afficherToast(`${pObj.nom} ajouté !`);
         }
 
-        // RENDU CRÉATIONS
+        // RENDU CRÉATIONS AVEC CLIC POUR FICHE PRODUIT
         function renderCreationsGrid() {
             const container = document.getElementById('creations-grid');
             if(!container) return;
@@ -1527,13 +1859,19 @@
                 card.className = s.card;
                 card.innerHTML = `
                     <div>
-                        <div class="h-60 overflow-hidden relative rounded-2xl mb-4 shadow-sm">
-                            <img src="${c.image}" alt="${c.nom}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='${c.fallbackImage}';">
+                        <div onclick="ouvrirFicheProduit('creation', '${c.id}')" class="h-60 overflow-hidden relative rounded-2xl mb-4 shadow-sm cursor-pointer group">
+                            <img src="${c.image}" alt="${c.nom}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null; this.src='${c.fallbackImage}';">
                             ${badgeHTML}
+                            <div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 opacity-90 group-hover:bg-sauge-600 transition-colors">
+                                <i data-lucide="eye" class="w-3.5 h-3.5"></i> Fiche produit
+                            </div>
                         </div>
                         <div class="space-y-3">
-                            <h3 class="font-serif text-xl font-bold ${s.title}">${c.nom}</h3>
+                            <h3 onclick="ouvrirFicheProduit('creation', '${c.id}')" class="font-serif text-xl font-bold ${s.title} cursor-pointer hover:text-sauge-600 transition-colors">${c.nom}</h3>
                             <p class="text-xs ${s.desc} leading-relaxed">${c.description}</p>
+                            <button onclick="ouvrirFicheProduit('creation', '${c.id}')" class="text-[11px] text-sauge-600 font-bold hover:underline flex items-center gap-1">
+                                Voir détails & composition <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                            </button>
                         </div>
                     </div>
                     <div class="pt-4 mt-4 flex items-center justify-between border-t ${s.border}">
