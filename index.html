@@ -303,7 +303,7 @@
                     </div>
 
                     <div class="flex flex-wrap gap-2 pb-2 border-b border-creme-200" id="categories-fondants-container"></div>
-                    <div id="parfums-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+                    <div id="parfums-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6"></div>
                 </div>
 
                 <div class="lg:col-span-4 sticky top-28 space-y-4">
@@ -470,10 +470,11 @@
                     <p class="text-[11px] mt-0.5">Deborah Bovrisse — SIREN 829 189 083 </p>
                 </div>
             </div>
-            <div class="flex items-center gap-6 font-semibold">
+            <div class="flex items-center gap-6 font-semibold flex-wrap justify-center sm:justify-end">
                 <button onclick="defilerVersContact()" class="hover:text-sauge-700 transition-colors">Contact</button>
-                <button onclick="ouvrirModalCGV()" class="hover:text-sauge-700 transition-colors">Conditions Générales de Vente (CGV)</button>
+                <button onclick="ouvrirModalCGV()" class="hover:text-sauge-700 transition-colors">CGV</button>
                 <button onclick="ouvrirModalMentions()" class="hover:text-sauge-700 transition-colors">Mentions Légales</button>
+                <button onclick="ouvrirModalCookies()" class="hover:text-sauge-700 transition-colors">Cookies</button>
             </div>
         </div>
     </footer>
@@ -551,7 +552,7 @@
             <h3 class="font-serif text-xl font-bold text-creme-900">Mentions Légales</h3>
             <button onclick="fermerModalMentions()" class="p-1 rounded-full hover:bg-creme-100 text-creme-800"><i data-lucide="x"></i></button>
         </div>
-        <div class="flex-grow overflow-y-auto space-y-4 text-xs text-creme-800 leading-relaxed custom-scrollbar pr-3 space-y-3">
+        <div class="flex-grow overflow-y-auto space-y-4 text-xs text-creme-800 leading-relaxed custom-scrollbar pr-3">
             <p class="font-bold text-creme-900">LA PAUSE FONDANTE<br><span class="font-normal text-[11px]">Dernière mise à jour : 7 novembre 2026</span></p>
             
             <h4 class="font-bold text-creme-900 pt-2">1. ÉDITEUR DU SITE</h4>
@@ -629,7 +630,7 @@
             <h3 class="font-serif text-xl font-bold text-creme-900">Conditions Générales de Vente (CGV)</h3>
             <button onclick="fermerModalCGV()" class="p-1 rounded-full hover:bg-creme-100 text-creme-800"><i data-lucide="x"></i></button>
         </div>
-        <div class="flex-grow overflow-y-auto space-y-4 text-xs text-creme-800 leading-relaxed custom-scrollbar pr-3 space-y-3">
+        <div class="flex-grow overflow-y-auto space-y-4 text-xs text-creme-800 leading-relaxed custom-scrollbar pr-3">
             <p class="font-bold text-creme-900">LA PAUSE FONDANTE<br><span class="font-normal text-[11px]">Dernière mise à jour : 7 novembre 2026</span></p>
 
             <h4 class="font-bold text-creme-900 pt-2">ARTICLE 1 – IDENTIFICATION DU VENDEUR</h4>
@@ -695,7 +696,7 @@
     </div>
 </div>
 
-<!-- MODALE COOKIES (Politique rédigée dans le même esprit) -->
+<!-- MODALE COOKIES -->
 <div id="modal-cookies" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
     <div onclick="fermerModalCookies()" class="absolute inset-0 bg-creme-900/60 backdrop-blur-sm"></div>
     <div class="relative bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl z-10 space-y-4 max-h-[85vh] flex flex-col animate-fade-in">
@@ -880,84 +881,20 @@
             switch(styleNom) {
                 case 'noel':
                     return {
-                        card: "bg-gradient-to-br from-[#2c1810] via-[#4a2518] to-[#2c1810] text-white rounded-3xl border-2 border-[#d4af37] shadow-xl overflow-hidden p-5 transition-all relative",
+                        card: "bg-gradient-to-br from-[#2c1810] via-[#4a2518] to-[#2c1810] text-white rounded-3xl border-2 border-[#d4af37] shadow-xl overflow-hidden p-6 transition-all relative flex flex-col justify-between",
+                        badge: "bg-[#d4af37] text-white",
                         title: "text-[#fcf8f2]",
                         desc: "text-creme-100 opacity-90",
-                        etiquette: "bg-[#d4af37] text-white",
+                        etiquette: "bg-[#d4af37]/20 text-[#d4af37] border border-[#d4af37]/40",
                         border: "border-white/10",
                         counterBg: "bg-white/10 border-white/20 text-white",
                         btnMinus: "bg-white/20 text-white hover:bg-white/30",
                         btnPlus: "bg-[#d4af37] text-white hover:bg-[#bfa130]"
                     };
-                case 'halloween':
-                    return {
-                        card: "bg-gradient-to-br from-[#1c1410] via-[#3d1c02] to-[#1c1410] text-white rounded-3xl border-2 border-orange-500 shadow-xl overflow-hidden p-5 transition-all relative",
-                        title: "text-orange-100",
-                        desc: "text-orange-200/80",
-                        etiquette: "bg-orange-600 text-white",
-                        border: "border-orange-900/40",
-                        counterBg: "bg-orange-950/50 border-orange-500/30 text-orange-100",
-                        btnMinus: "bg-orange-900/50 text-orange-200 hover:bg-orange-900",
-                        btnPlus: "bg-orange-600 text-white hover:bg-orange-700"
-                    };
-                case 'paques':
-                    return {
-                        card: "bg-gradient-to-br from-yellow-50 via-green-50 to-emerald-50 text-creme-900 rounded-3xl border-2 border-emerald-300 shadow-xl overflow-hidden p-5 transition-all relative",
-                        title: "text-emerald-900",
-                        desc: "text-emerald-800/80",
-                        etiquette: "bg-emerald-600 text-white",
-                        border: "border-emerald-200",
-                        counterBg: "bg-white/80 border-emerald-200 text-emerald-900",
-                        btnMinus: "bg-emerald-100 text-emerald-800 hover:bg-emerald-200",
-                        btnPlus: "bg-emerald-600 text-white hover:bg-emerald-700"
-                    };
-                case 'st-valentin':
-                    return {
-                        card: "bg-gradient-to-br from-rose-50 via-red-50 to-pink-100 text-creme-900 rounded-3xl border-2 border-rose-300 shadow-xl overflow-hidden p-5 transition-all relative",
-                        title: "text-rose-950",
-                        desc: "text-rose-900/80",
-                        etiquette: "bg-rose-600 text-white",
-                        border: "border-rose-200",
-                        counterBg: "bg-white/80 border-rose-200 text-rose-950",
-                        btnMinus: "bg-rose-100 text-rose-800 hover:bg-rose-200",
-                        btnPlus: "bg-rose-600 text-white hover:bg-rose-700"
-                    };
-                case 'rose-bleu':
-                    return {
-                        card: "bg-gradient-to-br from-pink-50 via-sky-50 to-indigo-50 text-creme-900 rounded-3xl border-2 border-sky-300 shadow-xl overflow-hidden p-5 transition-all relative",
-                        title: "text-indigo-950",
-                        desc: "text-slate-700",
-                        etiquette: "bg-indigo-500 text-white",
-                        border: "border-sky-200",
-                        counterBg: "bg-white/80 border-sky-200 text-indigo-950",
-                        btnMinus: "bg-sky-100 text-sky-800 hover:bg-sky-200",
-                        btnPlus: "bg-indigo-500 text-white hover:bg-indigo-600"
-                    };
-                case 'ete':
-                    return {
-                        card: "bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-100 text-creme-900 rounded-3xl border-2 border-amber-300 shadow-xl overflow-hidden p-5 transition-all relative",
-                        title: "text-amber-950",
-                        desc: "text-amber-900/80",
-                        etiquette: "bg-amber-600 text-white",
-                        border: "border-amber-200",
-                        counterBg: "bg-white/80 border-amber-200 text-amber-950",
-                        btnMinus: "bg-amber-100 text-amber-800 hover:bg-amber-200",
-                        btnPlus: "bg-amber-600 text-white hover:bg-amber-700"
-                    };
-                case 'poudreux':
-                    return {
-                        card: "bg-gradient-to-br from-[#f7f4f2] via-[#efeae6] to-[#e8dfdb] text-creme-900 rounded-3xl border-2 border-[#d9cecb] shadow-lg overflow-hidden p-5 transition-all relative",
-                        title: "text-[#4a3f3c]",
-                        desc: "text-[#6e615e]",
-                        etiquette: "bg-[#8c7a75] text-white",
-                        border: "border-[#d9cecb]",
-                        counterBg: "bg-white/70 border-[#d9cecb] text-[#4a3f3c]",
-                        btnMinus: "bg-[#e8dfdb] text-[#4a3f3c] hover:bg-[#d9cecb]",
-                        btnPlus: "bg-[#8c7a75] text-white hover:bg-[#73625d]"
-                    };
                 default: // classique
                     return {
-                        card: "bg-white rounded-3xl border border-creme-200 hover:border-sauge-300 shadow-sm overflow-hidden p-5 transition-all relative",
+                        card: "bg-white rounded-3xl border border-creme-200 hover:border-sauge-500 hover:shadow-xl transition-all flex flex-col justify-between p-6 relative shadow-sm",
+                        badge: "bg-sauge-700 text-white",
                         title: "text-creme-900",
                         desc: "text-creme-800",
                         etiquette: "bg-sauge-50 text-sauge-700 border border-sauge-100",
@@ -1067,7 +1004,6 @@
             prixUnitaire: 0.50,
             categoriesParfums: ["Toutes", "Gourmands", "Fleuris", "Frais & Propres", "Épicés & Cocooning", "Fruités"],
             
-            // CONFIGURATION DES PARFUMS (Tu peux changer le 'style', l' 'etiquette' ou l' 'image' unitairement)
             parfums: [
                 { id: 1, nom: "Citrouille vanillée", categorie: "Gourmands", description: "Douceur de citrouille et vanille", icone: "sparkles", couleur: "#fef3c7", style: "classique", etiquette: "Gourmands", image: "" },
                 { id: 2, nom: "Orangette", categorie: "Gourmands", description: "Orange confite et cacao", icone: "cookie", couleur: "#fed7aa", style: "classique", etiquette: "Gourmand", image: "" },
@@ -1094,30 +1030,11 @@
                 { id: 23, nom: "Cire et Miel", categorie: "Épicés & Cocooning", description: "Nectar de miel brut", icone: "sparkles", couleur: "#fef3c7", style: "classique", etiquette: "Épicés & Cocooning", image: "" }
             ],
             plateaux: [
-                
                 { id: 'plat-naturel', nom: "Plateau Classique", prix: 15.00, weight: 1200, badge: "", stock: 8, style: 'classique', image: "plateau_nature_lpf.jpeg", description: "Faite parler la nature en vous !", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration Naturel", "1 plateau"] },
-                
                 { id: 'plat-zen', nom: "Plateau Zen", prix: 18.00, weight: 1200, badge: "Sérénité", stock: 5, style: 'classique', image: "plateau_zen_lpf.jpeg", description: "Retrouvez vous avec ce kit de plateau complet", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration zen","une petite bougie", "1 plateau"] },
-                
                 { id: 'plat-noel', nom: "Plateau Noël", prix: 17.00, weight: 1200, badge: "Édition Limitée !", stock: 3, style: 'noel', image: "plateau_noel_lpf.jpeg", description: "Faite vivre les fête de fin d'année", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration hivernale", "1 plateau"] },
-                
-                {   
-                    id: 'plat-grinch',
-                    nom: "Plateau Grinch", 
-                    prix: 16.00,
-                    Weight: 1200,
-                    badge: " !Édition Limitée !",
-                    stock : 1,
-                    style: 'noel',
-                    image: "plateau_grinch.jpg",
-                    description: "Ajouter une touche grincheuse à votre table avec kit de plateau complet",
-                    elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration Hivernale","une figurine du Grinch", "1 plateau"] 
-                    
-                },
-                    
-                
+                { id: 'plat-grinch', nom: "Plateau Grinch", prix: 16.00, weight: 1200, badge: " !Édition Limitée !", stock : 1, style: 'noel', image: "plateau_grinch.jpg", description: "Ajouter une touche grincheuse à votre table avec kit de plateau complet", elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration Hivernale","une figurine du Grinch", "1 plateau"] }
             ],
-            
             creations: [
                 { 
                     id: 'bm-noel', 
@@ -1260,7 +1177,7 @@
 
         window.filtrerParfums = function() { renderParfumsGrid(); }
 
-        // AFFICHAGE DES FONDANTS AVEC LEUR ÉTIQUETTE ET LEUR IMAGE EN HAUT À DROITE
+        // AFFICHAGE DES FONDANTS AVEC LE FORMAT GRANDE IMAGE (STYLE TABLETTES)
         function renderParfumsGrid() {
             const container = document.getElementById('parfums-grid');
             if(!container) return;
@@ -1277,37 +1194,35 @@
                 const styleNom = p.style || 'classique';
                 const s = obtenirStyleFondant(styleNom);
 
+                const badgeHTML = (p.etiquette && p.etiquette.trim() !== "") 
+                    ? `<span class="absolute top-3 left-3 ${s.etiquette} text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${p.etiquette}</span>` 
+                    : `<span class="absolute top-3 left-3 bg-sauge-700 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${p.categorie}</span>`;
+
+                const imageContent = (p.image && p.image.trim() !== "")
+                    ? `<img src="${p.image}" alt="${p.nom}" class="w-full h-full object-cover">`
+                    : `<div class="w-full h-full flex items-center justify-center" style="background-color: ${p.couleur || '#f4f6f4'}"><i data-lucide="${p.icone || 'sparkles'}" class="w-16 h-16 opacity-40 text-creme-900"></i></div>`;
+
                 const card = document.createElement('div');
                 card.className = s.card;
-                
-                // Image optionnelle en haut à droite
-                const imageHTML = (p.image && p.image.trim() !== "") 
-                    ? `<div class="absolute top-4 right-4 w-12 h-12 rounded-xl overflow-hidden shadow-sm border border-white/40"><img src="${p.image}" alt="${p.nom}" class="w-full h-full object-cover"></div>`
-                    : '';
-
-                // Étiquette personnalisable
-                const etiquetteHTML = (p.etiquette && p.etiquette.trim() !== "")
-                    ? `<span class="text-[10px] font-bold px-2.5 py-1 rounded-md ${s.etiquette}">${p.etiquette}</span>`
-                    : `<span class="text-[10px] font-semibold px-2.5 py-1 rounded-md ${s.etiquette}">${p.categorie}</span>`;
-
                 card.innerHTML = `
-                    ${imageHTML}
-                    <div class="space-y-1.5 pr-12">
-                        <div class="flex items-center gap-2">
-                            <span class="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0" style="background-color: ${p.couleur || '#f4f6f4'}">
-                                <i data-lucide="${p.icone || 'sparkles'}" class="w-4 h-4 text-creme-900"></i>
-                            </span>
-                            <h4 class="font-serif font-bold text-sm ${s.title}">${p.nom}</h4>
+                    <div>
+                        <div class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm">
+                            ${imageContent}
+                            ${badgeHTML}
                         </div>
-                        <p class="text-[11px] ${s.desc} leading-relaxed">${p.description}</p>
+                        <div class="space-y-2">
+                            <h3 class="font-serif text-xl font-bold ${s.title}">${p.nom}</h3>
+                            <p class="text-xs ${s.desc} leading-relaxed">${p.description}</p>
+                        </div>
                     </div>
-
-                    <div class="pt-3 mt-3 border-t ${s.border} flex items-center justify-between">
-                        ${etiquetteHTML}
+                    <div class="pt-4 mt-4 flex items-center justify-between border-t ${s.border}">
+                        <div>
+                            <span class="text-xs font-bold ${s.title}">Quantité dans le lot :</span>
+                        </div>
                         <div class="flex items-center gap-2 p-1 rounded-xl border ${s.counterBg}">
-                            <button onclick="modifierParfumCount(${p.id}, -1)" class="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs ${s.btnMinus}" ${count === 0 ? 'disabled' : ''}>-</button>
-                            <span class="w-5 text-center font-bold text-xs">${count}</span>
-                            <button onclick="modifierParfumCount(${p.id}, 1)" class="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs ${s.btnPlus}">+</button>
+                            <button onclick="modifierParfumCount(${p.id}, -1)" class="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs ${s.btnMinus}" ${count === 0 ? 'disabled' : ''}>-</button>
+                            <span class="w-6 text-center font-bold text-xs">${count}</span>
+                            <button onclick="modifierParfumCount(${p.id}, 1)" class="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs ${s.btnPlus}">+</button>
                         </div>
                     </div>
                 `;
@@ -1471,7 +1386,6 @@
                     ? `<span class="absolute top-3 left-3 ${s.badge} text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${p.badge}</span>` 
                     : '';
 
-                // Étiquette spécifique pour les tablettes
                 const etiquetteTabletteHTML = (p.etiquette && p.etiquette.trim() !== "")
                     ? `<span class="text-[10px] font-bold uppercase tracking-wider ${s.etiquette} px-2.5 py-1 rounded-md">${p.etiquette}</span>`
                     : `<span class="text-[10px] font-bold uppercase tracking-wider ${s.etiquette} px-2.5 py-1 rounded-md">Tablette Sécable</span>`;
@@ -1705,6 +1619,9 @@
         window.fermerModalCGV = function() { document.getElementById('modal-cgv').classList.add('hidden'); document.getElementById('modal-cgv').classList.remove('flex'); }
         window.ouvrirModalMentions = function() { document.getElementById('modal-mentions').classList.remove('hidden'); document.getElementById('modal-mentions').classList.add('flex'); }
         window.fermerModalMentions = function() { document.getElementById('modal-mentions').classList.add('hidden'); document.getElementById('modal-mentions').classList.remove('flex'); }
+
+        window.ouvrirModalCookies = function() { document.getElementById('modal-cookies').classList.remove('hidden'); document.getElementById('modal-cookies').classList.add('flex'); }
+        window.fermerModalCookies = function() { document.getElementById('modal-cookies').classList.add('hidden'); document.getElementById('modal-cookies').classList.remove('flex'); }
 
         window.ouvrirModalPaiement = function() {
             if (cart.length === 0) { afficherToast("Panier vide", "warning"); return; }
