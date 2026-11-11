@@ -537,13 +537,14 @@
             const nom = document.getElementById('checkout-nom').value.trim();
             const prenom = document.getElementById('checkout-prenom').value.trim();
             const email = document.getElementById('checkout-email').value.trim();
+            const remarqueSaisie = document.getElementById('checkout-remarques').value.trim();
             const telephone = document.getElementById('checkout-telephone').value.trim();
             const adresse = document.getElementById('checkout-adresse').value.trim();
             const cp = document.getElementById('checkout-cp').value.trim();
             const ville = document.getElementById('checkout-ville').value.trim();
             const mode = document.querySelector('input[name="mode_livraison"]:checked')?.value;
             const pointRelais = document.getElementById('checkout-point-relais').value.trim();
-            const remarques = document.getElementById('checkout-remarques').value.trim();
+
 
             const totaux = calculerTotauxPanier();
             const fraisPort = calculerFraisPort(mode, totaux.poidsTotalGrammes, totaux.estLivraisonOfferte);
@@ -561,7 +562,7 @@
                 clientPhone: telephone,
                 deliveryAddress: `${adresse}, ${cp} ${ville}`,
                 discount: codePromoApplique ? `${totaux.montantReduction.toFixed(2).replace('.', ',')} €` : '0,00 €',
-                remarques: remarques,
+                remarque: remarqueSaisie !== "" ? remarqueSaisie : "Aucune consigne particulière"
             };
 
             try {
