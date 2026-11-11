@@ -14,7 +14,9 @@ export default async function handler(req, res) {
     clientName,
     clientPhone,
     deliveryAddress,
-    discount
+    discount,
+    remarque,
+    remarques
   } = req.body || {};
   
   if (!amount || isNaN(amount) || amount <= 0) {
@@ -104,7 +106,8 @@ export default async function handler(req, res) {
         subtotal: `${parseFloat(sousTotal || 0).toFixed(2).replace('.', ',')} €`,
         discount: discount || '0,00 €',
         shipping: estLivraisonOfferte ? "OFFERTS" : `${parseFloat(fraisDePort || 0).toFixed(2).replace('.', ',')} €`,
-        total: `${finalAmount.toFixed(2).replace('.', ',')} €`
+        total: `${finalAmount.toFixed(2).replace('.', ',')} €`,
+        remarque: remarque || remarques || req.body?.remarque || req.body?.remarques || "Aucune consigne particulière"
       };
 
       const emailjsPayload = {
