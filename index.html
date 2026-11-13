@@ -153,6 +153,24 @@
             transform: translateY(-3px) !important;
         }
 
+        /* Suppression du grand cadre blanc autour du Catalogue visuel de nos Fragrances */
+        body.theme-noel #view-fondants > div:nth-child(3) {
+            max-width: 720px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+        body.theme-noel #view-fondants > div:nth-child(3) > div:nth-child(2) {
+            background: linear-gradient(180deg, #d7c7ad 0%, #c8b698 100%) !important;
+            border: 1px solid #fde68a !important;
+            padding: 0 !important;
+        }
+        body.theme-noel #view-fondants > div:nth-child(3) > div:nth-child(2) img {
+            max-height: none !important;
+            width: 100% !important;
+            max-width: 650px !important;
+            margin: 0 auto !important;
+        }
+
         /* Sous-blocs intérieurs (ex. coordonnées contact, listes plateaux, compteurs) */
         body.theme-noel main .bg-creme-50,
         body.theme-noel main .bg-sauge-50,
@@ -191,7 +209,7 @@
             border: 2px solid #fde68a !important;
         }
 
-        /* Toute l'écriture du site et des articles en BLANC */
+        /* Toute l'écriture du site, des articles et liens ("Explorer ->") en BLANC */
         body.theme-noel main h1,
         body.theme-noel main h2,
         body.theme-noel main h3,
@@ -202,6 +220,8 @@
         body.theme-noel main div,
         body.theme-noel main strong,
         body.theme-noel main button.text-sauge-600,
+        body.theme-noel #view-home .grid > div.group div.text-ocre-600,
+        body.theme-noel #view-home .grid > div.group div.text-sauge-600,
         body.theme-noel #section-contact h2,
         body.theme-noel #section-contact h3,
         body.theme-noel #section-contact p,
@@ -328,20 +348,6 @@
         }
         body.theme-noel footer button:hover {
             color: #fde68a !important;
-            
-        /* Supprimer le grand cadre blanc autour de l'affiche Catalogue visuel de nos Fragrances */
-        body.theme-noel #view-fondants > div:nth-child(3) > div:nth-child(2) {
-            background: linear-gradient(180deg, #d7c7ad 0%, #c8b698 100%) !important;
-            border: 1px solid #fde68a !important;
-            padding: 0 !important;
-        }
-        body.theme-noel #view-fondants > div:nth-child(3) > div:nth-child(2) img {
-            max-height: none !important;
-            width: 100% !important;
-            max-width: 650px !important;
-            margin: 0 auto !important;
-        }
-        
         }
     </style>
 </head>
@@ -364,13 +370,13 @@
                     <i data-lucide="home" class="w-4 h-4"></i> Accueil
                 </button>
                 <button id="nav-fondants" onclick="naviguerVers('fondants')" class="py-2 px-3.5 rounded-xl font-medium flex items-center gap-1.5 transition-all">
-                    <i data-lucide="box" class="w-4 h-4"></i> Bar à Fondants
+                    <i data-lucide="flame" class="w-4 h-4"></i> Bar à Fondants
                 </button>
                 <button id="nav-tablettes" onclick="naviguerVers('tablettes')" class="py-2 px-3.5 rounded-xl font-medium flex items-center gap-1.5 transition-all">
-                    <i data-lucide="tablet" class="w-4 h-4"></i> Les tablettes
+                    <i data-lucide="layout-grid" class="w-4 h-4"></i> Les tablettes
                 </button>
                 <button id="nav-plateaux" onclick="naviguerVers('plateaux')" class="py-2 px-3.5 rounded-xl font-medium flex items-center gap-1.5 transition-all">
-                    <i data-lucide="utensils" class="w-4 h-4"></i> Plateaux
+                    <i data-lucide="layers" class="w-4 h-4"></i> Plateaux
                 </button>
                 <button id="nav-creations" onclick="naviguerVers('creations')" class="py-2 px-3.5 rounded-xl font-medium flex items-center gap-1.5 transition-all">
                     <i data-lucide="sparkles" class="w-4 h-4"></i> Créations
@@ -403,13 +409,13 @@
                 <i data-lucide="home" class="w-4 h-4"></i> Accueil
             </button>
             <button id="nav-mob-fondants" onclick="naviguerVers('fondants')" class="px-2.5 py-1.5 flex flex-col items-center gap-0.5 shrink-0 transition-all">
-                <i data-lucide="box" class="w-4 h-4"></i> Fondants
+                <i data-lucide="flame" class="w-4 h-4"></i> Fondants
             </button>
             <button id="nav-mob-tablettes" onclick="naviguerVers('tablettes')" class="px-2.5 py-1.5 flex flex-col items-center gap-0.5 shrink-0 transition-all">
-                <i data-lucide="tablet" class="w-4 h-4"></i> Tablettes
+                <i data-lucide="layout-grid" class="w-4 h-4"></i> Tablettes
             </button>
             <button id="nav-mob-plateaux" onclick="naviguerVers('plateaux')" class="px-2.5 py-1.5 flex flex-col items-center gap-0.5 shrink-0 transition-all">
-                <i data-lucide="utensils" class="w-4 h-4"></i> Plateaux
+                <i data-lucide="layers" class="w-4 h-4"></i> Plateaux
             </button>
             <button id="nav-mob-creations" onclick="naviguerVers('creations')" class="px-2.5 py-1.5 flex flex-col items-center gap-0.5 shrink-0 transition-all">
                 <i data-lucide="sparkles" class="w-4 h-4"></i> Créations
