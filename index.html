@@ -70,6 +70,96 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+
+        /* =====================================================================
+           SKIN DE NOËL (Rouge Père Noël, Doré, Touches de Vert Sapin & Blanc)
+           Activé automatiquement lorsque CONFIG.themeNoel = true
+           ===================================================================== */
+        body.theme-noel {
+            background-color: #8b1313 !important;
+            background-image: radial-gradient(circle at top center, #b91c1c 0%, #7f1d1d 60%, #5c0f0f 100%) !important;
+            color: #ffffff;
+        }
+        body.theme-noel header {
+            background-color: rgba(110, 14, 14, 0.96) !important;
+            border-bottom: 2px solid #d4af37 !important;
+        }
+        body.theme-noel header .text-creme-900,
+        body.theme-noel header .text-creme-800 {
+            color: #ffffff !important;
+        }
+        body.theme-noel header .text-sauge-600 {
+            color: #fde047 !important;
+        }
+        body.theme-noel header nav button:hover {
+            background-color: rgba(212, 175, 55, 0.2) !important;
+            color: #fde047 !important;
+        }
+        /* Navigation mobile en thème Noël */
+        body.theme-noel header > div:nth-child(2) {
+            background-color: #5c0f0f !important;
+            border-top-color: #d4af37 !important;
+        }
+        body.theme-noel header > div:nth-child(2) button {
+            color: #ffffff !important;
+        }
+        /* Boutons principaux en Doré */
+        body.theme-noel .bg-sauge-600,
+        body.theme-noel .bg-ocre-600 {
+            background-color: #d4af37 !important;
+            color: #2c1810 !important;
+            border-color: #f3e5ab !important;
+        }
+        body.theme-noel .hover\:bg-sauge-700:hover,
+        body.theme-noel .hover\:bg-ocre-700:hover {
+            background-color: #bfa130 !important;
+        }
+        /* Touches de vert sapin sur les badges et encarts */
+        body.theme-noel .bg-sauge-50,
+        body.theme-noel .bg-sauge-100 {
+            background-color: #14532d !important;
+            color: #ffffff !important;
+            border-color: #d4af37 !important;
+        }
+        body.theme-noel .text-sauge-600,
+        body.theme-noel .text-sauge-700,
+        body.theme-noel .text-sauge-800 {
+            color: #15803d !important;
+        }
+        /* Encarts blancs avec bordure dorée */
+        body.theme-noel main > section > div.bg-white,
+        body.theme-noel #section-contact {
+            border: 2px solid #d4af37 !important;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35) !important;
+        }
+        /* Titres de sections sur fond rouge */
+        body.theme-noel #view-fondants > div:first-child h2,
+        body.theme-noel #view-plateaux > div:first-child h2,
+        body.theme-noel #view-creations > div:first-child h2,
+        body.theme-noel #view-creations > div:first-child p {
+            color: #ffffff !important;
+        }
+        /* Bannière accueil secondaire en vert sapin, blanc et doré */
+        body.theme-noel #view-home > div:nth-child(2) {
+            background: linear-gradient(135deg, #14532d 0%, #166534 50%, #0f3d21 100%) !important;
+            border: 2px solid #d4af37 !important;
+        }
+        body.theme-noel #view-home > div:nth-child(2) h2,
+        body.theme-noel #view-home > div:nth-child(2) p {
+            color: #ffffff !important;
+        }
+        /* Footer en rouge foncé / doré */
+        body.theme-noel footer {
+            background-color: #5c0f0f !important;
+            border-top: 2px solid #d4af37 !important;
+            color: #ffffff !important;
+        }
+        body.theme-noel footer .text-creme-900 {
+            color: #fde047 !important;
+        }
+        body.theme-noel footer button:hover {
+            color: #fde047 !important;
+        }
     </style>
 </head>
 <body class="h-full font-sans text-creme-900 antialiased flex flex-col selection:bg-ocre-100 selection:text-ocre-700">
@@ -144,7 +234,10 @@
 
         <!-- ACCUEIL -->
         <section id="view-home" class="space-y-12 animate-fade-in">
-            <div class="relative bg-gradient-to-br from-[#2c1810] via-[#4a2518] to-[#2c1810] text-white rounded-3xl p-6 sm:p-10 md:p-12 border-2 border-[#d4af37] shadow-2xl overflow-hidden">
+            <!-- BANNIÈRE GRAND CONCOURS DE NOËL (Avec image de fond configurable) -->
+            <div id="concours-noel-banner" class="relative bg-gradient-to-br from-[#2c1810] via-[#4a2518] to-[#2c1810] text-white rounded-3xl p-6 sm:p-10 md:p-12 border-2 border-[#d4af37] shadow-2xl overflow-hidden bg-cover bg-center">
+                <!-- Voile sombre si une image de fond est définie pour garder le texte lisible -->
+                <div id="concours-noel-overlay" class="hidden absolute inset-0 bg-black/60 backdrop-blur-[2px] pointer-events-none"></div>
                 <div class="absolute -right-10 -bottom-10 w-96 h-96 bg-[#d4af37]/10 rounded-full blur-3xl pointer-events-none"></div>
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
                     <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
@@ -1066,19 +1159,13 @@
             }
         }
 
-        /* 
-           CONSEIL MODIFICATION :
-           Pour modifier les descriptions, compositions, etc. et PASSER DES LIGNES :
-           Utilisez des guillemets obliques ` au lieu de " ou ' !
-           Exemple :
-           description: `Première ligne...
-
-Pyramide olfactive :
-- Note de tête : Citron
-- Note de cœur : Vanille`,
-        */
-
         const CONFIG = {
+            // =========================================================================
+            // PARAMÈTRES GÉNÉRAUX & PERSONNALISATION VISUELLE (NOËL / CONCOURS)
+            // =========================================================================
+            themeNoel: true, // Mettre true pour le skin Noël (Rouge Père Noël, Doré, Vert, Blanc) ou false pour revenir au thème classique
+            imageFondConcours: "", // Mets ici le nom de ton image de fond pour le Grand Concours (ex: "fond_concours_noel.jpg") à la place de l'encadré marron
+
             nomBoutique: "La pause Fondante",
             seuilFraisDePortGratuit: 70.00,
             lots: [
@@ -1090,6 +1177,13 @@ Pyramide olfactive :
             prixUnitaire: 0.50,
             categoriesParfums: ["Toutes", "Gourmands", "Fleuris", "Frais & Propres", "Épicés & Cocooning", "Fruités"],
             
+            // =========================================================================
+            // CATALOGUE DES PARFUMS (FONDANTS & TABLETTES)
+            // - image : photo du fondant
+            // - imageTablette : photo spécifique de la tablette (si vide, affiche l'icône sur fond coloré)
+            // - description : description du fondant
+            // - descriptionTablette : description spécifique de la tablette (si vide, reprend la description du fondant)
+            // =========================================================================
             parfums: [
                 {   id: 1, 
                     nom: "Citrouille vanillée", 
@@ -1100,8 +1194,11 @@ Pyramide olfactive :
                     • Notes de cœur : Citrouille, vanille
                     • Notes de fond : Sucre roux, cannelle, accords lactés
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: `Tablette fondante sécable Citrouille vanillée (~90g) : cassez un ou plusieurs carrés selon l'intensité souhaitée !
+                    • Notes de tête : Guimauve, accords épicés
+                    • Notes de cœur : Citrouille, vanille
+                    • Notes de fond : Sucre roux, cannelle, accords lactés`,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1120,7 +1217,9 @@ Pyramide olfactive :
                     Phrases EUH : 
                     • EUH208 - Contient ALDEHYDE CINNAMIQUE(104-55-2), ALDEHYDE ALPHA METHYL CINNAMIQUE(101-39-3). Peut produire une réaction allergique.`,
                     ficheTechniqueImage: "fiche_citrouille_lpf.png",
-                    icone: "sparkles", couleur: "#fef3c7", style: "classique", etiquette: "Gourmands", image: "citrouille_vanillé_lpf.jpeg" },
+                    icone: "sparkles", couleur: "#fef3c7", style: "classique", etiquette: "Gourmands", 
+                    image: "citrouille_vanillé_lpf.jpeg",
+                    imageTablette: "" },
                     
                 {   id: 2, 
                     nom: "Orangette", 
@@ -1131,8 +1230,8 @@ Pyramide olfactive :
                     • Notes de cœur : Chocolat, orange
                     • Notes de fond : Miel
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1161,7 +1260,8 @@ Pyramide olfactive :
                     couleur: "#fed7aa", 
                     style: "classique",
                     etiquette: "Gourmand", 
-                    image: "orangette_lpf.jpeg" },
+                    image: "orangette_lpf.jpeg",
+                    imageTablette: "" },
                     
                 {   id: 3, 
                     nom: "Fleur de coton", 
@@ -1172,8 +1272,8 @@ Pyramide olfactive :
                     • Notes de cœur : Fleur de coton, jasmin
                     • Notes de fond : Musc, fève tonka
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1204,7 +1304,8 @@ Pyramide olfactive :
                     couleur: "#e8ece9", 
                     style: "classique", 
                     etiquette: "Doux & Pur", 
-                    image: "fleur_coton_lpf.jpeg" },
+                    image: "fleur_coton_lpf.jpeg",
+                    imageTablette: "" },
                     
                 {   id: 4,
                     nom: "Litchi épicé",    
@@ -1215,8 +1316,8 @@ Pyramide olfactive :
                     • Notes de cœur : Litchi, patchouli
                     • Notes de fond : Vanille, fève tonka
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1235,7 +1336,8 @@ Pyramide olfactive :
                     couleur: "#ffe4e6", 
                     style: "classique", 
                     etiquette: "Fruités", 
-                    image: "litchi_lpf.jpeg" },
+                    image: "litchi_lpf.jpeg",
+                    imageTablette: "" },
                 
                 {   id: 5, 
                     nom: "Caramel", 
@@ -1246,8 +1348,8 @@ Pyramide olfactive :
                     • Notes de cœur : Caramel
                     • Notes de fond : Vanille
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1268,7 +1370,8 @@ Pyramide olfactive :
                     couleur: "#fde68a",
                     style: "classique",
                     etiquette: "Gourmands", 
-                    image: "caramel_lpf.jpeg" },
+                    image: "caramel_lpf.jpeg",
+                    imageTablette: "" },
                 
                 {   id: 6,
                     nom: "Pomme Cannelle", 
@@ -1279,8 +1382,8 @@ Pyramide olfactive :
                     • Notes de cœur : Pomme, cannelle
                     • Notes de fond : Vanille
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1310,7 +1413,8 @@ Pyramide olfactive :
                     couleur: "#fee2e2", 
                     style: "classique", 
                     etiquette: "Épicés & Cocooning", 
-                    image: "pomme_cannelle_lpf.jpeg" },
+                    image: "pomme_cannelle_lpf.jpeg",
+                    imageTablette: "" },
                 
                 {   id: 7, 
                     nom: "Noix de coco", 
@@ -1321,8 +1425,8 @@ Pyramide olfactive :
                     • Notes de cœur : Coconut
                     • Notes de fond : Vanille, caramel
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1341,7 +1445,8 @@ Pyramide olfactive :
                     couleur: "#fef3c7", 
                     style: "classique", 
                     etiquette: "Gourmands", 
-                    image: "coco_vanille_lpf.jpeg" },
+                    image: "coco_vanille_lpf.jpeg",
+                    imageTablette: "" },
                 
                 {   id: 8, 
                     nom: "Lavande", 
@@ -1352,8 +1457,8 @@ Pyramide olfactive :
                     • Notes de cœur : Lavande, lavandin
                     • Notes de fond : Tolu, tonka, benjoin
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1383,7 +1488,8 @@ Pyramide olfactive :
                     couleur: "#f3e8ff",
                     style: "classique", 
                     etiquette: "Fleuris",
-                    image: "lavande_lpf.jpeg" },
+                    image: "lavande_lpf.jpeg",
+                    imageTablette: "" },
                 
                 {   id: 9, 
                     nom: "Cerise Noire Explosive", 
@@ -1394,8 +1500,8 @@ Pyramide olfactive :
                     • Notes de cœur : Cerise noire, griotte
                     • Notes de fond : Vanille, sucre roux
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1414,7 +1520,8 @@ Pyramide olfactive :
                     couleur: "#ffe4e6", 
                     style: "classique", 
                     etiquette: "Fruités", 
-                    image: "cerise_lpf.jpeg" },
+                    image: "cerise_lpf.jpeg",
+                    imageTablette: "" },
                 
                 {   id: 10, 
                     nom: "Adoucissant", 
@@ -1425,8 +1532,8 @@ Pyramide olfactive :
                     • Notes de cœur : Accord frais, fleurs blanches
                     • Notes de fond : Musc, bois sec
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1450,7 +1557,8 @@ Pyramide olfactive :
                     couleur: "#e0f2fe", 
                     style: "classique", 
                     etiquette: "Frais & Propres", 
-                    image: "adoucissant_lpf.jpeg" },
+                    image: "adoucissant_lpf.jpeg",
+                    imageTablette: "" },
                 
                 {   id: 11, 
                     nom: "Bonbon Démoniaque", 
@@ -1461,8 +1569,8 @@ Pyramide olfactive :
                     • Notes de cœur : Jasmin, rose, violette
                     • Notes de fond : Accord boisé, accord gourmand
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1481,8 +1589,8 @@ Pyramide olfactive :
                     couleur: "#fce7f3", 
                     style: "classique",
                     etiquette: "Fruités", 
-                    image: "bonbon_lpf.jpeg" },
-                
+                    image: "bonbon_lpf.jpeg",
+                    imageTablette: "" },
                     
                 {   id: 14, 
                     nom: "Épices de Noël",
@@ -1493,8 +1601,8 @@ Pyramide olfactive :
                     • Notes de cœur : Orange, cannelle
                     • Notes de fond : Vanille, miel
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1522,7 +1630,8 @@ Pyramide olfactive :
                     couleur: "#ffedd5", 
                     style: "classique",
                     etiquette: "Épicés & Cocooning",
-                    image: "epice_noel_lpf.jpeg" },
+                    image: "epice_noel_lpf.jpeg",
+                    imageTablette: "" },
                     
                 {   id: 15, 
                     nom: "Cannelle", 
@@ -1533,8 +1642,8 @@ Pyramide olfactive :
                     • Notes de cœur : Cannelle
                     • Notes de fond : Vanille, fève tonka
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1562,7 +1671,8 @@ Pyramide olfactive :
                     couleur: "#ffedd5", 
                     style: "classique", 
                     etiquette: "Épicés & Cocooning", 
-                    image: "cannelle_lpf.jpeg" },
+                    image: "cannelle_lpf.jpeg",
+                    imageTablette: "" },
                     
                 {   id: 16, 
                     nom: "Balade Provençale", 
@@ -1573,8 +1683,8 @@ Pyramide olfactive :
                     • Notes de cœur : Immortelle, iris, accord aromatique
                     • Notes de fond : Fève tonka, vétiver, mousse
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1592,7 +1702,8 @@ Pyramide olfactive :
                     couleur: "#dcfce7", 
                     style: "classique", 
                     etiquette: "Fleuris", 
-                    image: "province_lpf.jpeg" },
+                    image: "province_lpf.jpeg",
+                    imageTablette: "" },
                     
                 {   id: 17, 
                     nom: "Abricot Romarin", 
@@ -1603,8 +1714,8 @@ Pyramide olfactive :
                     • Notes de cœur : Abricot, romarin
                     • Notes de fond : Musc, accord gourmand
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1634,7 +1745,8 @@ Pyramide olfactive :
                     couleur: "#ffedd5", 
                     style: "classique", 
                     etiquette: "Fruités", 
-                    image: "abricot_lpf.jpeg" },
+                    image: "abricot_lpf.jpeg",
+                    imageTablette: "" },
                     
                 {   id: 18, 
                     nom: "Vanille", 
@@ -1645,8 +1757,8 @@ Pyramide olfactive :
                     • Notes de cœur : Vanille
                     • Notes de fond : Caramel
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1662,7 +1774,8 @@ Pyramide olfactive :
                     couleur: "#fef3c7",
                     style: "classique", 
                     etiquette: "Gourmands", 
-                    image: "vanille_lpf.jpeg" },
+                    image: "vanille_lpf.jpeg",
+                    imageTablette: "" },
                     
                 {   id: 19,
                     nom: "Agrumes",
@@ -1673,8 +1786,8 @@ Pyramide olfactive :
                     • Notes de cœur : Orange, limette
                     • Notes de fond : Citronnelle
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1704,7 +1817,8 @@ Pyramide olfactive :
                     couleur: "#fef9c3", 
                     style: "classique", 
                     etiquette: "Frais & Propres", 
-                    image: "agrumes_lpf.jpeg" },
+                    image: "agrumes_lpf.jpeg",
+                    imageTablette: "" },
                     
                 {   id: 20,
                     nom: "Champagne", 
@@ -1715,8 +1829,8 @@ Pyramide olfactive :
                     • Notes de cœur : Fraise, fruits rouges
                     • Notes de fond : Caramel, fleur d'oranger
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1734,7 +1848,8 @@ Pyramide olfactive :
                     couleur: "#fef9c3",
                     style: "classique", 
                     etiquette: "Fleuris", 
-                    image: "champagne_lpf.jpeg" },
+                    image: "champagne_lpf.jpeg",
+                    imageTablette: "" },
                     
                 {   id: 21, 
                     nom: "Sirop d'érable",
@@ -1745,8 +1860,8 @@ Pyramide olfactive :
                     • Notes de cœur : Cèdre, vetiver
                     • Notes de fond : Vanille, caramel
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1777,7 +1892,8 @@ Pyramide olfactive :
                     couleur: "#fde68a", 
                     style: "classique", 
                     etiquette: "Gourmands", 
-                    image: "erable_lpf.jpeg" },
+                    image: "erable_lpf.jpeg",
+                    imageTablette: "" },
                     
                 {   id: 22, 
                     nom: "Cire et Miel",
@@ -1788,8 +1904,8 @@ Pyramide olfactive :
                     • Notes de cœur : Miel, rose
                     • Notes de fond : Fève tonka, amande
                     
-                    POIDS NET (1 fondant) : ~ 7g
-                    POIDS NET (1 tablette) : ~ 90g`,
+                    POIDS NET (1 fondant) : ~ 7g`,
+                    descriptionTablette: ``,
                     composition: `Cire 100% végétale de soja (sans OGM ni pesticides).
                     • sans CMR 
                     • sans phtalates.
@@ -1811,7 +1927,8 @@ Pyramide olfactive :
                     couleur: "#fef3c7",
                     style: "classique", 
                     etiquette: "Épicés & Cocooning", 
-                    image: "cire_miel_lpf.jpeg" }
+                    image: "cire_miel_lpf.jpeg",
+                    imageTablette: "" }
             ],
                 
             plateaux: [
@@ -2127,7 +2244,24 @@ Mécanisme musical en métal mécanique.`,
             updateCartUI();
         }
 
+        // Application du Skin de Noël & de l'image de fond du Grand Concours
+        function appliquerPersonnalisationSite() {
+            if (CONFIG.themeNoel) {
+                document.body.classList.add('theme-noel');
+            } else {
+                document.body.classList.remove('theme-noel');
+            }
+
+            const concoursBanner = document.getElementById('concours-noel-banner');
+            const concoursOverlay = document.getElementById('concours-noel-overlay');
+            if (concoursBanner && CONFIG.imageFondConcours && CONFIG.imageFondConcours.trim() !== "") {
+                concoursBanner.style.backgroundImage = `url('${CONFIG.imageFondConcours}')`;
+                if (concoursOverlay) concoursOverlay.classList.remove('hidden');
+            }
+        }
+
         window.onload = function() {
+            appliquerPersonnalisationSite();
             choisirFormat('unite');
             if(window.renderAuthHeader) window.renderAuthHeader();
             if(window.renderCartAccountSection) window.renderCartAccountSection();
@@ -2172,16 +2306,17 @@ Mécanisme musical en métal mécanique.`,
         window.ouvrirFicheProduit = function(type, id) {
             let item = null;
             let categoryText = "";
+            let isTablette = (type === 'tablette');
             
-            if (type === 'parfum') {
+            if (type === 'parfum' || isTablette) {
                 item = CONFIG.parfums.find(p => p.id == id);
-                categoryText = item?.categorie || "Fondant / Tablette";
+                categoryText = isTablette ? `Tablette Fondante • ${item?.categorie || ''}` : (item?.categorie || "Fondant");
             } else if (type === 'plateau') {
                 item = CONFIG.plateaux.find(p => p.id == id);
                 categoryText = "Coffret Plateau";
             } else if (type === 'creation') {
                 item = CONFIG.creations.find(c => c.id == id);
-                categoryText = "Création Artisanal";
+                categoryText = "Création Artisanale";
             }
 
             if (!item) return;
@@ -2200,10 +2335,14 @@ Mécanisme musical en métal mécanique.`,
             const ftBoxEl = document.getElementById('modal-prod-ft-box');
             const actionContainer = document.getElementById('modal-prod-action-container');
 
-            // Image Principale
+            // Image Principale (Prend imageTablette si c'est une tablette et qu'elle est renseignée)
             if (imgEl) {
-                if (item.image && item.image.trim() !== '') {
-                    imgEl.src = item.image;
+                const chosenImg = isTablette
+                    ? ((item.imageTablette && item.imageTablette.trim() !== '') ? item.imageTablette : item.image)
+                    : item.image;
+
+                if (chosenImg && chosenImg.trim() !== '') {
+                    imgEl.src = chosenImg;
                     imgEl.style.display = 'block';
                 } else {
                     imgEl.src = item.fallbackImage || 'https://placehold.co/400x300/6b7f71/ffffff?text=LPF';
@@ -2221,11 +2360,13 @@ Mécanisme musical en métal mécanique.`,
             }
 
             if (catEl) catEl.textContent = categoryText;
-            if (titleEl) titleEl.textContent = item.nom;
+            if (titleEl) titleEl.textContent = isTablette ? `Tablette ${item.nom}` : item.nom;
             
             // Prix
             if (priceEl) {
-                if (type === 'parfum') {
+                if (isTablette) {
+                    priceEl.textContent = "4,50 € l'unité (Offre : 3 tablettes = 12,00 €)";
+                } else if (type === 'parfum') {
                     priceEl.textContent = "0,50 € l'unité (Fondant) / 4,50 € (Tablette)";
                 } else if (item.prix) {
                     priceEl.textContent = `${item.prix.toFixed(2).replace('.', ',')} €`;
@@ -2234,8 +2375,11 @@ Mécanisme musical en métal mécanique.`,
                 }
             }
 
-            // Description
-            const defaultDesc = item.description || "Aucune description renseignée.";
+            // Description (Prend descriptionTablette si c'est une tablette et qu'elle est renseignée)
+            const chosenDesc = isTablette
+                ? ((item.descriptionTablette && item.descriptionTablette.trim() !== '') ? item.descriptionTablette : item.description)
+                : item.description;
+            const defaultDesc = chosenDesc || "Aucune description renseignée.";
             if (descEl) descEl.textContent = defaultDesc;
 
             // Composition
@@ -2243,7 +2387,7 @@ Mécanisme musical en métal mécanique.`,
             if (compEl) compEl.textContent = defaultComp;
 
             // Temps de brûlage
-            const defaultBurn = item.tempsBrulage || (type === 'parfum' ? "Environ 8 à 10 heures d'ambiance parfumée par fondant (jusqu'à 40h pour une tablette complète)." : "Variable selon l'utilisation et la taille de la création.");
+            const defaultBurn = item.tempsBrulage || ((type === 'parfum' || isTablette) ? "Environ 7 heures d'ambiance parfumée par fondant (plus de 70h pour une tablette complète)." : "Variable selon l'utilisation et la taille de la création.");
             if (burnEl) burnEl.textContent = defaultBurn;
 
             // Étiquette CLP
@@ -2263,7 +2407,7 @@ Mécanisme musical en métal mécanique.`,
 
             // Boutons d'action dans la modale
             if (actionContainer) {
-                if (type === 'parfum') {
+                if (type === 'parfum' || isTablette) {
                     actionContainer.innerHTML = `
                         <div class="flex flex-col sm:flex-row gap-2">
                             <button onclick="ajouterTabletteAuPanier(${item.id}); fermerModalProduit();" class="px-4 py-2.5 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md">
@@ -2552,7 +2696,7 @@ Mécanisme musical en métal mécanique.`,
 
         window.filtrerTablettes = function() { renderTablettesGrid(); }
 
-        // AFFICHAGE DES TABLETTES AVEC CLIC POUR VOIR LA FICHE
+        // AFFICHAGE DES TABLETTES AVEC PHOTO & DESCRIPTION SPÉCIFIQUES
         function renderTablettesGrid() {
             const container = document.getElementById('tablettes-grid');
             if(!container) return;
@@ -2560,8 +2704,9 @@ Mécanisme musical en métal mécanique.`,
             const searchValue = (document.getElementById('search-tablette')?.value || '').toLowerCase();
 
             const tablettesFiltrees = CONFIG.parfums.filter(p => {
+                const descPourRecherche = (p.descriptionTablette && p.descriptionTablette.trim() !== "") ? p.descriptionTablette : p.description;
                 return (selectedTablettesCategoryFilter === "Toutes" || p.categorie === selectedTablettesCategoryFilter) &&
-                       (p.nom.toLowerCase().includes(searchValue) || p.description.toLowerCase().includes(searchValue));
+                       (p.nom.toLowerCase().includes(searchValue) || descPourRecherche.toLowerCase().includes(searchValue));
             });
 
             tablettesFiltrees.forEach(p => {
@@ -2576,14 +2721,24 @@ Mécanisme musical en métal mécanique.`,
                     ? `<span class="text-[10px] font-bold uppercase tracking-wider ${s.etiquette} px-2.5 py-1 rounded-md">${p.etiquette}</span>`
                     : `<span class="text-[10px] font-bold uppercase tracking-wider ${s.etiquette} px-2.5 py-1 rounded-md">Tablette Sécable</span>`;
 
+                // Photo spécifique tablette (imageTablette), sinon fallback icône colorée
+                const visuelTabletteHTML = (p.imageTablette && p.imageTablette.trim() !== "")
+                    ? `<img src="${p.imageTablette}" alt="Tablette ${p.nom}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">`
+                    : `<div class="w-full h-full flex items-center justify-center group-hover:scale-105 transition-transform duration-300" style="background-color: ${p.couleur || '#f4f6f4'}">
+                           <i data-lucide="${p.icone || 'tablet'}" class="w-16 h-16 opacity-40"></i>
+                       </div>`;
+
+                // Description spécifique tablette (descriptionTablette), sinon description classique
+                const descTabletteTexte = (p.descriptionTablette && p.descriptionTablette.trim() !== "")
+                    ? p.descriptionTablette
+                    : p.description;
+
                 const card = document.createElement('div');
                 card.className = s.card;
                 card.innerHTML = `
                     <div>
-                        <div onclick="ouvrirFicheProduit('parfum', ${p.id})" class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm cursor-pointer group">
-                            <div class="w-full h-full flex items-center justify-center group-hover:scale-105 transition-transform duration-300" style="background-color: ${p.couleur || '#f4f6f4'}">
-                                <i data-lucide="${p.icone || 'tablet'}" class="w-16 h-16 opacity-40"></i>
-                            </div>
+                        <div onclick="ouvrirFicheProduit('tablette', ${p.id})" class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm cursor-pointer group">
+                            ${visuelTabletteHTML}
                             ${badgeHTML}
                             <div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 opacity-90 group-hover:bg-sauge-600 transition-colors">
                                 <i data-lucide="eye" class="w-3.5 h-3.5"></i> Fiche produit
@@ -2594,9 +2749,9 @@ Mécanisme musical en métal mécanique.`,
                                 ${etiquetteTabletteHTML}
                                 <span class="text-xs font-bold ${s.title}">4,50 € / u</span>
                             </div>
-                            <h3 onclick="ouvrirFicheProduit('parfum', ${p.id})" class="font-serif text-xl font-bold ${s.title} cursor-pointer hover:text-sauge-600 transition-colors">${p.nom}</h3>
-                            <p class="text-xs ${s.desc} leading-relaxed line-clamp-2">${p.description}</p>
-                            <button onclick="ouvrirFicheProduit('parfum', ${p.id})" class="text-[11px] text-sauge-600 font-bold hover:underline flex items-center gap-1 pt-0.5">
+                            <h3 onclick="ouvrirFicheProduit('tablette', ${p.id})" class="font-serif text-xl font-bold ${s.title} cursor-pointer hover:text-sauge-600 transition-colors">${p.nom}</h3>
+                            <p class="text-xs ${s.desc} leading-relaxed line-clamp-2">${descTabletteTexte}</p>
+                            <button onclick="ouvrirFicheProduit('tablette', ${p.id})" class="text-[11px] text-sauge-600 font-bold hover:underline flex items-center gap-1 pt-0.5">
                                 Voir détails & composition <i data-lucide="chevron-right" class="w-3 h-3"></i>
                             </button>
                         </div>
@@ -2811,6 +2966,7 @@ Mécanisme musical en métal mécanique.`,
                     </div>
                 `;
             });
+            updateTablettesProgressBar();
             if (window.lucide) window.lucide.createIcons();
         }
 
@@ -2840,7 +2996,7 @@ Mécanisme musical en métal mécanique.`,
             const email = document.getElementById('contact-email').value.trim();
             const sujet = document.getElementById('contact-sujet').value.trim();
             const msg = document.getElementById('contact-message').value.trim();
-            window.location.href = `mailto:debstyle-coiffure@hotmail.com?subject=${encodeURIComponent(sujet)}&body=${encodeURIComponent(`De: ${nom} (${email})\n\n${msg}`)}`;
+            window.location.href = `mailto:lapausefondante@gmail.com?subject=${encodeURIComponent(sujet)}&body=${encodeURIComponent(`De: ${nom} (${email})\n\n${msg}`)}`;
         }
 
         window.afficherToast = function(message, type = "success") {
