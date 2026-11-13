@@ -328,6 +328,20 @@
         }
         body.theme-noel footer button:hover {
             color: #fde68a !important;
+            
+        /* Supprimer le grand cadre blanc autour de l'affiche Catalogue visuel de nos Fragrances */
+        body.theme-noel #view-fondants > div:nth-child(3) > div:nth-child(2) {
+            background: linear-gradient(180deg, #d7c7ad 0%, #c8b698 100%) !important;
+            border: 1px solid #fde68a !important;
+            padding: 0 !important;
+        }
+        body.theme-noel #view-fondants > div:nth-child(3) > div:nth-child(2) img {
+            max-height: none !important;
+            width: 100% !important;
+            max-width: 650px !important;
+            margin: 0 auto !important;
+        }
+        
         }
     </style>
 </head>
