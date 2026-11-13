@@ -370,8 +370,8 @@
                 <!-- SÉLECTEUR DE SKIN (Masqué automatiquement si CONFIG.autoriserSkinNoel = false) -->
                 <div id="skin-switcher-container" class="hidden">
                     <select id="skin-selector" onchange="changerSkinUtilisateur(this.value)" aria-label="Choisir le thème du site" class="px-2.5 py-2 bg-white border border-creme-200 rounded-xl text-xs font-bold text-creme-800 shadow-sm focus:outline-none focus:border-sauge-500 cursor-pointer">
-                        <option value="classique">🌿 Classique</option>
                         <option value="noel">🎄 Noël</option>
+                        <option value="classique">🌿 Classique</option>
                     </select>
                 </div>
 
@@ -1345,7 +1345,7 @@
             // - imageFondConcours : nom du fichier image pour le fond du Grand Concours
             // =========================================================================
             autoriserSkinNoel: true,
-            skinParDefaut: 'classique',
+            skinParDefaut: 'noel',
             imageFondConcours: "",
 
             nomBoutique: "La pause Fondante",
@@ -1806,7 +1806,7 @@
                     style: "classique",
                     etiquette: "Épicés & Cocooning",
                     image: "epice_noel_lpf.jpeg",
-                    imageTablette: "" },
+                    imageTablette: "tablette_noel_lpf.jpeg" },
                     
                 {   id: 15, 
                     nom: "Cannelle", 
@@ -1993,7 +1993,7 @@
                     style: "classique", 
                     etiquette: "Frais & Propres", 
                     image: "agrumes_lpf.jpeg",
-                    imageTablette: "" },
+                    imageTablette: "tablette_agrumes_lpf.jpeg" },
                     
                 {   id: 20,
                     nom: "Champagne", 
@@ -2024,7 +2024,7 @@
                     style: "classique", 
                     etiquette: "Fleuris", 
                     image: "champagne_lpf.jpeg",
-                    imageTablette: "" },
+                    imageTablette: "tablette_champagne_lpf.jpeg" },
                     
                 {   id: 21, 
                     nom: "Sirop d'érable",
@@ -2068,7 +2068,7 @@
                     style: "classique", 
                     etiquette: "Gourmands", 
                     image: "erable_lpf.jpeg",
-                    imageTablette: "" },
+                    imageTablette: "tablette_erable_lpf.jpeg" },
                     
                 {   id: 22, 
                     nom: "Cire et Miel",
@@ -2445,7 +2445,7 @@ Mécanisme musical en métal mécanique.`,
                 if (switcherContainer) switcherContainer.classList.remove('hidden');
                 let skinSauvegarde = null;
                 try { skinSauvegarde = localStorage.getItem('lpf_skin'); } catch (e) {}
-                appliquerSkin(skinSauvegarde || CONFIG.skinParDefaut || 'classique');
+                appliquerSkin(skinSauvegarde || CONFIG.skinParDefaut || 'noel');
             } else {
                 if (switcherContainer) switcherContainer.classList.add('hidden');
                 try { localStorage.removeItem('lpf_skin'); } catch (e) {}
