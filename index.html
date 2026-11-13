@@ -71,94 +71,222 @@
         }
         .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
 
-        /* =====================================================================
-           SKIN DE NOËL (Rouge Père Noël, Doré, Touches de Vert Sapin & Blanc)
-           Activé automatiquement lorsque CONFIG.themeNoel = true
-           ===================================================================== */
-        body.theme-noel {
-            background-color: #8b1313 !important;
-            background-image: radial-gradient(circle at top center, #b91c1c 0%, #7f1d1d 60%, #5c0f0f 100%) !important;
-            color: #ffffff;
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f5f0e6; border-radius: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #c8d6c9; border-radius: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #6b7f71; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f5f0e6; border-radius: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #c8d6c9; border-radius: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #6b7f71; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+
+        /* =====================================================================
+           SKIN DE NOËL OPTIONNEL
+           - Fond rouge Père Noël pétillant
+           - Barre du haut & footer vert sapin avec contours dorés et touches de blanc
+           - Survol doré sur la navigation et les 4 encadrés de catégories
+           - Écriture dorée sur TOUS les articles (cartes blanches ET cartes foncées)
+           ===================================================================== */
+        html.theme-noel,
+        body.theme-noel {
+            background-color: #dc2626 !important;
+            background-image: linear-gradient(180deg, #ef4444 0%, #dc2626 50%, #b91c1c 100%) !important;
+            background-attachment: fixed !important;
+            color: #92400e !important;
+        }
+
+        /* Barre du haut (Header) */
         body.theme-noel header {
-            background-color: rgba(110, 14, 14, 0.96) !important;
+            background-color: #14532d !important;
             border-bottom: 2px solid #d4af37 !important;
         }
-        body.theme-noel header .text-creme-900,
-        body.theme-noel header .text-creme-800 {
+        body.theme-noel header span.font-serif {
+            color: #fde68a !important;
+        }
+        body.theme-noel header span.uppercase {
             color: #ffffff !important;
         }
-        body.theme-noel header .text-sauge-600 {
-            color: #fde047 !important;
+        body.theme-noel header nav button {
+            color: #ffffff !important;
+            border: 1px solid transparent !important;
+            transition: all 0.2s ease !important;
         }
         body.theme-noel header nav button:hover {
-            background-color: rgba(212, 175, 55, 0.2) !important;
-            color: #fde047 !important;
-        }
-        /* Navigation mobile en thème Noël */
-        body.theme-noel header > div:nth-child(2) {
-            background-color: #5c0f0f !important;
-            border-top-color: #d4af37 !important;
-        }
-        body.theme-noel header > div:nth-child(2) button {
-            color: #ffffff !important;
-        }
-        /* Boutons principaux en Doré */
-        body.theme-noel .bg-sauge-600,
-        body.theme-noel .bg-ocre-600 {
             background-color: #d4af37 !important;
-            color: #2c1810 !important;
-            border-color: #f3e5ab !important;
+            color: #111827 !important;
+            border-color: #fde68a !important;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.45) !important;
         }
-        body.theme-noel .hover\:bg-sauge-700:hover,
-        body.theme-noel .hover\:bg-ocre-700:hover {
-            background-color: #bfa130 !important;
+        body.theme-noel header nav button.bg-sauge-100 {
+            background-color: #ffffff !important;
+            color: #14532d !important;
+            border: 2px solid #d4af37 !important;
         }
-        /* Touches de vert sapin sur les badges et encarts */
-        body.theme-noel .bg-sauge-50,
-        body.theme-noel .bg-sauge-100 {
+        body.theme-noel header nav button.bg-sauge-100:hover {
+            background-color: #d4af37 !important;
+            color: #111827 !important;
+        }
+
+        /* Navigation mobile */
+        body.theme-noel header .md\:hidden {
             background-color: #14532d !important;
+            border-top: 1px solid #d4af37 !important;
+        }
+        body.theme-noel header .md\:hidden button {
             color: #ffffff !important;
+        }
+        body.theme-noel header .md\:hidden button.bg-sauge-100 {
+            background-color: #ffffff !important;
+            color: #14532d !important;
             border-color: #d4af37 !important;
         }
-        body.theme-noel .text-sauge-600,
-        body.theme-noel .text-sauge-700,
-        body.theme-noel .text-sauge-800 {
-            color: #15803d !important;
+
+        /* Écriture dorée sur TOUS les articles (cartes blanches comme Fleur de coton, Litchi, etc.) */
+        body.theme-noel main .bg-white h2,
+        body.theme-noel main .bg-white h3,
+        body.theme-noel #section-contact h2,
+        body.theme-noel #section-contact h3,
+        body.theme-noel #view-home > div:nth-child(2) h2,
+        body.theme-noel #view-tablettes > div:first-child h2 {
+            color: #b45309 !important;
         }
-        /* Encarts blancs avec bordure dorée */
-        body.theme-noel main > section > div.bg-white,
-        body.theme-noel #section-contact {
-            border: 2px solid #d4af37 !important;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35) !important;
+        body.theme-noel main .bg-white p,
+        body.theme-noel main .bg-white span,
+        body.theme-noel main .bg-white li,
+        body.theme-noel main .bg-white button.text-sauge-600,
+        body.theme-noel #section-contact p,
+        body.theme-noel #section-contact span,
+        body.theme-noel #section-contact label,
+        body.theme-noel #view-home > div:nth-child(2) p,
+        body.theme-noel #view-home > div:nth-child(2) span,
+        body.theme-noel #view-tablettes > div:first-child p,
+        body.theme-noel #view-tablettes > div:first-child span,
+        body.theme-noel #view-tablettes > div:nth-child(2) span,
+        body.theme-noel #view-tablettes > div:nth-child(2) p {
+            color: #92400e !important;
         }
-        /* Titres de sections sur fond rouge */
+
+        /* Titres de sections directement sur le fond rouge en doré lumineux */
         body.theme-noel #view-fondants > div:first-child h2,
         body.theme-noel #view-plateaux > div:first-child h2,
         body.theme-noel #view-creations > div:first-child h2,
         body.theme-noel #view-creations > div:first-child p {
-            color: #ffffff !important;
+            color: #fde68a !important;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
         }
-        /* Bannière accueil secondaire en vert sapin, blanc et doré */
+
+        /* 4 encadrés de catégories sur l'accueil : blanc + contour doré + survol doré */
+        body.theme-noel #view-home .grid > div.group {
+            background-color: #ffffff !important;
+            border: 2px solid #d4af37 !important;
+            transition: all 0.25s ease !important;
+        }
+        body.theme-noel #view-home .grid > div.group h3 {
+            color: #b45309 !important;
+        }
+        body.theme-noel #view-home .grid > div.group p,
+        body.theme-noel #view-home .grid > div.group div {
+            color: #92400e !important;
+        }
+        body.theme-noel #view-home .grid > div.group:hover {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%) !important;
+            border-color: #b45309 !important;
+            box-shadow: 0 12px 25px rgba(212, 175, 55, 0.55) !important;
+            transform: translateY(-3px) !important;
+        }
+        body.theme-noel #view-home .grid > div.group:hover h3,
+        body.theme-noel #view-home .grid > div.group:hover p,
+        body.theme-noel #view-home .grid > div.group:hover div {
+            color: #111827 !important;
+        }
+
+        /* Cartes produits foncées (style 'noel' comme Boîte Musicale, Plateau Noël, Bougies...) : écriture en DORÉ */
+        body.theme-noel main div[class*="1a0f0a"] h3,
+        body.theme-noel main div[class*="1a0f0a"] span,
+        body.theme-noel main div[class*="1a0f0a"] li,
+        body.theme-noel main div[class*="2c1810"] h3,
+        body.theme-noel main div[class*="2c1810"] span,
+        body.theme-noel main div[class*="2c1810"] li {
+            color: #fde68a !important;
+        }
+        body.theme-noel main div[class*="1a0f0a"] p,
+        body.theme-noel main div[class*="2c1810"] p {
+            color: #f3d078 !important;
+        }
+        body.theme-noel main div[class*="1a0f0a"] button.text-sauge-600,
+        body.theme-noel main div[class*="2c1810"] button.text-sauge-600 {
+            color: #fde68a !important;
+        }
+
+        /* Boutons d'action vert sapin -> doré au survol */
+        body.theme-noel .bg-sauge-600,
+        body.theme-noel .bg-sauge-700,
+        body.theme-noel .bg-sauge-800,
+        body.theme-noel .bg-ocre-600 {
+            background-color: #14532d !important;
+            color: #fde68a !important;
+            border: 1px solid #d4af37 !important;
+            transition: all 0.2s ease !important;
+        }
+        body.theme-noel .bg-sauge-600:hover,
+        body.theme-noel .bg-sauge-700:hover,
+        body.theme-noel .bg-sauge-800:hover,
+        body.theme-noel .bg-ocre-600:hover {
+            background-color: #d4af37 !important;
+            color: #111827 !important;
+        }
+        body.theme-noel .bg-sauge-600 span,
+        body.theme-noel .bg-sauge-700 span,
+        body.theme-noel .bg-sauge-800 span,
+        body.theme-noel .bg-ocre-600 span,
+        body.theme-noel #concours-noel-banner h1,
+        body.theme-noel #concours-noel-banner p,
+        body.theme-noel #concours-noel-banner span,
+        body.theme-noel #concours-noel-banner strong {
+            color: #fde68a !important;
+        }
+
+        /* Contours dorés et touches de blanc sur les cartes et blocs */
+        body.theme-noel .bg-white,
+        body.theme-noel #section-contact,
         body.theme-noel #view-home > div:nth-child(2) {
-            background: linear-gradient(135deg, #14532d 0%, #166534 50%, #0f3d21 100%) !important;
+            background-color: #ffffff !important;
             border: 2px solid #d4af37 !important;
         }
-        body.theme-noel #view-home > div:nth-child(2) h2,
-        body.theme-noel #view-home > div:nth-child(2) p {
-            color: #ffffff !important;
+        body.theme-noel .bg-creme-50,
+        body.theme-noel .bg-sauge-50,
+        body.theme-noel .bg-sauge-100,
+        body.theme-noel .bg-ocre-50 {
+            background-color: #fffbeb !important;
+            border: 1px solid #d4af37 !important;
+            color: #92400e !important;
         }
-        /* Footer en rouge foncé / doré */
+
+        /* Pied de page en vert sapin et bordure dorée */
         body.theme-noel footer {
-            background-color: #5c0f0f !important;
+            background-color: #14532d !important;
             border-top: 2px solid #d4af37 !important;
-            color: #ffffff !important;
+            color: #fde68a !important;
         }
-        body.theme-noel footer .text-creme-900 {
-            color: #fde047 !important;
+        body.theme-noel footer p,
+        body.theme-noel footer button {
+            color: #fde68a !important;
         }
         body.theme-noel footer button:hover {
-            color: #fde047 !important;
+            color: #ffffff !important;
         }
     </style>
 </head>
@@ -197,7 +325,15 @@
                 </button>
             </nav>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- SÉLECTEUR DE SKIN (Masqué automatiquement si CONFIG.autoriserSkinNoel = false) -->
+                <div id="skin-switcher-container" class="hidden">
+                    <select id="skin-selector" onchange="changerSkinUtilisateur(this.value)" aria-label="Choisir le thème du site" class="px-2.5 py-2 bg-white border border-creme-200 rounded-xl text-xs font-bold text-creme-800 shadow-sm focus:outline-none focus:border-sauge-500 cursor-pointer">
+                        <option value="classique">🌿 Classique</option>
+                        <option value="noel">🎄 Noël</option>
+                    </select>
+                </div>
+
                 <div id="auth-header-container"></div>
                 <button onclick="ouvrirPanier()" class="relative p-2.5 bg-sauge-50 hover:bg-sauge-100 border border-sauge-200 text-sauge-700 rounded-2xl transition-all flex items-center gap-2 group shadow-sm">
                     <i data-lucide="shopping-bag" class="w-5 h-5"></i>
@@ -237,7 +373,7 @@
             <!-- BANNIÈRE GRAND CONCOURS DE NOËL (Avec image de fond configurable) -->
             <div id="concours-noel-banner" class="relative bg-gradient-to-br from-[#2c1810] via-[#4a2518] to-[#2c1810] text-white rounded-3xl p-6 sm:p-10 md:p-12 border-2 border-[#d4af37] shadow-2xl overflow-hidden bg-cover bg-center">
                 <!-- Voile sombre si une image de fond est définie pour garder le texte lisible -->
-                <div id="concours-noel-overlay" class="hidden absolute inset-0 bg-black/60 backdrop-blur-[2px] pointer-events-none"></div>
+                <div id="concours-noel-overlay" class="hidden absolute inset-0 bg-black/55 backdrop-blur-[2px] pointer-events-none"></div>
                 <div class="absolute -right-10 -bottom-10 w-96 h-96 bg-[#d4af37]/10 rounded-full blur-3xl pointer-events-none"></div>
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
                     <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
@@ -1161,10 +1297,15 @@
 
         const CONFIG = {
             // =========================================================================
-            // PARAMÈTRES GÉNÉRAUX & PERSONNALISATION VISUELLE (NOËL / CONCOURS)
+            // PARAMÈTRES DES SKINS & DU CONCOURS (MODIFIABLES FACILEMENT)
+            // - autoriserSkinNoel : true = affiche le sélecteur Classique / Noël en haut
+            //                       false = masque le sélecteur et verrouille sur Classique après Noël
+            // - skinParDefaut     : 'classique' ou 'noel' (thème affiché à la première visite)
+            // - imageFondConcours : nom du fichier image pour le fond du Grand Concours
             // =========================================================================
-            themeNoel: true, // Mettre true pour le skin Noël (Rouge Père Noël, Doré, Vert, Blanc) ou false pour revenir au thème classique
-            imageFondConcours: "", // Mets ici le nom de ton image de fond pour le Grand Concours (ex: "fond_concours_noel.jpg") à la place de l'encadré marron
+            autoriserSkinNoel: true,
+            skinParDefaut: 'classique',
+            imageFondConcours: "",
 
             nomBoutique: "La pause Fondante",
             seuilFraisDePortGratuit: 70.00,
@@ -1177,13 +1318,6 @@
             prixUnitaire: 0.50,
             categoriesParfums: ["Toutes", "Gourmands", "Fleuris", "Frais & Propres", "Épicés & Cocooning", "Fruités"],
             
-            // =========================================================================
-            // CATALOGUE DES PARFUMS (FONDANTS & TABLETTES)
-            // - image : photo du fondant
-            // - imageTablette : photo spécifique de la tablette (si vide, affiche l'icône sur fond coloré)
-            // - description : description du fondant
-            // - descriptionTablette : description spécifique de la tablette (si vide, reprend la description du fondant)
-            // =========================================================================
             parfums: [
                 {   id: 1, 
                     nom: "Citrouille vanillée", 
@@ -2244,14 +2378,40 @@ Mécanisme musical en métal mécanique.`,
             updateCartUI();
         }
 
-        // Application du Skin de Noël & de l'image de fond du Grand Concours
-        function appliquerPersonnalisationSite() {
-            if (CONFIG.themeNoel) {
+        // Gestion du Skin (Classique vs Noël) et verrouillage depuis CONFIG
+        function appliquerSkin(nomSkin) {
+            const skinFinal = (CONFIG.autoriserSkinNoel && nomSkin === 'noel') ? 'noel' : 'classique';
+            if (skinFinal === 'noel') {
+                document.documentElement.classList.add('theme-noel');
                 document.body.classList.add('theme-noel');
             } else {
+                document.documentElement.classList.remove('theme-noel');
                 document.body.classList.remove('theme-noel');
             }
+            const selector = document.getElementById('skin-selector');
+            if (selector) selector.value = skinFinal;
+        }
 
+        window.changerSkinUtilisateur = function(nouveauSkin) {
+            if (!CONFIG.autoriserSkinNoel) return;
+            try { localStorage.setItem('lpf_skin', nouveauSkin); } catch (e) {}
+            appliquerSkin(nouveauSkin);
+        }
+
+        function initialiserPersonnalisationSite() {
+            const switcherContainer = document.getElementById('skin-switcher-container');
+            if (CONFIG.autoriserSkinNoel) {
+                if (switcherContainer) switcherContainer.classList.remove('hidden');
+                let skinSauvegarde = null;
+                try { skinSauvegarde = localStorage.getItem('lpf_skin'); } catch (e) {}
+                appliquerSkin(skinSauvegarde || CONFIG.skinParDefaut || 'classique');
+            } else {
+                if (switcherContainer) switcherContainer.classList.add('hidden');
+                try { localStorage.removeItem('lpf_skin'); } catch (e) {}
+                appliquerSkin('classique');
+            }
+
+            // Image de fond du Grand Concours
             const concoursBanner = document.getElementById('concours-noel-banner');
             const concoursOverlay = document.getElementById('concours-noel-overlay');
             if (concoursBanner && CONFIG.imageFondConcours && CONFIG.imageFondConcours.trim() !== "") {
@@ -2261,7 +2421,7 @@ Mécanisme musical en métal mécanique.`,
         }
 
         window.onload = function() {
-            appliquerPersonnalisationSite();
+            initialiserPersonnalisationSite();
             choisirFormat('unite');
             if(window.renderAuthHeader) window.renderAuthHeader();
             if(window.renderCartAccountSection) window.renderCartAccountSection();
