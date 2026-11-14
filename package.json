@@ -1,0 +1,12 @@
+{
+  "name": "la-pause-fondante",
+  "version": "1.0.0",
+  "description": "La Pause Fondante - Fondants Artisanaux & Parfums",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Static site - no build required'"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^1.1.1"
+  }
+}
