@@ -522,12 +522,23 @@ async function verifierHistoriqueCommandesClient(emailClient) {
                 discountLabel.textContent = `Réduction (${codePromoApplique.code})`;
                 discountAmount.textContent = `- ${totaux.montantReduction.toFixed(2).replace('.', ',')} €`;
             } else if (totaux.premiereRemiseActive) {
-                // --- AFFICHAGE DE LA REMISE DE BIENVENUE 1ÈRE COMMANDE ---
+                // --- AFFICHAGE DESIGN DE LA REMISE DE BIENVENUE 1ÈRE COMMANDE ---
                 appliedBadgeContainer.innerHTML = `
-                    <div class="flex items-center justify-between bg-emerald-50 border border-emerald-200 px-3 py-2 rounded-xl text-xs mt-1 text-emerald-800">
-                        <span class="font-bold flex items-center gap-1.5">
-                            ✨ Offre de bienvenue : -10% dès 35 € appliqués !
-                        </span>
+                    <div class="relative overflow-hidden bg-gradient-to-r from-sauge-50 via-creme-100 to-sauge-50 border border-sauge-300 p-3 rounded-2xl shadow-sm mt-2">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-xl bg-sauge-600 text-white flex items-center justify-center shadow-sm">
+                                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-sauge-900 text-xs block">Offre de bienvenue active</span>
+                                    <span class="text-[11px] text-sauge-700">10% de réduction immédiate dès 35 € d'achat</span>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold font-serif text-sauge-800 bg-white px-2.5 py-1 rounded-lg border border-sauge-200">
+                                -10 %
+                            </span>
+                        </div>
                     </div>
                 `;
                 discountRow.classList.remove('hidden');
