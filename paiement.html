@@ -501,35 +501,42 @@ async function verifierHistoriqueCommandesClient(emailClient) {
             
             // --- MISE À JOUR DE LA BARRE DE PROGRESSION (Objectif 35 €) ---
             const conteneurBarre = document.getElementById('progression-bienvenue-container');
-            const texteProgression = document.getElementById('texte-progression');
-            const pourcentageProgression = document.getElementById('pourcentage-progression');
-            const barreRemplissage = document.getElementById('barre-remplissage');
-            const messageProgression = document.getElementById('message-progression');
 
             if (conteneurBarre) {
-                // Si l'utilisateur a déjà commandé, on peut choisir de masquer la barre, ou de l'afficher pour les nouveaux
-                // (Ici on calcule par rapport à 35 €)
-                const montantActuel = totaux.sousTotalArticles;
-                const seuilOffre = 35;
-                let pourcentage = (montantActuel / seuilOffre) * 100;
-                if (pourcentage > 100) pourcentage = 100;
-
-                barreRemplissage.style.width = `${pourcentage}%`;
-                pourcentageProgression.textContent = `${Math.round(pourcentage)}%`;
-
-                if (totaux.premiereRemiseActive) {
-                    messageProgression.textContent = "🎉 Félicitations ! Votre réduction de 10% de première commande est active.";
-                    conteneurBarre.className = "bg-emerald-50 border border-emerald-200 p-3.5 rounded-2xl mb-4 text-xs";
-                    pourcentageProgression.className = "font-serif font-bold text-emerald-700";
-                    barreRemplissage.className = "bg-emerald-600 h-full transition-all duration-500 rounded-full";
-                } else if (montantActuel < seuilOffre) {
-                    const reste = (seuilOffre - montantActuel).toFixed(2).replace('.', ',');
-                    messageProgression.textContent = `Ajoutez encore ${reste} € pour profiter de -10% sur votre première commande !`;
-                    conteneurBarre.className = "bg-creme-50 border border-creme-200 p-3.5 rounded-2xl mb-4 text-xs";
-                    pourcentageProgression.className = "font-serif font-bold text-sauge-700";
-                    barreRemplissage.className = "bg-sauge-600 h-full transition-all duration-500 rounded-full";
+                // Si l'utilisateur a déjà commandé, on masque complètement la barre de bienvenue
+                if (utilisateurDejaCommande) {
+                    conteneurBarre.classList.add('hidden');
                 } else {
-                    messageProgression.textContent = "Votre panier est éligible à l'offre de bienvenue.";
+                    // Sinon on l'affiche et on calcule la progression
+                    conteneurBarre.classList.remove('hidden');
+
+                    const texteProgression = document.getElementById('texte-progression');
+                    const pourcentageProgression = document.getElementById('pourcentage-progression');
+                    const barreRemplissage = document.getElementById('barre-remplissage');
+                    const messageProgression = document.getElementById('message-progression');
+
+                    const montantActuel = totaux.sousTotalArticles;
+                    const seuilOffre = 35;
+                    let pourcentage = (montantActuel / seuilOffre) * 100;
+                    if (pourcentage > 100) pourcentage = 100;
+
+                    if (barreRemplissage) barreRemplissage.style.width = `${pourcentage}%`;
+                    if (pourcentageProgression) pourcentageProgression.textContent = `${Math.round(pourcentage)}%`;
+
+                    if (totaux.premiereRemiseActive) {
+                        if (messageProgression) messageProgression.textContent = "🎉 Félicitations ! Votre réduction de 10% de première commande est active.";
+                        conteneurBarre.className = "bg-emerald-50 border border-emerald-200 p-3.5 rounded-2xl mb-4 text-xs";
+                        if (pourcentageProgression) pourcentageProgression.className = "font-serif font-bold text-emerald-700";
+                        if (barreRemplissage) barreRemplissage.className = "bg-emerald-600 h-full transition-all duration-500 rounded-full";
+                    } else if (montantActuel < seuilOffre) {
+                        const reste = (seuilOffre - montantActuel).toFixed(2).replace('.', ',');
+                        if (messageProgression) messageProgression.textContent = `Ajoutez encore ${reste} € pour profiter de -10% sur votre première commande !`;
+                        conteneurBarre.className = "bg-creme-50 border border-creme-200 p-3.5 rounded-2xl mb-4 text-xs";
+                        if (pourcentageProgression) pourcentageProgression.className = "font-serif font-bold text-sauge-700";
+                        if (barreRemplissage) barreRemplissage.className = "bg-sauge-600 h-full transition-all duration-500 rounded-full";
+                    } else {
+                        if (messageProgression) messageProgression.textContent = "Votre panier est éligible à l'offre de bienvenue.";
+                    }
                 }
             }
 
