@@ -365,49 +365,83 @@
             afficherToast("Code promo retiré.");
             calculerEtAfficherCheckout();
         }
+        
+        let premiereRemiseActive = false;
+let utilisateurDejaCommande = false;
+
+// Fonction pour vérifier si le client a déjà passé au moins une commande dans Supabase
+async function verifierHistoriqueCommandesClient(emailClient) {
+    if (!supabaseClient || !emailClient) return;
+    try {
+        const { data, error } = await supabaseClient
+            .from('commandes') // Nom de votre table de commandes
+            .select('id')
+            .eq('client_email', emailClient);
+        
+        if (data && data.length > 0) {
+            utilisateurDejaCommande = true;
+        } else {
+            utilisateurDejaCommande = false;
+        }
+    } catch (e) {
+        utilisateurDejaCommande = false;
+    }
+}
 
         function calculerTotauxPanier() {
-            let sousTotalArticles = 0;
-            let nombreTablettes = 0;
-            let poidsTotalGrammes = 0;
+    let sousTotalArticles = 0;
+    let nombreTablettes = 0;
+    let poidsTotalGrammes = 0;
 
-            cart.forEach(item => {
-                poidsTotalGrammes += (item.weight || 80) * item.quantity;
-                if (item.type === 'tablette') {
-                    nombreTablettes += item.quantity;
-                } else {
-                    sousTotalArticles += item.price * item.quantity;
-                }
-            });
-
-            const lotsDeTrois = Math.floor(nombreTablettes / 3);
-            const tablettesRestantes = nombreTablettes % 3;
-            const prixTotalTablettes = (lotsDeTrois * 12.00) + (tablettesRestantes * 4.50);
-
-            sousTotalArticles += prixTotalTablettes;
-
-            let montantReduction = 0;
-            if (codePromoApplique) {
-                if (codePromoApplique.type === 'percent') {
-                    montantReduction = (sousTotalArticles * codePromoApplique.value) / 100;
-                } else if (codePromoApplique.type === 'free_order') {
-                    montantReduction = sousTotalArticles;
-                }
-            }
-
-            const sousTotalApresReduction = Math.max(0, sousTotalArticles - montantReduction);
-            const estLivraisonOfferte = sousTotalArticles >= SEUIL_PORT_GRATUIT;
-
-            return {
-                sousTotalArticles,
-                montantReduction,
-                sousTotalApresReduction,
-                nombreTablettes,
-                lotsDeTrois,
-                poidsTotalGrammes,
-                estLivraisonOfferte
-            };
+    cart.forEach(item => {
+        poidsTotalGrammes += (item.weight || 80) * item.quantity;
+        if (item.type === 'tablette') {
+            nombreTablettes += item.quantity;
+        } else {
+            sousTotalArticles += item.price * item.quantity;
         }
+    });
+
+    const lotsDeTrois = Math.floor(nombreTablettes / 3);
+    const tablettesRestantes = nombreTablettes % 3;
+    const prixTotalTablettes = (lotsDeTrois * 12.00) + (tablettesRestantes * 4.50);
+
+    sousTotalArticles += prixTotalTablettes;
+
+    let montantReduction = 0;
+
+    // --- LOGIQUE REMISE PREMIÈRE COMMANDE (> 35 €) ---
+    // Si l'utilisateur n'a jamais commandé, que le panier dépasse 35 € et qu'aucun autre code promo n'est saisi
+    if (!utilisateurDejaCommande && sousTotalArticles > 35 && !codePromoApplique) {
+        premiereRemiseActive = true;
+        montantReduction = sousTotalArticles * 0.10; // 10% de réduction immédiate
+    } else {
+        premiereRemiseActive = false;
+    }
+
+    // Si un code promo manuel a été appliqué, il prend le pas sur la remise de bienvenue
+    if (codePromoApplique) {
+        if (codePromoApplique.type === 'percent') {
+            montantReduction = (sousTotalArticles * codePromoApplique.value) / 100;
+        } else if (codePromoApplique.type === 'free_order') {
+            montantReduction = sousTotalArticles;
+        }
+    }
+
+    const sousTotalApresReduction = Math.max(0, sousTotalArticles - montantReduction);
+    const estLivraisonOfferte = sousTotalArticles >= SEUIL_PORT_GRATUIT;
+
+    return {
+        sousTotalArticles,
+        montantReduction,
+        sousTotalApresReduction,
+        nombreTablettes,
+        lotsDeTrois,
+        poidsTotalGrammes,
+        estLivraisonOfferte,
+        premiereRemiseActive
+    };
+}
 
         function calculerFraisPort(mode, poidsGrammes, estGratuit) {
             if (estGratuit) return 0.00;
@@ -469,7 +503,7 @@
                 bannerTablettes.classList.add('hidden');
             }
 
-            // Display promo code appliqué
+            // Display promo code appliqué OU Remise de première commande
             const appliedBadgeContainer = document.getElementById('checkout-applied-promo-badge');
             const discountRow = document.getElementById('checkout-discount-row');
             const discountLabel = document.getElementById('checkout-discount-label');
@@ -486,6 +520,18 @@
                 `;
                 discountRow.classList.remove('hidden');
                 discountLabel.textContent = `Réduction (${codePromoApplique.code})`;
+                discountAmount.textContent = `- ${totaux.montantReduction.toFixed(2).replace('.', ',')} €`;
+            } else if (totaux.premiereRemiseActive) {
+                // --- AFFICHAGE DE LA REMISE DE BIENVENUE 1ÈRE COMMANDE ---
+                appliedBadgeContainer.innerHTML = `
+                    <div class="flex items-center justify-between bg-emerald-50 border border-emerald-200 px-3 py-2 rounded-xl text-xs mt-1 text-emerald-800">
+                        <span class="font-bold flex items-center gap-1.5">
+                            ✨ Offre de bienvenue : -10% dès 35 € appliqués !
+                        </span>
+                    </div>
+                `;
+                discountRow.classList.remove('hidden');
+                discountLabel.textContent = `Remise 1ère commande (-10%)`;
                 discountAmount.textContent = `- ${totaux.montantReduction.toFixed(2).replace('.', ',')} €`;
             } else {
                 appliedBadgeContainer.innerHTML = '';
@@ -526,7 +572,7 @@
 
             document.getElementById('checkout-total-final').textContent = totalFinal.toFixed(2).replace('.', ',') + " €";
             if (window.lucide) window.lucide.createIcons();
-        }
+}
 
         window.traiterCommande = async function(event) {
             event.preventDefault();
