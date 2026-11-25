@@ -71,6 +71,19 @@
 </head>
 <body class="h-full font-sans text-creme-900 antialiased flex flex-col selection:bg-ocre-100 selection:text-ocre-700">
 
+    <!-- OVERLAY VÉRIFICATION PAIEMENT SUMUP -->
+    <div id="sumup-verification-overlay" class="hidden fixed inset-0 z-50 bg-[#fbf9f5]/95 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white border border-creme-200 rounded-3xl p-8 max-w-md w-full text-center shadow-xl space-y-4">
+            <div class="w-14 h-14 rounded-2xl bg-sauge-100 text-sauge-700 flex items-center justify-center mx-auto">
+                <i data-lucide="loader" class="w-7 h-7 animate-spin"></i>
+            </div>
+            <h2 class="font-serif text-2xl font-bold text-creme-900">Vérification du paiement...</h2>
+            <p class="text-xs text-creme-800 leading-relaxed">
+                Nous confirmons la validation de votre règlement auprès de SumUp. Merci de patienter quelques instants.
+            </p>
+        </div>
+    </div>
+
     <!-- EN-TÊTE SIMPLIFIÉ DE PAIEMENT -->
     <header class="bg-[#fbf9f5]/95 backdrop-blur-md border-b border-creme-200 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
@@ -90,7 +103,29 @@
 
     <!-- CONTENU PRINCIPAL -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 md:py-12">
-        <form onsubmit="traiterCommande(event)" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+        <!-- ÉCRAN DE CONFIRMATION APRÈS PAIEMENT VALIDÉ -->
+        <div id="order-confirmed-screen" class="hidden max-w-2xl mx-auto bg-white p-8 sm:p-10 rounded-3xl border border-sauge-200 shadow-xl text-center space-y-6 animate-fade-in">
+            <div class="w-16 h-16 rounded-full bg-sauge-100 text-sauge-700 flex items-center justify-center mx-auto border border-sauge-200">
+                <i data-lucide="check-circle-2" class="w-9 h-9"></i>
+            </div>
+            <div class="space-y-2">
+                <span class="text-xs font-bold uppercase tracking-widest text-sauge-600">Paiement validé</span>
+                <h1 class="font-serif text-3xl font-bold text-creme-900">Merci pour votre commande !</h1>
+                <p id="confirmed-order-details" class="text-sm text-creme-800 leading-relaxed max-w-lg mx-auto">
+                    Votre règlement a bien été confirmé et les stocks ont été mis à jour. Nous préparons vos fondants parfumés avec le plus grand soin.
+                </p>
+            </div>
+            <div class="bg-creme-50 border border-creme-200 rounded-2xl p-4 text-xs text-creme-800 space-y-1">
+                <p class="font-bold text-creme-900">Un récapitulatif a été transmis à notre atelier.</p>
+                <p>Vous serez informé(e) dès l'expédition ou la mise à disposition de votre colis.</p>
+            </div>
+            <a href="index.html" class="inline-flex items-center justify-center gap-2 px-6 py-4 bg-sauge-600 hover:bg-sauge-700 text-white font-bold rounded-2xl shadow-lg transition-all text-xs uppercase tracking-wider">
+                <i data-lucide="store" class="w-4 h-4"></i> Retourner à la boutique
+            </a>
+        </div>
+
+        <form id="checkout-form" onsubmit="traiterCommande(event)" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             <!-- INFORMATIONS CLIENT ET LIVRAISON -->
             <div class="lg:col-span-7 space-y-6">
@@ -131,13 +166,13 @@
                 <div class="bg-white p-6 sm:p-8 rounded-3xl border border-creme-200 shadow-sm space-y-6">
                     <div class="border-b border-creme-100 pb-4 flex items-center justify-between">
                         <h2 class="font-serif text-xl font-bold text-creme-900 flex items-center gap-2">
-                            <i data-lucide="truck" class="w-5 h-5 text-sauge-600"></i> 2. Mode de Livraison
+                            <i data-lucide="truck" class="w-5 h-5 text-sauge-600"></i> 2. Mode de Livraison & Retrait
                         </h2>
                         <span id="poids-colis-badge" class="text-xs font-semibold text-creme-800 bg-creme-100 px-3 py-1 rounded-full">Poids estimé : 0 g</span>
                     </div>
 
                     <div class="space-y-3">
-                        <!-- OPTION RELAIS -->
+                        <!-- OPTION POINT RELAIS -->
                         <label class="cursor-pointer border-2 rounded-2xl p-4 flex items-start justify-between transition-all bg-creme-50/50 hover:bg-white border-creme-200" id="label-livraison-relais">
                             <div class="flex items-start gap-3">
                                 <input type="radio" name="mode_livraison" value="relais" checked onchange="majChoixLivraison()" class="mt-1 text-sauge-600 focus:ring-sauge-500">
@@ -147,6 +182,18 @@
                                 </div>
                             </div>
                             <span id="tarif-relais-label" class="font-serif font-bold text-sm text-ocre-600 shrink-0 ml-2">4,90 €</span>
+                        </label>
+
+                        <!-- OPTION RETRAIT EN BOUTIQUE -->
+                        <label class="cursor-pointer border-2 rounded-2xl p-4 flex items-start justify-between transition-all bg-creme-50/50 hover:bg-white border-creme-200" id="label-livraison-boutique">
+                            <div class="flex items-start gap-3">
+                                <input type="radio" name="mode_livraison" value="boutique" onchange="majChoixLivraison()" class="mt-1 text-sauge-600 focus:ring-sauge-500">
+                                <div>
+                                    <span class="font-bold text-sm text-creme-900 block">Retrait du colis en boutique (Escaudain, 59124)</span>
+                                    <span class="text-xs text-creme-800">Remise en main propre sur rendez-vous dès que votre commande est prête.</span>
+                                </div>
+                            </div>
+                            <span class="font-serif font-bold text-sm text-sauge-700 bg-sauge-100 px-2.5 py-0.5 rounded-lg shrink-0 ml-2">GRATUIT</span>
                         </label>
 
                         <!-- OPTION DOMICILE -->
@@ -162,7 +209,7 @@
                         </label>
                     </div>
 
-                    <!-- ADRESSE DE LIVRAISON ET POINT RELAIS -->
+                    <!-- ADRESSE DE FACTURATION / LIVRAISON ET POINT RELAIS -->
                     <div class="space-y-4 pt-4 border-t border-creme-100 text-xs">
                         <div class="space-y-1">
                             <label class="font-bold text-creme-800 uppercase tracking-wider">Adresse postale <span class="text-red-500">*</span></label>
@@ -185,15 +232,25 @@
                             <label class="font-bold text-sauge-800 uppercase tracking-wider flex items-center gap-1.5">
                                 <i data-lucide="map-pin" class="w-4 h-4 text-sauge-600"></i> Nom ou adresse du Point Relais souhaité <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" id="checkout-point-relais" placeholder="Ex: La Poste, 21  Rue Pierre Mauroy, 59800 Lille" class="w-full px-4 py-3 bg-white border border-sauge-300 rounded-xl focus:outline-none focus:border-sauge-600">
+                            <input type="text" id="checkout-point-relais" placeholder="Ex: La Poste, 21 Rue Pierre Mauroy, 59800 Lille" class="w-full px-4 py-3 bg-white border border-sauge-300 rounded-xl focus:outline-none focus:border-sauge-600">
                             <p class="text-[11px] text-sauge-700 mt-1 italic">Indiquez le point relais de votre choix ou la ville souhaitée. Nous validerons le dépôt le plus proche.</p>
+                        </div>
+
+                        <!-- INFORMATION RETRAIT EN BOUTIQUE -->
+                        <div id="info-retrait-boutique-container" class="hidden space-y-1.5 bg-sauge-50 p-4 rounded-2xl border border-sauge-200">
+                            <p class="font-bold text-sauge-900 flex items-center gap-1.5">
+                                <i data-lucide="store" class="w-4 h-4 text-sauge-600"></i> Retrait du colis en boutique — Escaudain (59124)
+                            </p>
+                            <p class="text-[11px] text-sauge-800 leading-relaxed">
+                                Votre commande sera préparée avec soin à l'atelier. Nous vous contacterons par SMS ou par e-mail dès qu'elle sera prête afin de convenir ensemble du créneau de retrait.
+                            </p>
                         </div>
                     </div>
 
                     <!-- REMARQUES / CONSIGNES -->
                     <div class="space-y-1 text-xs">
                         <label class="font-bold text-creme-800 uppercase tracking-wider">Instructions particulières (Optionnel)</label>
-                        <textarea id="checkout-remarques" rows="2" placeholder="Informations complémentaires pour l'emballage ou la livraison..." class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500 custom-scrollbar"></textarea>
+                        <textarea id="checkout-remarques" rows="2" placeholder="Informations complémentaires pour l'emballage, le créneau de retrait ou la livraison..." class="w-full px-4 py-3 bg-creme-50 border border-creme-200 rounded-xl focus:outline-none focus:border-sauge-500 custom-scrollbar"></textarea>
                     </div>
                 </div>
             </div>
@@ -232,18 +289,16 @@
                     </div>
                     
                     <!-- Conteneur de la barre de progression Offre de Bienvenue -->
-<div id="progression-bienvenue-container" class="bg-creme-50 border border-creme-200 p-3.5 rounded-2xl mb-4 text-xs">
-    <div class="flex justify-between items-center mb-1.5">
-        <span id="texte-progression" class="font-bold text-creme-900">Offre de bienvenue (-10% dès 35 €)</span>
-        <span id="pourcentage-progression" class="font-serif font-bold text-sauge-700">0%</span>
-    </div>
-    <!-- La barre visuelle -->
-    <div class="w-full bg-creme-200 h-2.5 rounded-full overflow-hidden">
-        <div id="barre-remplissage" class="bg-sauge-600 h-full transition-all duration-500 rounded-full" style="width: 0%;"></div>
-    </div>
-    <!-- Texte d'encouragement dynamique -->
-    <p id="message-progression" class="text-[11px] text-creme-700 mt-1.5 italic"></p>
-</div>
+                    <div id="progression-bienvenue-container" class="bg-creme-50 border border-creme-200 p-3.5 rounded-2xl mb-4 text-xs">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <span id="texte-progression" class="font-bold text-creme-900">Offre de bienvenue (-10% dès 35 €)</span>
+                            <span id="pourcentage-progression" class="font-serif font-bold text-sauge-700">0%</span>
+                        </div>
+                        <div class="w-full bg-creme-200 h-2.5 rounded-full overflow-hidden">
+                            <div id="barre-remplissage" class="bg-sauge-600 h-full transition-all duration-500 rounded-full" style="width: 0%;"></div>
+                        </div>
+                        <p id="message-progression" class="text-[11px] text-creme-700 mt-1.5 italic"></p>
+                    </div>
 
                     <!-- CALCUL DES MONTANTS ET FRAIS -->
                     <div class="space-y-2 pt-4 border-t border-creme-100 text-xs text-creme-800">
@@ -294,14 +349,8 @@
         const SUPABASE_ANON_KEY = "sb_publishable_esIheB1MfmllTZQWBivCWA_QFFuWkX8";
         const SEUIL_PORT_GRATUIT = 70.00;
 
-        // MAP DES CODES PROMO MASQUÉS (Base64)
-        const PROMO_CODES_DB = {
-            "UEFVU0UxMA==": { code: "PAUSE10", type: "percent", value: 10, label: "10% de réduction" },
-            "UkVEVUMxMA==": { code: "REDUC10", type: "percent", value: 10, label: "10% de réduction" },
-            "QklFTlZFTlVF": { code: "BIENVENUE", type: "percent", value: 15, label: "15% de bienvenue" },
-            "T0ZGRVJUMQ==": { code: "OFFERT", type: "free_order", value: 100, label: "Commande offerte (100%)" },
-            "T0ZGRVJU": { code: "OFFERT", type: "free_order", value: 100, label: "Commande offerte (100%)" }
-        };
+        // MAP DES CODES PROMO (Vide par défaut — prêt pour de futurs codes)
+        const PROMO_CODES_DB = {};
 
         let supabaseClient = null;
         if (window.supabase && typeof window.supabase.createClient === 'function') {
@@ -311,8 +360,20 @@
         let cart = [];
         let utilisateur = null;
         let codePromoApplique = null;
+        let premiereRemiseActive = false;
+        let utilisateurDejaCommande = false;
 
         window.onload = async function() {
+            if (window.lucide) window.lucide.createIcons();
+
+            // 1. Vérifier d'abord si le client revient d'un paiement SumUp en attente
+            const commandeFinalisee = await verifierRetourPaiementSumUp();
+            if (commandeFinalisee) {
+                if (window.lucide) window.lucide.createIcons();
+                return;
+            }
+
+            // 2. Chargement normal du panier et de la session client
             chargerPanier();
 
             if (supabaseClient) {
@@ -326,6 +387,7 @@
                         badge.textContent = "Connecté";
                         badge.className = "text-xs bg-sauge-600 text-white font-bold px-3 py-1 rounded-full";
                     }
+                    await verifierHistoriqueCommandesClient(utilisateur.email);
                 } else {
                     afficherToast("Vous devez être connecté pour accéder au paiement.", "warning");
                     setTimeout(() => window.location.href = 'index.html', 1500);
@@ -336,6 +398,110 @@
             calculerEtAfficherCheckout();
             if (window.lucide) window.lucide.createIcons();
         };
+
+        async function verifierRetourPaiementSumUp() {
+            const rawPending = localStorage.getItem('lpf_pending_order');
+            if (!rawPending) return false;
+
+            let pending;
+            try {
+                pending = JSON.parse(rawPending);
+            } catch {
+                localStorage.removeItem('lpf_pending_order');
+                return false;
+            }
+
+            const params = new URLSearchParams(window.location.search);
+            const isSumupReturn = params.get('sumup_return') === '1';
+            const overlay = document.getElementById('sumup-verification-overlay');
+
+            // Nettoyage propre de l'URL si le paramètre sumup_return est présent
+            if (isSumupReturn) {
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
+            // Sécurité anti-doublon si la commande a déjà été validée
+            const processed = JSON.parse(localStorage.getItem('lpf_processed_checkouts') || '[]');
+            if (processed.includes(pending.checkoutId)) {
+                localStorage.removeItem('lpf_pending_order');
+                return false;
+            }
+
+            if (overlay) overlay.classList.remove('hidden');
+
+            try {
+                const res = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'verify',
+                        checkoutId: pending.checkoutId,
+                        orderData: pending.orderData
+                    })
+                });
+
+                const result = await res.json();
+
+                if (res.ok && result.paid) {
+                    // Paiement confirmé : on déduit maintenant les stocks dans Supabase
+                    await deduireStocksCommande(pending.orderData.cart);
+
+                    // Verrouillage anti-doublon + nettoyage du panier
+                    processed.push(pending.checkoutId);
+                    localStorage.setItem('lpf_processed_checkouts', JSON.stringify(processed));
+                    localStorage.removeItem('lpf_cart');
+                    localStorage.removeItem('lpf_pending_order');
+
+                    if (overlay) overlay.classList.add('hidden');
+
+                    // Affichage de la confirmation de commande
+                    const formEl = document.getElementById('checkout-form');
+                    const confirmedScreen = document.getElementById('order-confirmed-screen');
+                    const detailsEl = document.getElementById('confirmed-order-details');
+
+                    if (formEl) formEl.classList.add('hidden');
+                    if (confirmedScreen) confirmedScreen.classList.remove('hidden');
+                    if (detailsEl && pending.orderData?.amount) {
+                        const montantFmt = parseFloat(pending.orderData.amount).toFixed(2).replace('.', ',');
+                        detailsEl.textContent = `Votre règlement de ${montantFmt} € a bien été confirmé et les stocks ont été mis à jour. Nous préparons vos fondants parfumés avec le plus grand soin.`;
+                    }
+
+                    return true;
+                } else {
+                    // Paiement annulé ou abandonné : on restaure les champs saisis et on conserve lpf_cart
+                    if (pending.formFields) {
+                        restaurerChampsFormulaire(pending.formFields);
+                    }
+                    localStorage.removeItem('lpf_pending_order');
+                    if (overlay) overlay.classList.add('hidden');
+
+                    if (isSumupReturn) {
+                        afficherToast("Le paiement n'a pas été finalisé. Votre panier a bien été conservé.", "warning");
+                    }
+                    return false;
+                }
+            } catch (err) {
+                console.error("Erreur lors de la vérification du retour SumUp :", err);
+                if (overlay) overlay.classList.add('hidden');
+                return false;
+            }
+        }
+
+        function restaurerChampsFormulaire(fields) {
+            if (!fields) return;
+            if (fields.nom) document.getElementById('checkout-nom').value = fields.nom;
+            if (fields.prenom) document.getElementById('checkout-prenom').value = fields.prenom;
+            if (fields.telephone) document.getElementById('checkout-telephone').value = fields.telephone;
+            if (fields.adresse) document.getElementById('checkout-adresse').value = fields.adresse;
+            if (fields.cp) document.getElementById('checkout-cp').value = fields.cp;
+            if (fields.ville) document.getElementById('checkout-ville').value = fields.ville;
+            if (fields.pointRelais) document.getElementById('checkout-point-relais').value = fields.pointRelais;
+            if (fields.remarqueSaisie) document.getElementById('checkout-remarques').value = fields.remarqueSaisie;
+            if (fields.mode) {
+                const radio = document.querySelector(`input[name="mode_livraison"][value="${fields.mode}"]`);
+                if (radio) radio.checked = true;
+            }
+        }
 
         function chargerPanier() {
             try {
@@ -372,93 +538,82 @@
             } else {
                 afficherToast("Code promo invalide ou expiré.", "warning");
             }
-        }
+        };
 
         window.retirerCodePromo = function() {
             codePromoApplique = null;
             afficherToast("Code promo retiré.");
             calculerEtAfficherCheckout();
-        }
-        
-        let premiereRemiseActive = false;
-let utilisateurDejaCommande = false;
+        };
 
-// Fonction pour vérifier si le client a déjà passé au moins une commande dans Supabase
-async function verifierHistoriqueCommandesClient(emailClient) {
-    if (!supabaseClient || !emailClient) return;
-    try {
-        const { data, error } = await supabaseClient
-            .from('commandes') // Nom de votre table de commandes
-            .select('id')
-            .eq('client_email', emailClient);
-        
-        if (data && data.length > 0) {
-            utilisateurDejaCommande = true;
-        } else {
-            utilisateurDejaCommande = false;
+        async function verifierHistoriqueCommandesClient(emailClient) {
+            if (!supabaseClient || !emailClient) return;
+            try {
+                const { data } = await supabaseClient
+                    .from('commandes')
+                    .select('id')
+                    .eq('client_email', emailClient);
+                
+                utilisateurDejaCommande = Boolean(data && data.length > 0);
+            } catch (e) {
+                utilisateurDejaCommande = false;
+            }
         }
-    } catch (e) {
-        utilisateurDejaCommande = false;
-    }
-}
 
         function calculerTotauxPanier() {
-    let sousTotalArticles = 0;
-    let nombreTablettes = 0;
-    let poidsTotalGrammes = 0;
+            let sousTotalArticles = 0;
+            let nombreTablettes = 0;
+            let poidsTotalGrammes = 0;
 
-    cart.forEach(item => {
-        poidsTotalGrammes += (item.weight || 80) * item.quantity;
-        if (item.type === 'tablette') {
-            nombreTablettes += item.quantity;
-        } else {
-            sousTotalArticles += item.price * item.quantity;
+            cart.forEach(item => {
+                poidsTotalGrammes += (item.weight || 80) * item.quantity;
+                if (item.type === 'tablette') {
+                    nombreTablettes += item.quantity;
+                } else {
+                    sousTotalArticles += item.price * item.quantity;
+                }
+            });
+
+            const lotsDeTrois = Math.floor(nombreTablettes / 3);
+            const tablettesRestantes = nombreTablettes % 3;
+            const prixTotalTablettes = (lotsDeTrois * 12.00) + (tablettesRestantes * 4.50);
+
+            sousTotalArticles += prixTotalTablettes;
+
+            let montantReduction = 0;
+
+            if (!utilisateurDejaCommande && sousTotalArticles > 35 && !codePromoApplique) {
+                premiereRemiseActive = true;
+                montantReduction = sousTotalArticles * 0.10;
+            } else {
+                premiereRemiseActive = false;
+            }
+
+            if (codePromoApplique) {
+                if (codePromoApplique.type === 'percent') {
+                    montantReduction = (sousTotalArticles * codePromoApplique.value) / 100;
+                } else if (codePromoApplique.type === 'free_order') {
+                    montantReduction = sousTotalArticles;
+                }
+            }
+
+            const sousTotalApresReduction = Math.max(0, sousTotalArticles - montantReduction);
+            const estLivraisonOfferte = sousTotalArticles >= SEUIL_PORT_GRATUIT;
+
+            return {
+                sousTotalArticles,
+                montantReduction,
+                sousTotalApresReduction,
+                nombreTablettes,
+                lotsDeTrois,
+                poidsTotalGrammes,
+                estLivraisonOfferte,
+                premiereRemiseActive
+            };
         }
-    });
-
-    const lotsDeTrois = Math.floor(nombreTablettes / 3);
-    const tablettesRestantes = nombreTablettes % 3;
-    const prixTotalTablettes = (lotsDeTrois * 12.00) + (tablettesRestantes * 4.50);
-
-    sousTotalArticles += prixTotalTablettes;
-
-    let montantReduction = 0;
-
-    // --- LOGIQUE REMISE PREMIÈRE COMMANDE (> 35 €) ---
-    // Si l'utilisateur n'a jamais commandé, que le panier dépasse 35 € et qu'aucun autre code promo n'est saisi
-    if (!utilisateurDejaCommande && sousTotalArticles > 35 && !codePromoApplique) {
-        premiereRemiseActive = true;
-        montantReduction = sousTotalArticles * 0.10; // 10% de réduction immédiate
-    } else {
-        premiereRemiseActive = false;
-    }
-
-    // Si un code promo manuel a été appliqué, il prend le pas sur la remise de bienvenue
-    if (codePromoApplique) {
-        if (codePromoApplique.type === 'percent') {
-            montantReduction = (sousTotalArticles * codePromoApplique.value) / 100;
-        } else if (codePromoApplique.type === 'free_order') {
-            montantReduction = sousTotalArticles;
-        }
-    }
-
-    const sousTotalApresReduction = Math.max(0, sousTotalArticles - montantReduction);
-    const estLivraisonOfferte = sousTotalArticles >= SEUIL_PORT_GRATUIT;
-
-    return {
-        sousTotalArticles,
-        montantReduction,
-        sousTotalApresReduction,
-        nombreTablettes,
-        lotsDeTrois,
-        poidsTotalGrammes,
-        estLivraisonOfferte,
-        premiereRemiseActive
-    };
-}
 
         function calculerFraisPort(mode, poidsGrammes, estGratuit) {
-            if (estGratuit) return 0.00;
+            if (mode === 'boutique' || estGratuit) return 0.00;
 
             if (mode === 'relais') {
                 if (poidsGrammes <= 500) return 4.90;
@@ -484,6 +639,19 @@ async function verifierHistoriqueCommandesClient(emailClient) {
             const fraisPort = calculerFraisPort(modeSelected, totaux.poidsTotalGrammes, totaux.estLivraisonOfferte);
             const totalFinal = totaux.sousTotalApresReduction + fraisPort;
 
+            // Mise à jour visuelle des cartes radio
+            const stylesCartes = {
+                relais: document.getElementById('label-livraison-relais'),
+                boutique: document.getElementById('label-livraison-boutique'),
+                domicile: document.getElementById('label-livraison-domicile')
+            };
+            Object.entries(stylesCartes).forEach(([cle, el]) => {
+                if (!el) return;
+                el.className = cle === modeSelected
+                    ? "cursor-pointer border-2 rounded-2xl p-4 flex items-start justify-between transition-all bg-sauge-50/60 border-sauge-600 shadow-xs"
+                    : "cursor-pointer border-2 rounded-2xl p-4 flex items-start justify-between transition-all bg-creme-50/50 hover:bg-white border-creme-200";
+            });
+
             // Mise à jour des badges
             document.getElementById('poids-colis-badge').textContent = `Poids estimé : ${totaux.poidsTotalGrammes} g`;
             document.getElementById('total-articles-count').textContent = `${cart.reduce((a, b) => a + b.quantity, 0)} article(s)`;
@@ -491,6 +659,7 @@ async function verifierHistoriqueCommandesClient(emailClient) {
             const labelRelaisPrice = document.getElementById('tarif-relais-label');
             const labelDomicilePrice = document.getElementById('tarif-domicile-label');
             const champRelaisContainer = document.getElementById('champ-point-relais-container');
+            const infoBoutiqueContainer = document.getElementById('info-retrait-boutique-container');
             const inputRelais = document.getElementById('checkout-point-relais');
 
             const tarifRelais = calculerFraisPort('relais', totaux.poidsTotalGrammes, totaux.estLivraisonOfferte);
@@ -499,26 +668,20 @@ async function verifierHistoriqueCommandesClient(emailClient) {
             labelRelaisPrice.textContent = totaux.estLivraisonOfferte ? "OFFERT" : `${tarifRelais.toFixed(2).replace('.', ',')} €`;
             labelDomicilePrice.textContent = totaux.estLivraisonOfferte ? "OFFERT" : `${tarifDomicile.toFixed(2).replace('.', ',')} €`;
             
-            // --- MISE À JOUR DE LA BARRE DE PROGRESSION (Objectif 35 €) ---
+            // Barre de progression Offre de Bienvenue (Objectif 35 €)
             const conteneurBarre = document.getElementById('progression-bienvenue-container');
-
             if (conteneurBarre) {
-                // Si l'utilisateur a déjà commandé, on masque complètement la barre de bienvenue
                 if (utilisateurDejaCommande) {
                     conteneurBarre.classList.add('hidden');
                 } else {
-                    // Sinon on l'affiche et on calcule la progression
                     conteneurBarre.classList.remove('hidden');
-
-                    const texteProgression = document.getElementById('texte-progression');
                     const pourcentageProgression = document.getElementById('pourcentage-progression');
                     const barreRemplissage = document.getElementById('barre-remplissage');
                     const messageProgression = document.getElementById('message-progression');
 
                     const montantActuel = totaux.sousTotalArticles;
                     const seuilOffre = 35;
-                    let pourcentage = (montantActuel / seuilOffre) * 100;
-                    if (pourcentage > 100) pourcentage = 100;
+                    const pourcentage = Math.min(100, (montantActuel / seuilOffre) * 100);
 
                     if (barreRemplissage) barreRemplissage.style.width = `${pourcentage}%`;
                     if (pourcentageProgression) pourcentageProgression.textContent = `${Math.round(pourcentage)}%`;
@@ -540,15 +703,22 @@ async function verifierHistoriqueCommandesClient(emailClient) {
                 }
             }
 
+            // Affichage conditionnel selon le mode de livraison
             if (modeSelected === 'relais') {
                 champRelaisContainer.classList.remove('hidden');
                 inputRelais.setAttribute('required', 'required');
+                infoBoutiqueContainer.classList.add('hidden');
+            } else if (modeSelected === 'boutique') {
+                champRelaisContainer.classList.add('hidden');
+                inputRelais.removeAttribute('required');
+                infoBoutiqueContainer.classList.remove('hidden');
             } else {
                 champRelaisContainer.classList.add('hidden');
                 inputRelais.removeAttribute('required');
+                infoBoutiqueContainer.classList.add('hidden');
             }
 
-            // Display promo tablettes
+            // Bannière offre tablettes
             const bannerTablettes = document.getElementById('recap-promo-tablettes-banner');
             const textTablettes = document.getElementById('recap-promo-tablettes-text');
             if (totaux.lotsDeTrois > 0) {
@@ -558,7 +728,7 @@ async function verifierHistoriqueCommandesClient(emailClient) {
                 bannerTablettes.classList.add('hidden');
             }
 
-            // Display promo code appliqué OU Remise de première commande
+            // Affichage code promo ou remise de bienvenue
             const appliedBadgeContainer = document.getElementById('checkout-applied-promo-badge');
             const discountRow = document.getElementById('checkout-discount-row');
             const discountLabel = document.getElementById('checkout-discount-label');
@@ -577,7 +747,6 @@ async function verifierHistoriqueCommandesClient(emailClient) {
                 discountLabel.textContent = `Réduction (${codePromoApplique.code})`;
                 discountAmount.textContent = `- ${totaux.montantReduction.toFixed(2).replace('.', ',')} €`;
             } else if (totaux.premiereRemiseActive) {
-                // --- AFFICHAGE DESIGN DE LA REMISE DE BIENVENUE 1ÈRE COMMANDE ---
                 appliedBadgeContainer.innerHTML = `
                     <div class="relative overflow-hidden bg-gradient-to-r from-sauge-50 via-creme-100 to-sauge-50 border border-sauge-300 p-3 rounded-2xl shadow-sm mt-2">
                         <div class="flex items-center justify-between">
@@ -628,7 +797,10 @@ async function verifierHistoriqueCommandesClient(emailClient) {
             
             const shippingElem = document.getElementById('checkout-shipping');
             const freeNote = document.getElementById('checkout-free-shipping-note');
-            if (totaux.estLivraisonOfferte) {
+            if (modeSelected === 'boutique') {
+                shippingElem.innerHTML = `<span class="text-sauge-700 font-bold bg-sauge-100 px-2 py-0.5 rounded-md">RETRAIT BOUTIQUE (GRATUIT)</span>`;
+                freeNote.classList.add('hidden');
+            } else if (totaux.estLivraisonOfferte) {
                 shippingElem.innerHTML = `<span class="text-sauge-700 font-bold bg-sauge-100 px-2 py-0.5 rounded-md">OFFERTS</span>`;
                 freeNote.classList.remove('hidden');
             } else {
@@ -638,13 +810,39 @@ async function verifierHistoriqueCommandesClient(emailClient) {
 
             document.getElementById('checkout-total-final').textContent = totalFinal.toFixed(2).replace('.', ',') + " €";
             if (window.lucide) window.lucide.createIcons();
-}
+        }
+
+        async function deduireStocksCommande(panier) {
+            if (!supabaseClient) return;
+            const lignes = [];
+
+            panier.forEach(item => {
+                if (item.type === 'lot' && item.parfums) {
+                    Object.entries(item.parfums).forEach(([parfumId, qte]) => {
+                        if (qte > 0) lignes.push({ id: `fondant-${parfumId}`, qte: qte * item.quantity });
+                    });
+                } else if (item.type === 'tablette') {
+                    lignes.push({ id: `tablette-${item.parfumId}`, qte: item.quantity });
+                } else if (item.type === 'plateau') {
+                    lignes.push({ id: item.plateauId, qte: item.quantity });
+                } else if (item.type === 'creation') {
+                    lignes.push({ id: item.creationId, qte: item.quantity });
+                } else if (item.type === 'mystere') {
+                    lignes.push({ id: 'lot-mystere', qte: item.quantity });
+                }
+            });
+
+            for (const ligne of lignes) {
+                await supabaseClient.rpc('decrementer_stock', { p_id: ligne.id, p_qte: ligne.qte });
+            }
+        }
 
         window.traiterCommande = async function(event) {
             event.preventDefault();
             const btn = document.getElementById('btn-valider-paiement');
             btn.disabled = true;
             btn.innerHTML = `<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Préparation de votre paiement sécurisé...`;
+            if (window.lucide) window.lucide.createIcons();
 
             const nom = document.getElementById('checkout-nom').value.trim();
             const prenom = document.getElementById('checkout-prenom').value.trim();
@@ -654,45 +852,71 @@ async function verifierHistoriqueCommandesClient(emailClient) {
             const adresse = document.getElementById('checkout-adresse').value.trim();
             const cp = document.getElementById('checkout-cp').value.trim();
             const ville = document.getElementById('checkout-ville').value.trim();
-            const mode = document.querySelector('input[name="mode_livraison"]:checked')?.value;
+            const mode = document.querySelector('input[name="mode_livraison"]:checked')?.value || 'relais';
             const pointRelais = document.getElementById('checkout-point-relais').value.trim();
-
 
             const totaux = calculerTotauxPanier();
             const fraisPort = calculerFraisPort(mode, totaux.poidsTotalGrammes, totaux.estLivraisonOfferte);
             const totalFinal = totaux.sousTotalApresReduction + fraisPort;
 
-            const payload = {
+            let libelleLivraison = 'Livraison à domicile';
+            if (mode === 'relais') {
+                libelleLivraison = pointRelais;
+            } else if (mode === 'boutique') {
+                libelleLivraison = 'Retrait du colis en boutique (Escaudain, 59124)';
+            }
+
+            const orderPayload = {
                 amount: parseFloat(totalFinal.toFixed(2)),
                 sousTotal: totaux.sousTotalArticles,
                 fraisDePort: fraisPort,
-                estLivraisonOfferte: totaux.estLivraisonOfferte,
-                pointRelais: mode === 'relais' ? pointRelais : 'Livraison à domicile',
+                estLivraisonOfferte: totaux.estLivraisonOfferte || mode === 'boutique',
+                pointRelais: libelleLivraison,
                 clientEmail: email,
                 cart: cart,
                 clientName: `${prenom} ${nom}`,
                 clientPhone: telephone,
                 deliveryAddress: `${adresse}, ${cp} ${ville}`,
-                discount: codePromoApplique ? `${totaux.montantReduction.toFixed(2).replace('.', ',')} €` : '0,00 €',
+                discount: totaux.montantReduction > 0 ? `${totaux.montantReduction.toFixed(2).replace('.', ',')} €` : '0,00 €',
                 remarque: remarqueSaisie !== "" ? remarqueSaisie : "Aucune consigne particulière"
             };
 
             try {
-                // APPEL A L'API SERVEUR VERCEL (/api/checkout)
                 const res = await fetch('/api/checkout', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({
+                        action: 'create',
+                        amount: parseFloat(totalFinal.toFixed(2)),
+                        returnUrl: window.location.origin + window.location.pathname
+                    })
                 });
 
                 const data = await res.json();
 
-                if (res.ok && data.url) {
+                if (res.ok && data.url && data.checkoutId) {
+                    // Sauvegarde en attente SANS toucher aux stocks ni à lpf_cart avant paiement réel
+                    localStorage.setItem('lpf_pending_order', JSON.stringify({
+                        checkoutId: data.checkoutId,
+                        orderData: orderPayload,
+                        formFields: {
+                            nom,
+                            prenom,
+                            telephone,
+                            adresse,
+                            cp,
+                            ville,
+                            mode,
+                            pointRelais,
+                            remarqueSaisie
+                        },
+                        createdAt: Date.now()
+                    }));
+
                     afficherToast("Redirection vers la page de paiement sécurisée...", "success");
-                    localStorage.removeItem('lpf_cart');
                     setTimeout(() => {
                         window.location.href = data.url;
-                    }, 800);
+                    }, 600);
                 } else {
                     throw new Error(data.error || "Erreur lors de l'initialisation du paiement SumUp.");
                 }
