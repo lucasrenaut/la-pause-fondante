@@ -1,6 +1,6 @@
 const SUPABASE_URL = "https://ewmdyjcjxwibhfjejhwe.supabase.co";
 
-export async function deduireStocksServeur(cart, supabaseServiceKey) {
+async function deduireStocksServeur(cart, supabaseServiceKey) {
   if (!Array.isArray(cart) || !supabaseServiceKey) return;
   const lignes = [];
 
@@ -33,7 +33,7 @@ export async function deduireStocksServeur(cart, supabaseServiceKey) {
   }
 }
 
-export async function envoyerEmailCommande(orderData) {
+async function envoyerEmailCommande(orderData) {
   if (!orderData) return;
 
   const {
@@ -110,8 +110,7 @@ export async function envoyerEmailCommande(orderData) {
   }
 }
 
-export async function finaliserCommandeSiNonTraitee(checkoutId, supabaseServiceKey) {
-  // Passage atomique de PENDING à PAID : garantit un traitement unique
+async function finaliserCommandeSiNonTraitee(checkoutId, supabaseServiceKey) {
   const patchRes = await fetch(
     `${SUPABASE_URL}/rest/v1/commandes_sumup?checkout_id=eq.${encodeURIComponent(checkoutId)}&statut=eq.PENDING`,
     {
@@ -135,8 +134,6 @@ export async function finaliserCommandeSiNonTraitee(checkoutId, supabaseServiceK
   }
 
   const updatedRows = await patchRes.json();
-
-  // Si aucune ligne n'a été modifiée, la commande a déjà été traitée
   if (!Array.isArray(updatedRows) || updatedRows.length === 0) {
     return true;
   }
@@ -145,6 +142,18 @@ export async function finaliserCommandeSiNonTraitee(checkoutId, supabaseServiceK
   await deduireStocksServeur(orderData.cart, supabaseServiceKey);
   await envoyerEmailCommande(orderData);
   return true;
+}
+
+async function obtenirMerchantCode(apiKey) {
+  if (process.env.SUMUP_MERCHANT_CODE) {
+    return process.env.SUMUP_MERCHANT_CODE.trim();
+  }
+  const meRes = await fetch("https://api.sumup.com/v0.1/me", {
+    headers: { "Authorization": `Bearer ${apiKey}` }
+  });
+  if (!meRes.ok) return null;
+  const meData = await meRes.json();
+  return meData?.merchant_profile?.merchant_code || null;
 }
 
 export default async function handler(req, res) {
@@ -156,31 +165,111 @@ export default async function handler(req, res) {
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!apiKey || !supabaseServiceKey) {
-    return res.status(500).json({ error: "Variables d'environnement manquantes." });
+    return res.status(500).json({ error: "Variables d'environnement manquantes sur Vercel." });
   }
 
-  const body = req.body || {};
-  const checkoutId = body.id || body.checkout_id;
-
-  if (!checkoutId) {
-    return res.status(400).json({ error: "Identifiant checkout absent." });
-  }
+  const { action, amount, returnUrl, orderData, checkoutId } = req.body || {};
 
   try {
-    // Vérification officielle du statut auprès de l'API SumUp
-    const checkResponse = await fetch(`https://api.sumup.com/v0.1/checkouts/${encodeURIComponent(checkoutId)}`, {
-      headers: { "Authorization": `Bearer ${apiKey}` }
-    });
-    const checkData = await checkResponse.json();
+    // 1. CRÉATION DU CHECKOUT SUMUP
+    if (action === 'create') {
+      const montant = Number(parseFloat(amount).toFixed(2));
+      if (!Number.isFinite(montant) || montant < 1) {
+        return res.status(400).json({ error: "Le montant minimum pour payer par carte est de 1,00 €." });
+      }
 
-    if (checkResponse.ok && checkData.status === 'PAID') {
-      await finaliserCommandeSiNonTraitee(checkoutId, supabaseServiceKey);
+      const merchantCode = await obtenirMerchantCode(apiKey);
+      if (!merchantCode && !process.env.SUMUP_PAY_TO_EMAIL) {
+        return res.status(500).json({ error: "Impossible de récupérer le code marchand SumUp." });
+      }
+
+      const redirectUrl = returnUrl
+        ? `${returnUrl}${returnUrl.includes('?') ? '&' : '?'}sumup_return=1`
+        : "https://la-pause-fondante.vercel.app/paiement.html?sumup_return=1";
+      const origin = returnUrl ? new URL(returnUrl).origin : "https://la-pause-fondante.vercel.app";
+
+      const sumupBody = {
+        checkout_reference: `LPF-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        amount: montant,
+        currency: "EUR",
+        description: "Commande La Pause Fondante",
+        return_url: `${origin}/api/webhook`,
+        redirect_url: redirectUrl,
+        hosted_checkout: { enabled: true }
+      };
+
+      if (merchantCode) {
+        sumupBody.merchant_code = merchantCode;
+      } else {
+        sumupBody.pay_to_email = process.env.SUMUP_PAY_TO_EMAIL.trim();
+      }
+
+      const sumupRes = await fetch("https://api.sumup.com/v0.1/checkouts", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(sumupBody)
+      });
+
+      const sumupData = await sumupRes.json();
+
+      if (!sumupRes.ok || !sumupData.id || !sumupData.hosted_checkout_url) {
+        console.error("Erreur création SumUp :", sumupRes.status, sumupData);
+        return res.status(502).json({
+          error: sumupData.message || sumupData.error_message || "SumUp n'a pas pu créer la session de paiement."
+        });
+      }
+
+      // Enregistrement de la commande en attente dans Supabase
+      const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/commandes_sumup`, {
+        method: "POST",
+        headers: {
+          "apikey": supabaseServiceKey,
+          "Authorization": `Bearer ${supabaseServiceKey}`,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify({
+          checkout_id: sumupData.id,
+          statut: "PENDING",
+          order_data: orderData
+        })
+      });
+
+      if (!insertRes.ok) {
+        console.error("Erreur insertion commandes_sumup :", await insertRes.text());
+      }
+
+      return res.status(200).json({
+        checkoutId: sumupData.id,
+        url: sumupData.hosted_checkout_url
+      });
     }
 
-    // Toujours répondre 200 OK à SumUp pour confirmer la réception du webhook
-    return res.status(200).json({ received: true, status: checkData.status });
+    // 2. VÉRIFICATION DU PAIEMENT AU RETOUR DE SUMUP
+    if (action === 'verify') {
+      if (!checkoutId) {
+        return res.status(400).json({ error: "Identifiant checkout absent." });
+      }
+
+      const checkRes = await fetch(`https://api.sumup.com/v0.1/checkouts/${encodeURIComponent(checkoutId)}`, {
+        headers: { "Authorization": `Bearer ${apiKey}` }
+      });
+      const checkData = await checkRes.json();
+
+      if (checkRes.ok && checkData.status === 'PAID') {
+        await finaliserCommandeSiNonTraitee(checkoutId, supabaseServiceKey);
+        return res.status(200).json({ paid: true, status: checkData.status });
+      }
+
+      return res.status(200).json({ paid: false, status: checkData.status || 'PENDING' });
+    }
+
+    return res.status(400).json({ error: "Action invalide." });
   } catch (error) {
-    console.error("Erreur webhook SumUp :", error);
-    return res.status(500).json({ error: "Erreur serveur webhook." });
+    console.error("Erreur serveur /api/checkout :", error);
+    return res.status(500).json({ error: "Erreur serveur lors du paiement." });
   }
 }
