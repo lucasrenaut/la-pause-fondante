@@ -1430,6 +1430,7 @@
                     stockTablette: 10,
                     nom: "Citrouille vanillée", 
                     categorie: "Gourmands", 
+                    badge: "bientôt remplacé",
                     description: `Pyramide olfactive :
                     • Famille Olfactive : Gourmand, épicé
                     • Notes de tête : Guimauve, accords épicés
@@ -1513,6 +1514,7 @@
                     stockTablette: 10,
                     nom: "Fleur de coton", 
                     categorie: "Fleuris", 
+                    badge: "bientôt remplacé",
                     description: `Pyramide olfactive :
                     • Famille Olfactive : Floral
                     • Notes de tête : Rose, ylang-ylang
@@ -1597,6 +1599,7 @@
                     stockTablette: 10,
                     nom: "Caramel", 
                     categorie: "Gourmands", 
+                    badge: "bientôt remplacé",
                     description: `Pyramide olfactive :
                     • Famille Olfactive : Gourmande
                     • Notes de tête : Noix de coco
@@ -1682,6 +1685,7 @@
                     stockTablette: 10,
                     nom: "Noix de coco", 
                     categorie: "Gourmands", 
+                    badge: "bientôt remplacé",
                     description: `Pyramide olfactive :
                     • Famille Olfactive : Fruité, gourmand
                     • Notes de tête : Amande, pêche
@@ -1718,6 +1722,7 @@
                     stockTablette: 10,
                     nom: "Lavande", 
                     categorie: "Fleuris",
+                    badge: "bientôt remplacé",
                     description: `Pyramide olfactive :
                     • Famille Olfactive : Frais, aromatique
                     • Notes de tête : Sauge
@@ -1968,6 +1973,7 @@
                     stockTablette: 10,
                     nom: "Balade Provençale", 
                     categorie: "Fleuris", 
+                    badge: "bientôt remplacé",
                     description: `Pyramide olfactive :
                     • Famille Olfactive : Boisé, aromatique, floral
                     • Notes de tête : Sauge, cyprès, ciste
@@ -2002,6 +2008,7 @@
                     stockTablette: 10,
                     nom: "Abricot Romarin", 
                     categorie: "Fruités",
+                    badge: "bientôt remplacé",
                     description: `Pyramide olfactive :
                     • Famille Olfactive : Fruité, frais
                     • Notes de tête : Pêche, orange
@@ -2049,6 +2056,7 @@
                     stockTablette: 10,
                     nom: "Vanille", 
                     categorie: "Gourmands", 
+                    badge: "bientôt remplacé",
                     description: `Pyramide olfactive :
                     • Famille Olfactive : Gourmand
                     • Notes de tête : Aubépine
@@ -2127,7 +2135,7 @@
                     cache: false,
                     stockFondant: 30,
                     stockTablette: 10,
-                    nom: "Champagne", 
+                    nom: "Bulles festives", 
                     categorie: "Épicés & Cocooning",
                     description: `Pyramide olfactive :
                     • Famille Olfactive : Cocktail
@@ -2163,6 +2171,7 @@
                     stockFondant: 30,
                     stockTablette: 10,
                     nom: "Sirop d'érable",
+                    badge: "bientôt remplacé",
                     categorie: "Gourmands",
                     description: `Pyramide olfactive :
                     • Famille Olfactive : Épicé, boisé, vanillé
@@ -2211,6 +2220,7 @@
                     stockTablette: 10,
                     nom: "Cire et Miel",
                     categorie: "Épicés & Cocooning", 
+                    badge: "bientôt remplacé",
                     description: `Pyramide olfactive :
                     • Famille Olfactive : Frais
                     • Notes de tête : Pin, lavande
@@ -3022,6 +3032,23 @@ async function initialiserStocksTempsReel() {
     return `Stock : ${stock} dispo`;
 }
 
+function obtenirCouleurBadgeFondant(texte) {
+    const t = texte.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if (t.includes("bestseller") || t.includes("best-seller") || t.includes("best seller")) {
+        return "bg-amber-500 text-white border border-amber-300";
+    }
+    if (t.includes("nouveau") || t.includes("nouveaute")) {
+        return "bg-emerald-600 text-white border border-emerald-300";
+    }
+    if (t.includes("fin") || t.includes("derniere") || t.includes("dernier")) {
+        return "bg-red-600 text-white border border-red-300";
+    }
+    if (t.includes("limite") || t.includes("edition")) {
+        return "bg-purple-600 text-white border border-purple-300";
+    }
+    return "bg-ocre-600 text-white border border-ocre-300";
+}
+
         // AFFICHAGE DES FONDANTS UNITAIRES AVEC CLIC POUR VOIR LA FICHE
         function renderParfumsGrid() {
     const container = document.getElementById('parfums-grid');
@@ -3050,7 +3077,11 @@ async function initialiserStocksTempsReel() {
         const badgeHTML = (p.etiquette && p.etiquette.trim() !== "") 
             ? `<span class="absolute top-3 left-3 ${s.etiquette} text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${p.etiquette}</span>` 
             : `<span class="absolute top-3 left-3 bg-sauge-700 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${p.categorie}</span>`;
-
+            
+            const badgePersoHTML = (p.badge && p.badge.trim() !== "")
+    ? `<span class="absolute top-3 right-3 ${obtenirCouleurBadgeFondant(p.badge)} text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">${p.badge}</span>`
+    : '';
+            
         const imageContent = (p.image && p.image.trim() !== "")
             ? `<img src="${p.image}" alt="${p.nom}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">`
             : `<div class="w-full h-full flex items-center justify-center" style="background-color: ${p.couleur || '#f4f6f4'}"><i data-lucide="${p.icone || 'sparkles'}" class="w-16 h-16 opacity-40 text-creme-900"></i></div>`;
@@ -3062,6 +3093,7 @@ async function initialiserStocksTempsReel() {
                 <div onclick="ouvrirFicheProduit('parfum', ${p.id})" class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm cursor-pointer group">
                     ${imageContent}
                     ${badgeHTML}
+                    ${badgePersoHTML}
                     <div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 opacity-90 group-hover:bg-sauge-600 transition-colors">
                         <i data-lucide="eye" class="w-3.5 h-3.5"></i> Fiche produit
                     </div>
