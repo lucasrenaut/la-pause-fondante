@@ -3018,9 +3018,8 @@ async function initialiserStocksTempsReel() {
         function texteStock(stock, seuil = 10, pieceUnique = false) {
     if (!Number.isFinite(stock)) return "";
     if (stock <= 0) return pieceUnique ? "Pièce unique — Vendue" : "Rupture de stock";
-    if (pieceUnique || stock === 1) return "Pièce unique";
-    if (stock <= seuil) return `Stock : ${stock} dispo`;
-    return "En stock";
+    if (pieceUnique || stock === 1) return "Pièce unique (1 dispo)";
+    return `Stock : ${stock} dispo`;
 }
 
         // AFFICHAGE DES FONDANTS UNITAIRES AVEC CLIC POUR VOIR LA FICHE
