@@ -442,9 +442,9 @@
 
                 const result = await res.json();
 
-                if (res.ok && result.paid) {
-                    // Paiement confirmé : on déduit maintenant les stocks dans Supabase
-                    await deduireStocksCommande(pending.orderData.cart);
+                if (res.ok && result.paid) 
+                
+                {;
 
                     // Verrouillage anti-doublon + nettoyage du panier
                     processed.push(pending.checkoutId);
@@ -883,14 +883,15 @@
 
             try {
                 const res = await fetch('/api/checkout', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'create',
-                        amount: parseFloat(totalFinal.toFixed(2)),
-                        returnUrl: window.location.origin + window.location.pathname
-                    })
-                });
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        action: 'create',
+        amount: parseFloat(totalFinal.toFixed(2)),
+        returnUrl: window.location.origin + window.location.pathname,
+        orderData: orderPayload
+    })
+});
 
                 const data = await res.json();
 
