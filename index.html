@@ -285,6 +285,18 @@
             background-color: #166534 !important;
             border-color: #ffffff !important;
         }
+        /* Boutons désactivés (Rupture de stock) en mode Noël */
+        body.theme-noel #parfums-grid button:disabled,
+        body.theme-noel #tablettes-grid button:disabled,
+        body.theme-noel #plateaux-grid button:disabled,
+        body.theme-noel #creations-grid button:disabled,
+        body.theme-noel #modal-produit button:disabled {
+            background-color: #4b5563 !important;
+            color: #d1d5db !important;
+            border-color: #6b7280 !important;
+            opacity: 0.65 !important;
+            cursor: not-allowed !important;
+        }
         /* Liens "Voir détails..." transparents sans fond vert */
         body.theme-noel main button.text-sauge-600 {
             background-color: transparent !important;
@@ -1406,8 +1418,16 @@
             prixUnitaire: 0.50,
             categoriesParfums: ["Toutes", "Gourmands", "Fleuris", "Frais & Propres", "Épicés & Cocooning", "Fruités"],
             
+            // =========================================================================
+            // GESTION DES ARTICLES :
+            // - cache : true = masque complètement l'article du site | false = visible
+            // - stock / stockFondant / stockTablette : si 0 = impossible à commander
+            // =========================================================================
             parfums: [
                 {   id: 1, 
+                    cache: false,
+                    stockFondant: 23,
+                    stockTablette: 10,
                     nom: "Citrouille vanillée", 
                     categorie: "Gourmands", 
                     description: `Pyramide olfactive :
@@ -1442,6 +1462,9 @@
                     imageTablette: "tablette_citrouille_vanillé_lpf.jpeg" },
                     
                 {   id: 2, 
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Orangette", 
                     categorie: "Gourmands", 
                     description: `Pyramide olfactive :
@@ -1485,6 +1508,9 @@
                     imageTablette: "tablette_orangette_lpf.jpeg" },
                     
                 {   id: 3, 
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Fleur de coton", 
                     categorie: "Fleuris", 
                     description: `Pyramide olfactive :
@@ -1530,6 +1556,9 @@
                     imageTablette: "tablette_coton_lpf.jpeg" },
                     
                 {   id: 4,
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Litchi épicé",    
                     categorie: "Fruités", 
                     description: `Pyramide olfactive :
@@ -1563,6 +1592,9 @@
                     imageTablette: "tablette_litchi_lpf.jpeg" },
                 
                 {   id: 5, 
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Caramel", 
                     categorie: "Gourmands", 
                     description: `Pyramide olfactive :
@@ -1598,6 +1630,9 @@
                     imageTablette: "tablette_caramel_lpf.jpeg" },
                 
                 {   id: 6,
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Pomme Cannelle", 
                     categorie: "Épicés & Cocooning",
                     description: `Pyramide olfactive :
@@ -1642,6 +1677,9 @@
                     imageTablette: "tablette_pomme_cannelle_lpf.jpeg" },
                 
                 {   id: 7, 
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Noix de coco", 
                     categorie: "Gourmands", 
                     description: `Pyramide olfactive :
@@ -1675,6 +1713,9 @@
                     imageTablette: "tablette_coco_lpf.jpeg" },
                 
                 {   id: 8, 
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Lavande", 
                     categorie: "Fleuris",
                     description: `Pyramide olfactive :
@@ -1719,6 +1760,9 @@
                     imageTablette: "tablette_lavande_lpf.jpeg" },
                 
                 {   id: 9, 
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Cerise Noire Explosive", 
                     categorie: "Fruités", 
                     description: `Pyramide olfactive :
@@ -1752,6 +1796,9 @@
                     imageTablette: "tablette_cerise_lpf.jpeg" },
                 
                 {   id: 10, 
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Adoucissant", 
                     categorie: "Frais & Propres", 
                     description: `Pyramide olfactive :
@@ -1790,6 +1837,9 @@
                     imageTablette: "tablette_adoucissant_lpf.jpeg" },
                 
                 {   id: 11, 
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Bonbon Démoniaque", 
                     categorie: "Fruités", 
                     description: `Pyramide olfactive :
@@ -1823,6 +1873,9 @@
                     imageTablette: "tablette_bonbon_lpf.jpeg" },
                     
                 {   id: 12, 
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Épices de Noël",
                     categorie: "Épicés & Cocooning", 
                     description: `Pyramide olfactive :
@@ -1865,6 +1918,9 @@
                     imageTablette: "tablette_noel_lpf.jpeg" },
                     
                 {   id: 13, 
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Cannelle", 
                     categorie: "Épicés & Cocooning", 
                     description: `Pyramide olfactive :
@@ -1907,6 +1963,9 @@
                     imageTablette: "tablette_cannelle_lpf.jpeg" },
                     
                 {   id: 14, 
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Balade Provençale", 
                     categorie: "Fleuris", 
                     description: `Pyramide olfactive :
@@ -1938,6 +1997,9 @@
                     imageTablette: "tablette_province_lpf.jpeg" },
                     
                 {   id: 15, 
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Abricot Romarin", 
                     categorie: "Fruités",
                     description: `Pyramide olfactive :
@@ -1982,6 +2044,9 @@
                     imageTablette: "tablette_abricot_lpf.jpeg" },
                     
                 {   id: 16, 
+                    cache: false,
+                    stockFondant: 1000,
+                    stockTablette: 10,
                     nom: "Vanille", 
                     categorie: "Gourmands", 
                     description: `Pyramide olfactive :
@@ -2012,6 +2077,9 @@
                     imageTablette: "tablette_vanille_lpf.jpeg" },
                     
                 {   id: 17,
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Agrumes",
                     categorie: "Frais & Propres", 
                     description: `Pyramide olfactive :
@@ -2056,6 +2124,9 @@
                     imageTablette: "tablette_agrumes_lpf.jpeg" },
                     
                 {   id: 18,
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Champagne", 
                     categorie: "Épicés & Cocooning",
                     description: `Pyramide olfactive :
@@ -2088,6 +2159,9 @@
                     imageTablette: "tablette_champagne_lpf.jpeg" },
                     
                 {   id: 19, 
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Sirop d'érable",
                     categorie: "Gourmands",
                     description: `Pyramide olfactive :
@@ -2117,7 +2191,6 @@
                     • P102 - Tenir hors de portée des enfants.
                     • P261 - Éviter de respirer les poussières/fumées/gaz/brouillards/vapeurs/aérosols.
                     • P272 - Les vêtements de travail contaminés ne devraient pas sortir du lieu de travail.
-                    • P273 - Éviter le rejet dans l’environnement.
                     • P280 - Porter des gants de protection/des vêtements de protection/un équipement de protection des yeux/du visage/une protection auditive.
                     • P302+P352 - EN CAS DE CONTACT AVEC LA PEAU: Laver abondamment à l’eau.
                     • P321 - Traitement spécifique (voir les instructions complémentaires de premiers secours sur cette étiquette).
@@ -2133,6 +2206,9 @@
                     imageTablette: "tablette_erable_lpf.jpeg" },
                     
                 {   id: 20, 
+                    cache: false,
+                    stockFondant: 30,
+                    stockTablette: 10,
                     nom: "Cire et Miel",
                     categorie: "Épicés & Cocooning", 
                     description: `Pyramide olfactive :
@@ -2172,6 +2248,7 @@
             plateaux: [
                 { 
                     id: 'plat-naturel', 
+                    cache: false,
                     nom: "Plateau Classique", 
                     prix: 15.00, 
                     weight: 1200, 
@@ -2194,6 +2271,7 @@
                     elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration Naturel", "1 plateau"] 
                 },
                 { id: 'plat-zen', 
+                cache: false,
                 nom: "Plateau Zen", 
                 prix: 18.00, weight: 1200, 
                 badge: "Sérénité",
@@ -2214,11 +2292,12 @@
                 elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration zen","une petite bougie", "1 plateau"] },
                 
                 { id: 'plat-noel', 
+                cache: false,
                 nom: "Plateau Noël", 
                 prix: 17.00, 
                 weight: 1200, 
                 badge: "Édition Limitée !", 
-                stock: 3, style: 'noel', 
+                stock: 1, style: 'noel', 
                 image: "plateau_noel_lpf.jpeg", 
                 description: `Faites vivre les fêtes de fin d'année dans votre salon !
                 
@@ -2234,11 +2313,12 @@
                 elements: ["10 fondants mystère", "10 chauffe-plats", "1 fondoir", "décoration hivernale", "1 plateau"] },
                 
                 { id: 'plat-grinch', 
+                cache: true,
                 nom: "Plateau Grinch", 
                 prix: 16.00, 
                 weight: 1200, 
                 badge: "Édition Limitée !", 
-                stock : 1, 
+                stock : 0, 
                 style: 'noel', 
                 image: "plateau_grinch.jpg", 
                 description: `Ajoutez une touche grincheuse et rigolote à votre table avec ce kit complet.
@@ -2258,12 +2338,13 @@
             creations: [
                 { 
                     id: 'bm-noel', 
+                    cache: false,
                     type: 'boite_musicale', 
                     nom: "BOÎTE MUSICALE DE NOËL 🎄✨", 
                     prix: 7.00, 
                     weight: 350, 
                     badge: "Édition Limitée", 
-                    stock: 3,
+                    stock: 1,
                     style: 'noel',
                     image: "boite_musique_noel.png",
                     fallbackImage: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=500",
@@ -2282,6 +2363,7 @@
                 },
                 {   
                     id: 'pot',
+                    cache: true,
                     type: 'pot',
                     nom: "Bouquet de fondants - épice de noël",
                     prix: 8.00,
@@ -2330,6 +2412,7 @@
                 },
                 
                 {   id: 'pot_citrouille',
+                cache: false,
                     type: 'pot',
                     nom: "Bouquet de fondants - citrouille vanillée",
                     prix: 8.00,
@@ -2373,6 +2456,7 @@
                 
                 {   
                     id: 'pot_adoucissant',
+                    cache: false,
                     type: 'pot',
                     nom: "Bouquet de fondants - adoucissant",
                     prix: 8.00,
@@ -2417,11 +2501,12 @@
                 
                 {   
                     id: 'bougie1_champagne',
+                    cache: false,
                     type: 'pot',
-                    nom: "Bougie Sapin de noël - champagne",
+                    nom: "Bougie Sapin de noël - bulles festives",
                     prix: 4.50,
                     badge: "édition limitée !",
-                    stock: 1,
+                    stock: 3,
                     style: 'noel',
                     weight: 50,
                     image: "bougie_sapin_champagne_lpf.png",
@@ -2451,8 +2536,9 @@
                 
                 {   
                     id: 'bougie2_champagne',
+                    cache: false,
                     type: 'pot',
-                    nom: "Bougie pain d'épice - champagne",
+                    nom: "Bougie pain d'épice - bulles festives",
                     prix: 4.50,
                     badge: "édition limitée !",
                     stock: 1,
@@ -2485,6 +2571,7 @@
                 
                 {
                     id: 'grand_pot_adoucissant',
+                    cache: true,
                     type: 'pot',
                     nom: "Grand Bouquet de fondants - épices de noël",
                     prix: 30.00,
@@ -2535,7 +2622,8 @@
                 },
                 
                 {
-                    id: 'grand_pot_adoucissant',
+                    id: 'moyen_pot_noel',
+                    cache: true,
                     type: 'pot',
                     nom: "Bouquet Moyen de fondants - épices de noël",
                     prix: 26.50,
@@ -2604,6 +2692,44 @@
             } catch (e) { cart = []; }
             updateCartUI();
         }
+        
+        function appliquerStocksSurConfig(listeStocks) {
+    const map = {};
+    listeStocks.forEach(row => { map[row.id] = row.quantite; });
+
+    CONFIG.parfums.forEach(p => {
+        if (map[`fondant-${p.id}`] !== undefined) p.stockFondant = map[`fondant-${p.id}`];
+        if (map[`tablette-${p.id}`] !== undefined) p.stockTablette = map[`tablette-${p.id}`];
+    });
+    CONFIG.plateaux.forEach(p => {
+        if (map[p.id] !== undefined) p.stock = map[p.id];
+    });
+    CONFIG.creations.forEach(c => {
+        if (map[c.id] !== undefined) c.stock = map[c.id];
+    });
+
+    renderParfumsGrid();
+    renderTablettesGrid();
+    renderPlateauxGrid();
+    renderCreationsGrid();
+}
+
+async function initialiserStocksTempsReel() {
+    if (!supabaseClient) return;
+
+    // Chargement initial depuis Supabase
+    const { data, error } = await supabaseClient.from('stocks').select('id, quantite');
+    if (!error && data) appliquerStocksSurConfig(data);
+
+    // Écoute des modifications en direct pour tous les visiteurs connectés
+    supabaseClient
+        .channel('stocks-en-direct')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'stocks' }, async () => {
+            const { data: maj } = await supabaseClient.from('stocks').select('id, quantite');
+            if (maj) appliquerStocksSurConfig(maj);
+        })
+        .subscribe();
+}
 
         // Gestion du Skin (Classique vs Noël) et verrouillage depuis CONFIG
         function appliquerSkin(nomSkin) {
@@ -2660,9 +2786,10 @@
             renderCreationsGrid();
             naviguerVers('home');
             chargerPanierDepuisStorage();
+            initialiserStocksTempsReel();
             if (window.lucide) window.lucide.createIcons();
         };
-
+        
         window.defilerVersContact = function() {
             const sec = document.getElementById('section-contact');
             if (sec) sec.scrollIntoView({ behavior: 'smooth' });
@@ -2887,85 +3014,168 @@
         }
 
         window.filtrerParfums = function() { renderParfumsGrid(); }
+        
+        function texteStock(stock, seuil = 10, pieceUnique = false) {
+    if (!Number.isFinite(stock)) return "";
+    if (stock <= 0) return pieceUnique ? "Pièce unique — Vendue" : "Rupture de stock";
+    if (pieceUnique || stock === 1) return "Pièce unique";
+    if (stock <= seuil) return `Stock : ${stock} dispo`;
+    return "En stock";
+}
 
         // AFFICHAGE DES FONDANTS UNITAIRES AVEC CLIC POUR VOIR LA FICHE
         function renderParfumsGrid() {
-            const container = document.getElementById('parfums-grid');
-            if(!container) return;
-            container.innerHTML = '';
-            const searchValue = (document.getElementById('search-parfum')?.value || '').toLowerCase();
+    const container = document.getElementById('parfums-grid');
+    if(!container) return;
+    container.innerHTML = '';
+    const searchValue = (document.getElementById('search-parfum')?.value || '').toLowerCase();
 
-            const parfumsFiltres = CONFIG.parfums.filter(p => {
-                return (selectedCategoryFilter === "Toutes" || p.categorie === selectedCategoryFilter) &&
-                       (p.nom.toLowerCase().includes(searchValue) || p.description.toLowerCase().includes(searchValue));
-            });
+    const parfumsFiltres = CONFIG.parfums.filter(p => {
+        return !p.cache &&
+               (selectedCategoryFilter === "Toutes" || p.categorie === selectedCategoryFilter) &&
+               (p.nom.toLowerCase().includes(searchValue) || p.description.toLowerCase().includes(searchValue));
+    });
 
-            parfumsFiltres.forEach(p => {
-                const count = selectedParfums[p.id] || 0;
-                const styleNom = p.style || 'classique';
-                const s = obtenirStyleFondant(styleNom);
+    parfumsFiltres.forEach(p => {
+        const count = selectedParfums[p.id] || 0;
+        const styleNom = p.style || 'classique';
+        const s = obtenirStyleFondant(styleNom);
 
-                const badgeHTML = (p.etiquette && p.etiquette.trim() !== "") 
-                    ? `<span class="absolute top-3 left-3 ${s.etiquette} text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${p.etiquette}</span>` 
-                    : `<span class="absolute top-3 left-3 bg-sauge-700 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${p.categorie}</span>`;
+        const stockFondant = typeof p.stockFondant === 'number' ? p.stockFondant : Infinity;
+        const enRupture = stockFondant <= 0;
+        const dejaDansPanier = cart
+            .filter(item => item.type === 'lot' && item.parfums && item.parfums[p.id])
+            .reduce((sum, item) => sum + (item.parfums[p.id] * item.quantity), 0);
+        const maxSelectionnable = Math.max(0, stockFondant - dejaDansPanier);
 
-                const imageContent = (p.image && p.image.trim() !== "")
-                    ? `<img src="${p.image}" alt="${p.nom}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">`
-                    : `<div class="w-full h-full flex items-center justify-center" style="background-color: ${p.couleur || '#f4f6f4'}"><i data-lucide="${p.icone || 'sparkles'}" class="w-16 h-16 opacity-40 text-creme-900"></i></div>`;
+        const badgeHTML = (p.etiquette && p.etiquette.trim() !== "") 
+            ? `<span class="absolute top-3 left-3 ${s.etiquette} text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${p.etiquette}</span>` 
+            : `<span class="absolute top-3 left-3 bg-sauge-700 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${p.categorie}</span>`;
 
-                const card = document.createElement('div');
-                card.className = s.card;
-                card.innerHTML = `
-                    <div>
-                        <div onclick="ouvrirFicheProduit('parfum', ${p.id})" class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm cursor-pointer group">
-                            ${imageContent}
-                            ${badgeHTML}
-                            <div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 opacity-90 group-hover:bg-sauge-600 transition-colors">
-                                <i data-lucide="eye" class="w-3.5 h-3.5"></i> Fiche produit
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <h3 onclick="ouvrirFicheProduit('parfum', ${p.id})" class="font-serif text-xl font-bold ${s.title} cursor-pointer hover:text-sauge-600 transition-colors">${p.nom}</h3>
-                            <p class="text-xs ${s.desc} leading-relaxed line-clamp-2">${p.description}</p>
-                            <button onclick="ouvrirFicheProduit('parfum', ${p.id})" class="text-[11px] text-sauge-600 font-bold hover:underline flex items-center gap-1 pt-0.5">
-                                Voir détails, pyramide & CLP <i data-lucide="chevron-right" class="w-3 h-3"></i>
-                            </button>
-                        </div>
+        const imageContent = (p.image && p.image.trim() !== "")
+            ? `<img src="${p.image}" alt="${p.nom}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">`
+            : `<div class="w-full h-full flex items-center justify-center" style="background-color: ${p.couleur || '#f4f6f4'}"><i data-lucide="${p.icone || 'sparkles'}" class="w-16 h-16 opacity-40 text-creme-900"></i></div>`;
+
+        const card = document.createElement('div');
+        card.className = s.card;
+        card.innerHTML = `
+            <div>
+                <div onclick="ouvrirFicheProduit('parfum', ${p.id})" class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm cursor-pointer group">
+                    ${imageContent}
+                    ${badgeHTML}
+                    <div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 opacity-90 group-hover:bg-sauge-600 transition-colors">
+                        <i data-lucide="eye" class="w-3.5 h-3.5"></i> Fiche produit
                     </div>
-                    <div class="pt-4 mt-4 flex items-center justify-between border-t ${s.border}">
-                        <div>
-                            <span class="text-xs font-bold ${s.title}">Quantité :</span>
-                        </div>
-                        <div class="flex items-center gap-2 p-1 rounded-xl border ${s.counterBg}">
-                            <button onclick="modifierParfumCount(${p.id}, -1)" class="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs ${s.btnMinus}" ${count === 0 ? 'disabled' : ''}>-</button>
-                            <span class="w-6 text-center font-bold text-xs">${count}</span>
-                            <button onclick="modifierParfumCount(${p.id}, 1)" class="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs ${s.btnPlus}">+</button>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-            if (window.lucide) window.lucide.createIcons();
-        }
+                </div>
+                <div class="space-y-2">
+                    <h3 onclick="ouvrirFicheProduit('parfum', ${p.id})" class="font-serif text-xl font-bold ${s.title} cursor-pointer hover:text-sauge-600 transition-colors">${p.nom}</h3>
+                    <p class="text-xs ${s.desc} leading-relaxed line-clamp-2">${p.description}</p>
+                    <button onclick="ouvrirFicheProduit('parfum', ${p.id})" class="text-[11px] text-sauge-600 font-bold hover:underline flex items-center gap-1 pt-0.5">
+                        Voir détails, pyramide & CLP <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="pt-4 mt-4 flex items-center justify-between border-t ${s.border}">
+                <div>
+                    <span class="text-xs font-bold ${s.title}">Quantité :</span>
+                    <span class="text-[10px] block opacity-80">${texteStock(p.stockFondant, 10)}</span>
+                </div>
+                <div class="flex items-center gap-2 p-1 rounded-xl border ${s.counterBg}">
+                    <button onclick="modifierParfumCount(${p.id}, -1)" class="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs ${s.btnMinus}" ${count === 0 ? 'disabled' : ''}>-</button>
+                    <span class="w-6 text-center font-bold text-xs">${count}</span>
+                    <button onclick="modifierParfumCount(${p.id}, 1)" class="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs ${s.btnPlus}" ${(enRupture || count >= maxSelectionnable) ? 'disabled' : ''}>+</button>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+    if (window.lucide) window.lucide.createIcons();
+}
 
         window.modifierParfumCount = function(parfumId, delta) {
-            if (!selectedFormat) {
-                afficherToast("Veuillez sélectionner un format de lot d'abord.", "warning");
-                return;
-            }
-            const totalCurrent = Object.values(selectedParfums).reduce((a, b) => a + b, 0);
-            if (delta > 0 && selectedFormat.capacity && totalCurrent >= selectedFormat.capacity) {
-                afficherToast(`Le format ${selectedFormat.nom} est limité à ${selectedFormat.capacity} fondants.`, "warning");
-                return;
-            }
-            const current = selectedParfums[parfumId] || 0;
-            const newCount = current + delta;
-            if (newCount <= 0) delete selectedParfums[parfumId];
-            else selectedParfums[parfumId] = newCount;
+    if (!selectedFormat) {
+        afficherToast("Veuillez sélectionner un format de lot d'abord.", "warning");
+        return;
+    }
+    const p = CONFIG.parfums.find(item => item.id == parfumId);
+    if (!p) return;
 
-            renderParfumsGrid();
-            updateFondantsSummary();
+    const totalCurrent = Object.values(selectedParfums).reduce((a, b) => a + b, 0);
+    if (delta > 0 && selectedFormat.capacity && totalCurrent >= selectedFormat.capacity) {
+        afficherToast(`Le format ${selectedFormat.nom} est limité à ${selectedFormat.capacity} fondants.`, "warning");
+        return;
+    }
+
+    const current = selectedParfums[parfumId] || 0;
+    const newCount = current + delta;
+
+    if (delta > 0 && typeof p.stockFondant === 'number') {
+        const dejaDansPanier = cart
+            .filter(item => item.type === 'lot' && item.parfums && item.parfums[parfumId])
+            .reduce((sum, item) => sum + (item.parfums[parfumId] * item.quantity), 0);
+
+        if (dejaDansPanier + newCount > p.stockFondant) {
+            afficherToast(p.stockFondant <= 0
+                ? `${p.nom} est en rupture de stock !`
+                : `Stock limité à ${p.stockFondant} fondant(s) pour ${p.nom} !`, "warning");
+            return;
         }
+    }
+
+    if (newCount <= 0) delete selectedParfums[parfumId];
+    else selectedParfums[parfumId] = newCount;
+
+    renderParfumsGrid();
+    updateFondantsSummary();
+}
+
+window.ajouterLotAuPanier = function() {
+    if (!selectedFormat) return;
+    const totalSelected = Object.values(selectedParfums).reduce((a, b) => a + b, 0);
+    if (selectedFormat.capacity && totalSelected !== selectedFormat.capacity) return;
+
+    for (const id of Object.keys(selectedParfums)) {
+        const qteDemandee = selectedParfums[id];
+        if (qteDemandee <= 0) continue;
+
+        const p = CONFIG.parfums.find(item => item.id == id);
+        if (!p) continue;
+
+        const stockMax = typeof p.stockFondant === 'number' ? p.stockFondant : Infinity;
+        const dejaDansPanier = cart
+            .filter(item => item.type === 'lot' && item.parfums && item.parfums[id])
+            .reduce((sum, item) => sum + (item.parfums[id] * item.quantity), 0);
+
+        if (dejaDansPanier + qteDemandee > stockMax) {
+            afficherToast(`Stock insuffisant pour ${p.nom} (${stockMax} max disponible(s)) !`, "warning");
+            return;
+        }
+    }
+
+    let detailsArr = [];
+    Object.keys(selectedParfums).forEach(id => {
+        if (selectedParfums[id] > 0) {
+            const p = CONFIG.parfums.find(item => item.id == id);
+            detailsArr.push(`${selectedParfums[id]}x ${p.nom}`);
+        }
+    });
+
+    const lotPrice = selectedFormat.capacity ? selectedFormat.prix : totalSelected * CONFIG.prixUnitaire;
+    cart.push({
+        id: 'lot-' + Date.now(),
+        type: 'lot',
+        title: `${selectedFormat.nom} (${totalSelected} fondants)`,
+        subtitle: detailsArr.join(', '),
+        parfums: { ...selectedParfums },
+        price: lotPrice,
+        weight: totalSelected * 10,
+        quantity: 1
+    });
+    sauvegarderPanierDansStorage();
+    updateCartUI();
+    afficherToast("Lot de fondants ajouté au panier !");
+    viderParfums();
+}
 
         window.viderParfums = function() {
             selectedParfums = {};
@@ -3039,33 +3249,40 @@
             }
         }
 
-        window.ajouterLotAuPanier = function() {
-            if (!selectedFormat) return;
-            const totalSelected = Object.values(selectedParfums).reduce((a, b) => a + b, 0);
-            if (selectedFormat.capacity && totalSelected !== selectedFormat.capacity) return;
-
-            let detailsArr = [];
-            Object.keys(selectedParfums).forEach(id => {
-                const p = CONFIG.parfums.find(item => item.id == id);
-                detailsArr.push(`${selectedParfums[id]}x ${p.nom}`);
-            });
-
-            const lotPrice = selectedFormat.capacity ? selectedFormat.prix : totalSelected * CONFIG.prixUnitaire;
-            cart.push({ id: 'lot-' + Date.now(), type: 'lot', title: `${selectedFormat.nom} (${totalSelected} fondants)`, subtitle: detailsArr.join(', '), price: lotPrice, weight: totalSelected * 10, quantity: 1 });
-            sauvegarderPanierDansStorage();
-            updateCartUI();
-            afficherToast("Lot de fondants ajouté au panier !");
-            viderParfums();
-        }
+        
 
         window.ajouterLotMystereAuPanier = function() {
-            const existing = cart.find(item => item.type === 'mystere');
-            if (existing) { existing.quantity += 1; }
-            else { cart.push({ id: 'lot-mystere', type: 'mystere', title: "Lot de 20 Fondants Mystère 🎁", subtitle: "Assortiment surprise", price: 8.00, weight: 140, quantity: 1 }); }
-            sauvegarderPanierDansStorage();
-            updateCartUI();
-            afficherToast("Lot Mystère ajouté !");
-        }
+    const stockMax = typeof CONFIG.stockMystere === 'number'
+        ? CONFIG.stockMystere
+        : (CONFIG.lotMystere && typeof CONFIG.lotMystere.stock === 'number' ? CONFIG.lotMystere.stock : Infinity);
+
+    const existing = cart.find(item => item.type === 'mystere');
+    const qteActuelle = existing ? existing.quantity : 0;
+
+    if (qteActuelle + 1 > stockMax) {
+        afficherToast(stockMax <= 0 ? "Lot Mystère en rupture de stock !" : `Stock limité à ${stockMax} lot(s) mystère !`);
+        return;
+    }
+
+    if (existing) {
+        existing.quantity += 1;
+        existing.maxStock = stockMax;
+    } else {
+        cart.push({
+            id: 'lot-mystere',
+            type: 'mystere',
+            title: "Lot de 20 Fondants Mystère 🎁",
+            subtitle: "Assortiment surprise",
+            price: 8.00,
+            weight: 140,
+            quantity: 1,
+            maxStock: stockMax
+        });
+    }
+    sauvegarderPanierDansStorage();
+    updateCartUI();
+    afficherToast("Lot Mystère ajouté !");
+}
 
         function renderTablettesCategoriesFilter() {
             const container = document.getElementById('categories-tablettes-container');
@@ -3085,79 +3302,85 @@
 
         // AFFICHAGE DES TABLETTES AVEC PHOTO & DESCRIPTION SPÉCIFIQUES
         function renderTablettesGrid() {
-            const container = document.getElementById('tablettes-grid');
-            if(!container) return;
-            container.innerHTML = '';
-            const searchValue = (document.getElementById('search-tablette')?.value || '').toLowerCase();
+    const container = document.getElementById('tablettes-grid');
+    if(!container) return;
+    container.innerHTML = '';
+    const searchValue = (document.getElementById('search-tablette')?.value || '').toLowerCase();
 
-            const tablettesFiltrees = CONFIG.parfums.filter(p => {
-                const descPourRecherche = (p.descriptionTablette && p.descriptionTablette.trim() !== "") ? p.descriptionTablette : p.description;
-                return (selectedTablettesCategoryFilter === "Toutes" || p.categorie === selectedTablettesCategoryFilter) &&
-                       (p.nom.toLowerCase().includes(searchValue) || descPourRecherche.toLowerCase().includes(searchValue));
-            });
+    const tablettesFiltrees = CONFIG.parfums.filter(p => {
+        const descPourRecherche = (p.descriptionTablette && p.descriptionTablette.trim() !== "") ? p.descriptionTablette : p.description;
+        return !p.cache &&
+               (selectedTablettesCategoryFilter === "Toutes" || p.categorie === selectedTablettesCategoryFilter) &&
+               (p.nom.toLowerCase().includes(searchValue) || descPourRecherche.toLowerCase().includes(searchValue));
+    });
 
-            tablettesFiltrees.forEach(p => {
-                const styleNom = p.style || 'classique';
-                const s = obtenirStyleTablette(styleNom);
+    tablettesFiltrees.forEach(p => {
+        const styleNom = p.style || 'classique';
+        const s = obtenirStyleTablette(styleNom);
 
-                const badgeHTML = (p.badge && p.badge.trim() !== "") 
-                    ? `<span class="absolute top-3 left-3 ${s.badge} text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${p.badge}</span>` 
-                    : '';
+        const stockTab = typeof p.stockTablette === 'number' ? p.stockTablette : Infinity;
+        const enRupture = stockTab <= 0;
+        const itemPanier = cart.find(item => item.type === 'tablette' && item.parfumId == p.id);
+        const qtePanier = itemPanier ? itemPanier.quantity : 0;
+        const stockAtteint = enRupture || qtePanier >= stockTab;
 
-                const etiquetteTabletteHTML = (p.etiquette && p.etiquette.trim() !== "")
-                    ? `<span class="text-[10px] font-bold uppercase tracking-wider ${s.etiquette} px-2.5 py-1 rounded-md">${p.etiquette}</span>`
-                    : `<span class="text-[10px] font-bold uppercase tracking-wider ${s.etiquette} px-2.5 py-1 rounded-md">Tablette Sécable</span>`;
+        const badgeHTML = (p.badge && p.badge.trim() !== "") 
+            ? `<span class="absolute top-3 left-3 ${s.badge} text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${p.badge}</span>` 
+            : '';
 
-                // Photo spécifique tablette (imageTablette), sinon fallback icône colorée
-                const visuelTabletteHTML = (p.imageTablette && p.imageTablette.trim() !== "")
-                    ? `<img src="${p.imageTablette}" alt="Tablette ${p.nom}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">`
-                    : `<div class="w-full h-full flex items-center justify-center group-hover:scale-105 transition-transform duration-300" style="background-color: ${p.couleur || '#f4f6f4'}">
-                           <i data-lucide="${p.icone || 'tablet'}" class="w-16 h-16 opacity-40"></i>
-                       </div>`;
+        const etiquetteTabletteHTML = (p.etiquette && p.etiquette.trim() !== "")
+            ? `<span class="text-[10px] font-bold uppercase tracking-wider ${s.etiquette} px-2.5 py-1 rounded-md">${p.etiquette}</span>`
+            : `<span class="text-[10px] font-bold uppercase tracking-wider ${s.etiquette} px-2.5 py-1 rounded-md">Tablette Sécable</span>`;
 
-                // Description spécifique tablette (descriptionTablette), sinon description classique
-                const descTabletteTexte = (p.descriptionTablette && p.descriptionTablette.trim() !== "")
-                    ? p.descriptionTablette
-                    : p.description;
+        const visuelTabletteHTML = (p.imageTablette && p.imageTablette.trim() !== "")
+            ? `<img src="${p.imageTablette}" alt="Tablette ${p.nom}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">`
+            : `<div class="w-full h-full flex items-center justify-center group-hover:scale-105 transition-transform duration-300" style="background-color: ${p.couleur || '#f4f6f4'}">
+                   <i data-lucide="${p.icone || 'tablet'}" class="w-16 h-16 opacity-40"></i>
+               </div>`;
 
-                const card = document.createElement('div');
-                card.className = s.card;
-                card.innerHTML = `
-                    <div>
-                        <div onclick="ouvrirFicheProduit('tablette', ${p.id})" class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm cursor-pointer group">
-                            ${visuelTabletteHTML}
-                            ${badgeHTML}
-                            <div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 opacity-90 group-hover:bg-sauge-600 transition-colors">
-                                <i data-lucide="eye" class="w-3.5 h-3.5"></i> Fiche produit
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex items-center justify-between gap-2">
-                                ${etiquetteTabletteHTML}
-                                <span class="text-xs font-bold ${s.title}">4,50 € / u</span>
-                            </div>
-                            <h3 onclick="ouvrirFicheProduit('tablette', ${p.id})" class="font-serif text-xl font-bold ${s.title} cursor-pointer hover:text-sauge-600 transition-colors">${p.nom}</h3>
-                            <p class="text-xs ${s.desc} leading-relaxed line-clamp-2">${descTabletteTexte}</p>
-                            <button onclick="ouvrirFicheProduit('tablette', ${p.id})" class="text-[11px] text-sauge-600 font-bold hover:underline flex items-center gap-1 pt-0.5">
-                                Voir détails & composition <i data-lucide="chevron-right" class="w-3 h-3"></i>
-                            </button>
-                        </div>
+        const descTabletteTexte = (p.descriptionTablette && p.descriptionTablette.trim() !== "")
+            ? p.descriptionTablette
+            : p.description;
+
+        const card = document.createElement('div');
+        card.className = s.card;
+        card.innerHTML = `
+            <div>
+                <div onclick="ouvrirFicheProduit('tablette', ${p.id})" class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm cursor-pointer group">
+                    ${visuelTabletteHTML}
+                    ${badgeHTML}
+                    <div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 opacity-90 group-hover:bg-sauge-600 transition-colors">
+                        <i data-lucide="eye" class="w-3.5 h-3.5"></i> Fiche produit
                     </div>
-                    <div class="pt-4 mt-4 flex items-center justify-between border-t ${s.border}">
-                        <div>
-                            <span class="font-serif text-xl font-bold ${s.title}">4,50 €</span>
-                            <span class="text-[10px] ${s.desc} block opacity-80">Offre 3 = 12 €</span>
-                        </div>
-                        <button onclick="ajouterTabletteAuPanier(${p.id})" class="px-4 py-2.5 ${s.btn} text-xs font-bold rounded-2xl transition-all shadow-md flex items-center gap-1.5 uppercase tracking-wider">
-                            <i data-lucide="shopping-bag" class="w-4 h-4"></i> Ajouter
-                        </button>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        ${etiquetteTabletteHTML}
+                        <span class="text-xs font-bold ${s.title}">4,50 € / u</span>
                     </div>
-                `;
-                container.appendChild(card);
-            });
-            if (window.lucide) window.lucide.createIcons();
-            updateTablettesProgressBar();
-        }
+                    <h3 onclick="ouvrirFicheProduit('tablette', ${p.id})" class="font-serif text-xl font-bold ${s.title} cursor-pointer hover:text-sauge-600 transition-colors">${p.nom}</h3>
+                    <p class="text-xs ${s.desc} leading-relaxed line-clamp-2">${descTabletteTexte}</p>
+                    <button onclick="ouvrirFicheProduit('tablette', ${p.id})" class="text-[11px] text-sauge-600 font-bold hover:underline flex items-center gap-1 pt-0.5">
+                        Voir détails & composition <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="pt-4 mt-4 flex items-center justify-between border-t ${s.border}">
+                <div>
+                    <span class="font-serif text-xl font-bold ${s.title}">4,50 €</span>
+                    <span class="text-[10px] ${s.desc} block opacity-80">Offre 3 = 12 €</span>
+                    <span class="text-[10px] block opacity-80">${texteStock(p.stockTablette, 3)}</span>
+                </div>
+                <button onclick="ajouterTabletteAuPanier(${p.id})" ${stockAtteint ? 'disabled' : ''} class="px-4 py-2.5 ${s.btn} text-xs font-bold rounded-2xl transition-all shadow-md flex items-center gap-1.5 uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i data-lucide="shopping-bag" class="w-4 h-4"></i> ${enRupture ? 'Rupture' : 'Ajouter'}
+                </button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+    if (window.lucide) window.lucide.createIcons();
+    updateTablettesProgressBar();
+}
 
         function updateTablettesProgressBar() {
             const badge = document.getElementById('tablettes-promo-badge');
@@ -3185,127 +3408,232 @@
         }
 
         window.ajouterTabletteAuPanier = function(parfumId) {
-            const p = CONFIG.parfums.find(item => item.id == parfumId);
-            if (!p) return;
-            const existingIndex = cart.findIndex(item => item.type === 'tablette' && item.parfumId == parfumId);
-            if (existingIndex !== -1) { cart[existingIndex].quantity += 1; }
-            else { cart.push({ id: 'tablette-' + parfumId, parfumId: parfumId, type: 'tablette', title: `Tablette ${p.nom}`, subtitle: "Tablette fondante sécable", price: 4.50, weight: 90, quantity: 1 }); }
-            sauvegarderPanierDansStorage();
-            updateCartUI();
-            afficherToast(`Tablette ${p.nom} ajoutée !`);
-        }
+    const p = CONFIG.parfums.find(item => item.id == parfumId);
+    if (!p) return;
+
+    // Gère p.stockTablette si tu as un stock séparé des fondants, sinon p.stock
+    const stockMax = typeof p.stockTablette === 'number'
+        ? p.stockTablette
+        : (typeof p.stock === 'number' ? p.stock : Infinity);
+
+    const existingIndex = cart.findIndex(item => item.type === 'tablette' && item.parfumId == parfumId);
+    const qteActuelle = existingIndex !== -1 ? cart[existingIndex].quantity : 0;
+
+    if (qteActuelle + 1 > stockMax) {
+        afficherToast(stockMax <= 0 ? `Tablette ${p.nom} en rupture de stock !` : `Stock limité à ${stockMax} tablette(s) pour ${p.nom} !`);
+        return;
+    }
+
+    if (existingIndex !== -1) {
+        cart[existingIndex].quantity += 1;
+        cart[existingIndex].maxStock = stockMax;
+    } else {
+        cart.push({
+            id: 'tablette-' + parfumId,
+            parfumId: parfumId,
+            type: 'tablette',
+            title: `Tablette ${p.nom}`,
+            subtitle: "Tablette fondante sécable",
+            price: 4.50,
+            weight: 90,
+            quantity: 1,
+            maxStock: stockMax
+        });
+    }
+    sauvegarderPanierDansStorage();
+    updateCartUI();
+    afficherToast(`Tablette ${p.nom} ajoutée !`);
+}
 
         // RENDU PLATEAUX AVEC CLIC POUR FICHE PRODUIT
         function renderPlateauxGrid() {
-            const container = document.getElementById('plateaux-grid');
-            if(!container) return;
-            container.innerHTML = '';
-            CONFIG.plateaux.forEach(p => {
-                const styleNom = p.style || 'classique';
-                const s = obtenirStyleTablette(styleNom);
-                const badgeHTML = (p.badge && p.badge.trim() !== "") ? `<span class="absolute top-3 left-3 ${s.badge} text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${p.badge}</span>` : '';
+    const container = document.getElementById('plateaux-grid');
+    if (!container) return;
+    container.innerHTML = '';
 
-                const card = document.createElement('div');
-                card.className = s.card;
-                card.innerHTML = `
-                    <div>
-                        <div onclick="ouvrirFicheProduit('plateau', '${p.id}')" class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm cursor-pointer group">
-                            <img src="${p.image}" alt="${p.nom}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400';">
-                            ${badgeHTML}
-                            <div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 opacity-90 group-hover:bg-sauge-600 transition-colors">
-                                <i data-lucide="eye" class="w-3.5 h-3.5"></i> Fiche produit
-                            </div>
-                        </div>
-                        <div class="space-y-3">
-                            <h3 onclick="ouvrirFicheProduit('plateau', '${p.id}')" class="font-serif text-xl font-bold ${s.title} cursor-pointer hover:text-sauge-600 transition-colors">${p.nom}</h3>
-                            <p class="text-xs ${s.desc} leading-relaxed line-clamp-2">${p.description}</p>
-                            <div class="bg-black/5 p-3 rounded-xl border ${s.border} space-y-1">
-                                <span class="text-[10px] font-bold uppercase tracking-wider block opacity-80">Ce coffret inclut :</span>
-                                <ul class="text-xs space-y-1">
-                                    ${p.elements.map(el => `<li>• ${el}</li>`).join('')}
-                                </ul>
-                            </div>
-                            <button onclick="ouvrirFicheProduit('plateau', '${p.id}')" class="text-[11px] text-sauge-600 font-bold hover:underline flex items-center gap-1">
-                                Voir détails & fiche technique <i data-lucide="chevron-right" class="w-3 h-3"></i>
-                            </button>
-                        </div>
+    CONFIG.plateaux.filter(p => !p.cache).forEach(p => {
+        const styleNom = p.style || 'classique';
+        const s = obtenirStyleTablette(styleNom);
+
+        const stockMax = typeof p.stock === 'number' ? p.stock : Infinity;
+        const enRupture = stockMax <= 0;
+        const estUnique = Boolean(p.unique || stockMax === 1);
+        const itemPanier = cart.find(item => item.type === 'plateau' && item.plateauId === p.id);
+        const stockAtteint = enRupture || (itemPanier && itemPanier.quantity >= stockMax);
+
+        const texteBadge = (p.badge && p.badge.trim() !== "")
+            ? p.badge
+            : (estUnique ? "Pièce unique" : "");
+        const badgeHTML = texteBadge
+            ? `<span class="absolute top-3 left-3 ${s.badge} text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${texteBadge}</span>`
+            : '';
+
+        const card = document.createElement('div');
+        card.className = s.card;
+        card.innerHTML = `
+            <div>
+                <div onclick="ouvrirFicheProduit('plateau', '${p.id}')" class="h-48 overflow-hidden relative rounded-2xl mb-4 shadow-sm cursor-pointer group">
+                    <img src="${p.image}" alt="${p.nom}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400';">
+                    ${badgeHTML}
+                    <div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 opacity-90 group-hover:bg-sauge-600 transition-colors">
+                        <i data-lucide="eye" class="w-3.5 h-3.5"></i> Fiche produit
                     </div>
-                    <div class="pt-4 mt-4 flex items-center justify-between border-t ${s.border}">
-                        <div>
-                            <span class="font-serif text-2xl font-bold ${s.title}">${p.prix.toFixed(2).replace('.', ',')} €</span>
-                            ${p.stock !== undefined ? `<span class="text-[10px] block opacity-80">Stock : ${p.stock} dispo</span>` : ''}
-                        </div>
-                        <button onclick="ajouterPlateauAuPanier('${p.id}')" class="px-5 py-2.5 bg-sauge-600 hover:bg-sauge-700 text-white text-xs font-bold rounded-2xl transition-all shadow-md uppercase tracking-wider">Ajouter</button>
+                </div>
+                <div class="space-y-3">
+                    <h3 onclick="ouvrirFicheProduit('plateau', '${p.id}')" class="font-serif text-xl font-bold ${s.title} cursor-pointer hover:text-sauge-600 transition-colors">${p.nom}</h3>
+                    <p class="text-xs ${s.desc} leading-relaxed line-clamp-2">${p.description}</p>
+                    <div class="bg-black/5 p-3 rounded-xl border ${s.border} space-y-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider block opacity-80">Ce coffret inclut :</span>
+                        <ul class="text-xs space-y-1">
+                            ${p.elements.map(el => `<li>• ${el}</li>`).join('')}
+                        </ul>
                     </div>
-                `;
-                container.appendChild(card);
-            });
-            if (window.lucide) window.lucide.createIcons();
-        }
+                    <button onclick="ouvrirFicheProduit('plateau', '${p.id}')" class="text-[11px] text-sauge-600 font-bold hover:underline flex items-center gap-1">
+                        Voir détails & fiche technique <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="pt-4 mt-4 flex items-center justify-between border-t ${s.border}">
+                <div>
+                    <span class="font-serif text-2xl font-bold ${s.title}">${p.prix.toFixed(2).replace('.', ',')} €</span>
+                    <span class="text-[10px] block opacity-80">${texteStock(p.stock, 3, p.unique)}</span>
+                </div>
+                <button onclick="ajouterPlateauAuPanier('${p.id}')" ${stockAtteint ? 'disabled' : ''} class="px-5 py-2.5 bg-sauge-600 hover:bg-sauge-700 text-white text-xs font-bold rounded-2xl transition-all shadow-md uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed">
+                    ${enRupture ? (estUnique ? 'Vendu' : 'Rupture') : 'Ajouter'}
+                </button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+    if (window.lucide) window.lucide.createIcons();
+}
 
         window.ajouterPlateauAuPanier = function(id) {
-            const pObj = CONFIG.plateaux.find(p => p.id === id);
-            if (!pObj) return;
-            const existing = cart.find(item => item.type === 'plateau' && item.plateauId === id);
-            if (existing) { existing.quantity += 1; }
-            else { cart.push({ id: 'plateau-' + id, plateauId: id, type: 'plateau', title: pObj.nom, subtitle: "Coffret complet", price: pObj.prix, weight: pObj.weight || 1200, quantity: 1 }); }
-            sauvegarderPanierDansStorage();
-            updateCartUI();
-            afficherToast(`${pObj.nom} ajouté !`);
-        }
+    const pObj = CONFIG.plateaux.find(p => p.id === id);
+    if (!pObj) return;
+
+    // Récupère le stock (si non défini sur l'objet, aucune limite n'est appliquée)
+    const stockMax = typeof pObj.stock === 'number' ? pObj.stock : Infinity;
+    const existing = cart.find(item => item.type === 'plateau' && item.plateauId === id);
+    const qteActuelle = existing ? existing.quantity : 0;
+
+    // Bloque si la quantité demandée dépasse le stock disponible
+    if (qteActuelle + 1 > stockMax) {
+        afficherToast(stockMax <= 0 ? `${pObj.nom} est en rupture de stock !` : `Stock limité à ${stockMax} exemplaire(s) !`);
+        return;
+    }
+
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cart.push({
+            id: 'plateau-' + id,
+            plateauId: id,
+            type: 'plateau',
+            title: pObj.nom,
+            subtitle: "Coffret complet",
+            price: pObj.prix,
+            weight: pObj.weight || 1200,
+            quantity: 1,
+            maxStock: stockMax // Mémorise la limite pour le bouton + du panier
+        });
+    }
+
+    sauvegarderPanierDansStorage();
+    updateCartUI();
+    afficherToast(`${pObj.nom} ajouté !`);
+}
 
         // RENDU CRÉATIONS AVEC CLIC POUR FICHE PRODUIT
         function renderCreationsGrid() {
-            const container = document.getElementById('creations-grid');
-            if(!container) return;
-            container.innerHTML = '';
-            CONFIG.creations.forEach(c => {
-                const styleNom = c.style || 'classique';
-                const s = obtenirStyleTablette(styleNom);
-                const badgeHTML = (c.badge && c.badge.trim() !== "") ? `<span class="absolute top-3 left-3 ${s.badge} text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${c.badge}</span>` : '';
+    const container = document.getElementById('creations-grid');
+    if (!container) return;
+    container.innerHTML = '';
 
-                const card = document.createElement('div');
-                card.className = s.card;
-                card.innerHTML = `
-                    <div>
-                        <div onclick="ouvrirFicheProduit('creation', '${c.id}')" class="h-60 overflow-hidden relative rounded-2xl mb-4 shadow-sm cursor-pointer group">
-                            <img src="${c.image}" alt="${c.nom}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null; this.src='${c.fallbackImage}';">
-                            ${badgeHTML}
-                            <div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 opacity-90 group-hover:bg-sauge-600 transition-colors">
-                                <i data-lucide="eye" class="w-3.5 h-3.5"></i> Fiche produit
-                            </div>
-                        </div>
-                        <div class="space-y-3">
-                            <h3 onclick="ouvrirFicheProduit('creation', '${c.id}')" class="font-serif text-xl font-bold ${s.title} cursor-pointer hover:text-sauge-600 transition-colors">${c.nom}</h3>
-                            <p class="text-xs ${s.desc} leading-relaxed">${c.description}</p>
-                            <button onclick="ouvrirFicheProduit('creation', '${c.id}')" class="text-[11px] text-sauge-600 font-bold hover:underline flex items-center gap-1">
-                                Voir détails & composition <i data-lucide="chevron-right" class="w-3 h-3"></i>
-                            </button>
-                        </div>
+    CONFIG.creations.filter(c => !c.cache).forEach(c => {
+        const styleNom = c.style || 'classique';
+        const s = obtenirStyleTablette(styleNom);
+
+        const stockMax = typeof c.stock === 'number' ? c.stock : Infinity;
+        const enRupture = stockMax <= 0;
+        const estUnique = Boolean(c.unique || stockMax === 1);
+        const itemPanier = cart.find(item => item.type === 'creation' && item.creationId === c.id);
+        const stockAtteint = enRupture || (itemPanier && itemPanier.quantity >= stockMax);
+
+        const texteBadge = (c.badge && c.badge.trim() !== "")
+            ? c.badge
+            : (estUnique ? "Pièce unique" : "");
+        const badgeHTML = texteBadge
+            ? `<span class="absolute top-3 left-3 ${s.badge} text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-md">${texteBadge}</span>`
+            : '';
+
+        const card = document.createElement('div');
+        card.className = s.card;
+        card.innerHTML = `
+            <div>
+                <div onclick="ouvrirFicheProduit('creation', '${c.id}')" class="h-60 overflow-hidden relative rounded-2xl mb-4 shadow-sm cursor-pointer group">
+                    <img src="${c.image}" alt="${c.nom}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null; this.src='${c.fallbackImage}';">
+                    ${badgeHTML}
+                    <div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 opacity-90 group-hover:bg-sauge-600 transition-colors">
+                        <i data-lucide="eye" class="w-3.5 h-3.5"></i> Fiche produit
                     </div>
-                    <div class="pt-4 mt-4 flex items-center justify-between border-t ${s.border}">
-                        <div>
-                            <span class="font-serif text-2xl font-bold ${s.title}">${c.prix.toFixed(2).replace('.', ',')} €</span>
-                            ${c.stock !== undefined ? `<span class="text-[10px] block opacity-80">Stock : ${c.stock} dispo</span>` : ''}
-                        </div>
-                        <button onclick="ajouterCreationAuPanier('${c.id}')" class="px-5 py-2.5 bg-sauge-600 hover:bg-sauge-700 text-white text-xs font-bold rounded-2xl transition-all shadow-md uppercase tracking-wider">Ajouter</button>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-            if (window.lucide) window.lucide.createIcons();
-        }
+                </div>
+                <div class="space-y-3">
+                    <h3 onclick="ouvrirFicheProduit('creation', '${c.id}')" class="font-serif text-xl font-bold ${s.title} cursor-pointer hover:text-sauge-600 transition-colors">${c.nom}</h3>
+                    <p class="text-xs ${s.desc} leading-relaxed">${c.description}</p>
+                    <button onclick="ouvrirFicheProduit('creation', '${c.id}')" class="text-[11px] text-sauge-600 font-bold hover:underline flex items-center gap-1">
+                        Voir détails & composition <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="pt-4 mt-4 flex items-center justify-between border-t ${s.border}">
+                <div>
+                    <span class="font-serif text-2xl font-bold ${s.title}">${c.prix.toFixed(2).replace('.', ',')} €</span>
+                    <span class="text-[10px] block opacity-80">${texteStock(c.stock, 3, c.unique)}</span>
+                </div>
+                <button onclick="ajouterCreationAuPanier('${c.id}')" ${stockAtteint ? 'disabled' : ''} class="px-5 py-2.5 bg-sauge-600 hover:bg-sauge-700 text-white text-xs font-bold rounded-2xl transition-all shadow-md uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed">
+                    ${enRupture ? (estUnique ? 'Vendu' : 'Rupture') : 'Ajouter'}
+                </button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+    if (window.lucide) window.lucide.createIcons();
+}
 
         window.ajouterCreationAuPanier = function(id) {
-            const cObj = CONFIG.creations.find(c => c.id === id);
-            if (!cObj) return;
-            const existing = cart.find(item => item.type === 'creation' && item.creationId === id);
-            if (existing) { existing.quantity += 1; }
-            else { cart.push({ id: 'creation-' + id, creationId: id, type: 'creation', title: cObj.nom, subtitle: "Création artisanale", price: cObj.prix, weight: cObj.weight || 350, quantity: 1 }); }
-            sauvegarderPanierDansStorage();
-            updateCartUI();
-            afficherToast(`${cObj.nom} ajouté !`);
-        }
+    const cObj = CONFIG.creations.find(c => c.id === id);
+    if (!cObj) return;
+
+    const stockMax = typeof cObj.stock === 'number' ? cObj.stock : Infinity;
+    const existing = cart.find(item => item.type === 'creation' && item.creationId === id);
+    const qteActuelle = existing ? existing.quantity : 0;
+
+    if (qteActuelle + 1 > stockMax) {
+        afficherToast(stockMax <= 0 ? `${cObj.nom} est en rupture de stock !` : `Stock limité à ${stockMax} exemplaire(s) !`);
+        return;
+    }
+
+    if (existing) {
+        existing.quantity += 1;
+        existing.maxStock = stockMax;
+    } else {
+        cart.push({
+            id: 'creation-' + id,
+            creationId: id,
+            type: 'creation',
+            title: cObj.nom,
+            subtitle: "Création artisanale",
+            price: cObj.prix,
+            weight: cObj.weight || 350,
+            quantity: 1,
+            maxStock: stockMax
+        });
+    }
+    sauvegarderPanierDansStorage();
+    updateCartUI();
+    afficherToast(`${cObj.nom} ajouté !`);
+}
 
         function calculerTotalPanier() {
             let sousTotalArticles = 0;
@@ -3353,6 +3681,10 @@
                     </div>
                 `;
             });
+            renderParfumsGrid();
+            renderTablettesGrid();
+            renderPlateauxGrid();
+            renderCreationsGrid();
             updateTablettesProgressBar();
             if (window.lucide) window.lucide.createIcons();
         }
